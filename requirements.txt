@@ -1,0 +1,14 @@
+scikit-learn
+ddt
+psycopg2-binary
+sqlalchemy
+price-parser
+scrapy
+nltk
+flask
+flask_cors
+simplejson
+validate_email
+uwsgi
+defusedxml
+requests

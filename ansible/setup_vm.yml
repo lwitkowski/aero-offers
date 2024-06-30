@@ -1,0 +1,7 @@
+---
+- hosts: backend
+  gather_facts: yes
+  become: yes
+  roles:
+  - nginx
+  - backend

@@ -1,0 +1,599 @@
+[
+  {
+    "input": "DIAMOND SUPERDIMONA HK36 TC 80",
+    "expect_manufacturer": false,
+    "manufacturer": "Diamond Aircraft",
+    "model": "Super Dimona HK36"
+  },
+  {
+    "input": "STEMME S6-RT in excellent condition and with all options",
+    "expect_manufacturer": false,
+    "manufacturer": "Stemme",
+    "model": "S6-RT"
+  },
+  {
+    "input": "Discus BT  In  gutem Zustand mit wenigen Flugstunden.",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Discus"
+  },
+  {
+    "input": "Ka2  guter Zustand",
+    "expect_manufacturer": false,
+    "manufacturer": "Alexander Schleicher",
+    "model": "Ka2"
+  },
+  {
+    "input": "DG 800 B",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-800B"
+  },
+  {
+    "input": "DG400",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-400"
+  },
+  {
+    "input": "ASG29E 15m / 18m  to be repaired",
+    "expect_manufacturer": false,
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASG 29 E"
+  },
+  {
+    "input": "Comco Ikarus C42 B Competition",
+    "manufacturer": "Comco Ikarus",
+    "model": "C42"
+  },
+  {
+    "input": "Cirrus WL ready for competition",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Standard Cirrus WL"
+  },
+  {
+    "input": "Stemme S10-VT",
+    "manufacturer": "Stemme",
+    "model": "S10-VT"
+  },
+  {
+    "input": "Stemme S-10 VT",
+    "manufacturer": "Stemme",
+    "model": "S10-VT"
+  },
+  {
+    "input": "Schempp-Hirth Discus bM",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Discus"
+  },
+  {
+    "input": "Vans Aircraft RV-6A",
+    "manufacturer": "Vans",
+    "model": "RV-6"
+  },
+  {
+    "input": "Mini Nimbus HS7, excellenter Zustand",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Mini-Nimbus"
+  },
+  {
+    "input": "Schöne Mini Nimbus mit Cobra",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Mini-Nimbus"
+  },
+  {
+    "input": "ASW 19B",
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASW 19"
+  },
+  {
+    "input": "ASK 21 D-6854",
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASK 21"
+  },
+  {
+    "input": "Ventus 2cx, PU-Lack, LX 9070, neue Winglets, Cobra-Anhänger",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Ventus 2cx"
+  },
+  {
+    "input": "Gleitwunder ASH 25 Mi zu verkaufen",
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASH 25 Mi"
+  },
+  {
+    "input": "Jodel DR 1050 Ambassadeur",
+    "manufacturer": "Jodel",
+    "model": "DR 1050 Ambassadeur"
+  },
+  {
+    "input": "Club Libelle 205",
+    "detail_text": "VERY NICE GLIDER ONLY FOR LIBELLE LOVERS",
+    "manufacturer": "Glasflügel",
+    "model": "Club-Libelle"
+  },
+  {
+    "input": "Robin DR 400/180 Regent",
+    "manufacturer": "Robin",
+    "model": "DR400"
+  },
+  {
+    "input": "Grob G109b",
+    "manufacturer": "Grob",
+    "model": "G109b"
+  },
+  {
+    "input": "Cirrus SR20",
+    "manufacturer": "Cirrus",
+    "model": "SR20"
+  },
+  {
+    "input": "DG800 S,   HB-3252,   18m & 15m",
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-800S"
+  },
+  {
+    "input": "Piper Aircraft PA-28-161 Warrior III",
+    "manufacturer": "Piper",
+    "model": "PA-28"
+  },
+  {
+    "input": "Binder EB 29",
+    "manufacturer": "Binder",
+    "model": "EB29"
+  },
+  {
+    "input": "Schleppflugzeug Robin DR400 zu Verkaufen",
+    "manufacturer": "Robin",
+    "model": "DR400"
+  },
+  {
+    "input": "Motorsegler SF 25 C Zweibeinfalke zu verkaufen",
+    "manufacturer": "Scheibe",
+    "model": "SF 25"
+  },
+  {
+    "input": "Diamond Aircraft DA20-100 Katana",
+    "manufacturer": "Diamond Aircraft",
+    "model": "DA20"
+  },
+  {
+    "input": "SZD55-1",
+    "manufacturer": "PZL Bielsko",
+    "model": "SZD-55-1"
+  },
+  {
+    "input": "Cessna 337 Skymaster G camera",
+    "manufacturer": "Cessna",
+    "model": "337"
+  },
+  {
+    "input": "Beech 55 Baron G500",
+    "manufacturer": "Beechcraft",
+    "model": "55 Baron"
+  },
+  {
+    "input": "Gleitwunder ASH 25 EB 28 zu verkaufen",
+    "manufacturer": "binder",
+    "model": "ASH25 EB28"
+  },
+  {
+    "input": "SCHLEICHER K7",
+    "manufacturer": "Alexander Schleicher",
+    "model": "K7"
+  },
+  {
+    "input": "ASK21 -Winterschnapper-",
+    "expect_manufacturer": false,
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASK 21"
+  },
+  {
+    "input": "ASH 25",
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASH 25"
+  },
+  {
+    "input": "2019 Schleicher ASG 32 Mi",
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASG 32 Mi"
+  },
+  {
+    "input": "Super Blanik L-23",
+    "manufacturer": "Vivat",
+    "model": "L-23"
+  },
+  {
+    "input": "Mooney M20J 201 project",
+    "manufacturer": "Mooney",
+    "model": "M20"
+  },
+  {
+    "input": "ASH25 EB28, Solo 2625/2",
+    "expect_manufacturer": false,
+    "manufacturer": "Binder",
+    "model": "ASH25 EB28"
+  },
+  {
+    "input": "H301b Renn-Libelle",
+    "manufacturer": "Glasflügel",
+    "model": "H-301 Libelle"
+  },
+  {
+    "input": "NICE Foka-5, SZD-32A with Bulletin docs",
+    "manufacturer": "PZL Bielsko",
+    "model": "SZD-32"
+  },
+  {
+    "input": "Tecnam P92 Echo Classic Deluxe",
+    "manufacturer": "Tecnam",
+    "model": "P92"
+  },
+  {
+    "input": "Tipsy T-66 Nipper Series 2",
+    "manufacturer": "Avions Fairey",
+    "model": "Tipsy Nipper"
+  },
+  {
+    "input": "Ventus 2c 15/18m PU painted",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Ventus 2c"
+  },
+  {
+    "input": "TWIN ASTIR I",
+    "manufacturer": "Grob",
+    "model": "Twin Astir"
+  },
+  {
+    "input": "PIK20B glider for sale",
+    "manufacturer": "Eiri Avion",
+    "model": "PIK-20"
+  },
+  {
+    "input": "De Havilland DHC-1 Chipmunk",
+    "manufacturer": "De Havilland",
+    "model": "DHC-1"
+  },
+  {
+    "input": "Grumman American AA-5A Cheetah",
+    "manufacturer": "Grumman American",
+    "model": "Grumman American AA-5"
+  },
+  {
+    "input": "Piper PA-22 Colt",
+    "manufacturer": "Piper",
+    "model": "PA-22"
+  },
+  {
+    "input": "Astir CS 77",
+    "manufacturer": "Grob",
+    "model": "Astir"
+  },
+  {
+    "input": "Flight Design CTSW",
+    "manufacturer": "Flight Design",
+    "model": "CTSW"
+  },
+  {
+    "input": "Mooney M20K 231",
+    "manufacturer": "Mooney",
+    "model": "M20"
+  },
+  {
+    "input": "Scheibe Bergfalke II-55 / III",
+    "manufacturer": "Scheibe",
+    "model": "Bergfalke III"
+  },
+  {
+    "input": "invalidManufacturer GroßerVogel",
+    "manufacturer": null,
+    "model": null
+  },
+  {
+    "input": "dasHierIstKeine 192",
+    "manufacturer": null,
+    "model": null
+  },
+  {
+    "input": "Cirrus 12345",
+    "manufacturer": null,
+    "model": null
+  },
+  {
+    "input": "Nimbus 3 25,5m",
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 3"
+  },
+  {
+    "input": "Schöne Dg 200 wegen Aufgabe zu verkaufen",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-200"
+  },
+  {
+    "input": "Diana 2",
+    "expect_manufacturer": false,
+    "manufacturer": "Avionic",
+    "model": "Diana 2"
+  },
+  {
+    "input": "Phoebus B1",
+    "expect_manufacturer": false,
+    "manufacturer": "Bölkow",
+    "model": "Phoebus"
+  },
+  {
+    "input": "originale Piper PA-22-108 von 1962 mit Papieren",
+    "expect_manufacturer": true,
+    "manufacturer": "Piper",
+    "model": "PA-22"
+  },
+  {
+    "input": "Aerospool Dynamic WT-9 RGi",
+    "expect_manufacturer": false,
+    "manufacturer": "Aerospool",
+    "model": "WT-9"
+  },
+  {
+    "input": "Diamond DA20-100 Katana",
+    "expect_manufacturer": true,
+    "manufacturer": "Diamond Aircraft",
+    "model": "DA20"
+  },
+  {
+    "input": "Cessna 162 Skycatcher",
+    "expect_manufacturer": true,
+    "manufacturer": "Cessna",
+    "model": "162"
+  },
+  {
+    "input": "Grunau Baby III",
+    "expect_manufacturer": true,
+    "manufacturer": "Schneider",
+    "model": "Grunau Baby"
+  },
+  {
+    "input": "Nimbus 3 25.5 m",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 3"
+  },
+  {
+    "input": "DG-100 for sale !",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-100"
+  },
+  {
+    "input": "Cessna 175",
+    "expect_manufacturer": true,
+    "manufacturer": "Cessna",
+    "model": "175"
+  },
+  {
+    "input": "Nimbus2b for sale",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 2"
+  },
+  {
+    "input": "Quest Kodiak",
+    "expect_manufacturer": false,
+    "manufacturer": "Quest",
+    "model": "Kodiak"
+  },
+  {
+    "input": "Flight Design CT LS ELA",
+    "expect_manufacturer": true,
+    "manufacturer": "Flight Design",
+    "model": "CTLS"
+  },
+  {
+    "input": "Tecnam P-2002 JF",
+    "expect_manufacturer": true,
+    "manufacturer": "Tecnam",
+    "model": "P2002"
+  },
+  {
+    "input": "SZD-50-3 Puchacz",
+    "expect_manufacturer": false,
+    "manufacturer": "PZL Bielsko",
+    "model": "SZD-50"
+  },
+  {
+    "input": "De Havilland DH-82 Tiger Moth",
+    "expect_manufacturer": true,
+    "manufacturer": "De Havilland",
+    "model": "DH.82"
+  },
+  {
+    "input": "LS-4",
+    "expect_manufacturer": false,
+    "manufacturer": "Rolladen Schneider",
+    "model": "LS4"
+  },
+  {
+    "input": "Nimbus 4DM, W-Nr. 50, 1.600h, Motor grundüberholt, ARC neu",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 4DM"
+  },
+  {
+    "input": "Nimbus 2",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 2"
+  },
+  {
+    "input": "DG200 15m",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-200"
+  },
+  {
+    "input": "EIGENSTARTER Silent 2 Electro",
+    "expect_manufacturer": false,
+    "manufacturer": "Alisport",
+    "model": "Silent 2 Electro"
+  },
+  {
+    "input": "Hornet inkl. Anhänger von Anschau",
+    "expect_manufacturer": false,
+    "manufacturer": "Glasflügel",
+    "model": "206 Hornet"
+  },
+  {
+    "input": "neuwertige ASG32 MI",
+    "expect_manufacturer": false,
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASG 32 Mi"
+  },
+  {
+    "input": "TL 96 Sting",
+    "expect_manufacturer": false,
+    "manufacturer": "TL Ultralight",
+    "model": "TL-96 Sting"
+  },
+  {
+    "input": "Nimbus 4DM, W-Nr. 50, 1.600h, Motor grundüberholt, ARC neu",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Nimbus 4DM"
+  },
+  {
+    "input": "Ventus B - 15 / 16.60m",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Ventus b"
+  },
+  {
+    "input": "SF25C mit Bugrad Motor noch 800h offen",
+    "expect_manufacturer": false,
+    "manufacturer": "Scheibe",
+    "model": "SF 25"
+  },
+  {
+    "input": "Lake LA-200",
+    "expect_manufacturer": true,
+    "manufacturer": "Lake Aircraft",
+    "model": "LA4-200 Buccaneer"
+  },
+  {
+    "input": "LS3/17 with 1700hr",
+    "expect_manufacturer": false,
+    "manufacturer": "Rolladen Schneider",
+    "model": "LS3"
+  },
+  {
+    "input": "Morane-Saulnier MS.893A Commodore",
+    "expect_manufacturer": true,
+    "manufacturer": "Morane-Saulnier",
+    "model": "MS-893"
+  },
+  {
+    "input": "DR400/140B Major",
+    "expect_manufacturer": false,
+    "manufacturer": "Robin",
+    "model": "DR400"
+  },
+  {
+    "input": "Ventus 2B for sale $100,000NZ Omarama Gliding Club",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Ventus 2b"
+  },
+  {
+    "input": "Pitts S-1 S",
+    "expect_manufacturer": true,
+    "manufacturer": "Aviat Aircraft",
+    "model": "Pitts S1"
+  },
+  {
+    "input": "LAK-17at (turbo) 15/18m for sale immediately! Reasonable offers welcome / new ARC",
+    "expect_manufacturer": false,
+    "manufacturer": "Sportinė Aviacija",
+    "model": "LAK-17AT"
+  },
+  {
+    "input": "DG808C Competition",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-808C"
+  },
+  {
+    "input": "Discus 2a",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Discus-2a"
+  },
+  {
+    "input": "DG200-17m mit neuer 3000 Stundenkontrolle",
+    "expect_manufacturer": false,
+    "manufacturer": "DG Flugzeugbau",
+    "model": "DG-200"
+  },
+  {
+    "input": "Discus CS Winglet",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Discus CS"
+  },
+  {
+    "input": "ProFe Banjo MH",
+    "expect_manufacturer": true,
+    "manufacturer": "ProFe",
+    "model": "Banjo-MH"
+  },
+  {
+    "input": "ASW22BLE",
+    "expect_manufacturer": false,
+    "manufacturer": "Alexander Schleicher",
+    "model": "ASW 22 BLE"
+  },
+  {
+    "input": "SZD-24-4A Foka4",
+    "expect_manufacturer": false,
+    "manufacturer": "PZL Bielsko",
+    "model": "SZD-24"
+  },
+  {
+    "input": "LS3-17",
+    "expect_manufacturer": false,
+    "manufacturer": "Rolladen Schneider",
+    "model": "LS3"
+  },
+  {
+    "input": "LS4 a",
+    "expect_manufacturer": false,
+    "manufacturer": "Rolladen Schneider",
+    "model": "LS4"
+  },
+  {
+    "input": "Verkaufe /Sale SZD-41A Jantar Std.",
+    "expect_manufacturer": false,
+    "manufacturer": "PZL Bielsko",
+    "model": "SZD-41"
+  },
+  {
+    "input": "Cessna 421-B Golden Eagle",
+    "expect_manufacturer": true,
+    "manufacturer": "Cessna",
+    "model": "421"
+  },
+  {
+    "input": "Very Good Janus CT For Sale",
+    "expect_manufacturer": false,
+    "manufacturer": "Schempp-Hirth",
+    "model": "Janus cT"
+  },
+  {
+    "input": "Robinson R-66",
+    "manufacturer": "Robinson",
+    "model": "R66"
+  },
+  {
+      "input": "Siebert Sie-3 For Sale",
+      "manufacturer": "Siebert",
+      "model": "Sie 3"
+  }
+]

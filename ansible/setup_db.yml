@@ -1,0 +1,6 @@
+---
+- hosts: database
+  gather_facts: yes
+  become: yes
+  roles:
+  - db

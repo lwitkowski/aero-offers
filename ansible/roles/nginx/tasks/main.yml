@@ -1,0 +1,53 @@
+---
+- name: "Install nginx"
+  ansible.builtin.dnf:
+    name: 
+      - "nginx"
+    state: latest
+  become_user: root
+  become_method: sudo
+  become: yes
+
+- name: "Copy nginx config file"
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  become_user: root
+  become_method: sudo
+  become: yes
+
+- name: "Create User uwsgi:nginx for running uwsgi"
+  user:
+    name: uwsgi
+    comment: technical user for uwsgi
+    group: nginx
+  become_user: root
+  become_method: sudo
+  become: yes
+
+- name: "Make sure also ec2-user is part of nginx group"
+  user:
+    name: ec2-user
+    group: nginx
+    append: yes
+  become_user: root
+  become_method: sudo
+  become: yes
+
+- name: "Create directory for unix file socket (uwsgi)"
+  file:
+    path: "/run/aero-offers"
+    owner: uwsgi
+    group: nginx
+    state: directory
+  become_user: root
+  become_method: sudo
+  become: yes
+
+- name: "Reload configuration"
+  systemd:
+    name: nginx
+    state: reloaded
+  become: true
+  become_method: sudo
+  become_user: root

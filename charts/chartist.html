@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chartist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/gionkunz/chartist-js/master/dist/chartist.min.css">
+    <style>
+#chart {
+height: 300px;
+width: 100%;
+            }
+
+
+    </style>
+</head>
+<body>
+<div class="ct-chart" id="chart"></div>
+<script type="text/javascript" src="https://rawgit.com/gionkunz/chartist-js/master/dist/chartist.js"></script>
+<script>
+new Chartist.Line('#chart', {
+labels: ['2019-01-01', '2020-01-18', '2020-01-19'],
+series: [
+[62280.00, 75000.00, 94380.00]
+]
+}, {
+low: 0,
+showArea: false
+});
+
+
+</script>
+</body>
+</html>

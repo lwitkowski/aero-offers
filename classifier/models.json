@@ -1,0 +1,823 @@
+{
+  "Aerospool": {
+    "manufacturer_website": "https://www.aerospool.sk/index.php/en",
+    "models": {
+      "ultralight": [
+        "WT-9"
+      ]
+    }
+  },
+  "Akaflieg Braunschweig": {
+    "manufacturer_website": "https://de.wikipedia.org/wiki/Akaflieg#Akaflieg_Braunschweig",
+    "models": {
+      "glider": [
+        "SB 5",
+        "SB 6",
+        "SB 7",
+        "SB 8",
+        "SB 9",
+        "SB 10",
+        "SB 11",
+        "SB 12",
+        "SB 13",
+        "SB 14",
+        "SB 15"
+      ]
+    }
+  },
+  "Alexander Schleicher": {
+    "manufacturer_website": "https://www.alexander-schleicher.de",
+    "models": {
+      "glider": [
+        "Ka2",
+        "Ka6",
+        "K7",
+        "K8",
+        "ASK 13",
+        "ASK 18",
+        "ASK 21",
+        "ASK 23",
+        "ASG 29 E",
+        "ASH 25",
+        "ASH 25 Mi",
+        "ASH 26 E",
+        "ASH 30 Mi",
+        "ASH 31 Mi",
+        "ASG 32 Mi",
+        "ASW 15",
+        "ASW 17",
+        "ASW 19",
+        "ASW 20",
+        "ASW 22",
+        "ASW 22 BLE",
+        "ASW 24",
+        "ASW 27",
+        "ASW 28"
+      ],
+      "tmg": [
+        "ASK 14",
+        "ASK 16"
+      ]
+    }
+  },
+  "Alisport": {
+    "manufacturer_website": "http://www.alisport.com/",
+    "models": {
+      "glider": [
+        "Silent 2 Targa",
+        "Silent 2 Electro"
+      ],
+      "ultralight": [
+        "Yuma"
+      ]
+    }
+  },
+  "Antonov": {
+    "manufacturer_website": "https://www.antonov.com/",
+    "models": {
+      "airplane": [
+        "An-2"
+      ]
+    }
+  },
+  "Aquila": {
+    "manufacturer_website": "https://aquila-aviation.de/en/home/",
+    "models": {
+      "airplane": [
+        "A210",
+        "A211"
+      ]
+    }
+  },
+  "Atec Aircraft": {
+    "manufacturer_website": "https://www.atecaircraft.eu/en",
+    "models": {
+      "ultralight": [
+        "321 FAETA",
+        "321 FAETA NG"
+      ]
+    }
+  },
+  "AutoGyro": {
+    "manufacturer_website": "http://www.auto-gyro.com/en/",
+    "models": {
+      "ultralight": [
+        "MTOsport 2010",
+        "MTOsport 2017",
+        "Cavalon",
+        "CavalonPRO",
+        "Calidus",
+        "MTOnautic"
+      ]
+    }
+  },
+  "Aviat Aircraft": {
+    "manufacturer_website": "https://aviataircraft.com/",
+    "models": {
+      "airplane": [
+        "Christen Eagle",
+        "Pitts S1",
+        "Pitts S2"
+      ]
+    }
+  },
+  "Avionic": {
+    "manufacturer_website": "http://avionic.pl/en/",
+    "models": {
+      "glider": [
+        "Diana 2"
+      ]
+    }
+  },
+  "Avions Fairey": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Avions_Fairey",
+    "models": {
+      "airplane": [
+        "Tipsy Nipper"
+      ]
+    }
+  },
+  "Beechcraft": {
+    "manufacturer_website": "https://beechcraft.txtav.com/",
+    "models": {
+      "airplane": [
+        "Baron",
+        "33 Bonanza",
+        "35 Bonanza",
+        "36 Bonanza",
+        "90 King Air",
+        "55 Baron",
+        "58 Baron",
+        "Model 17 Staggerwing"
+      ]
+    }
+  },
+  "Bell": {
+    "models": {
+      "helicopter": [
+        "206"
+      ]
+    }
+  },
+  "Binder": {
+    "manufacturer_website": "https://www.binder-flugmotorenbau.de",
+    "models": {
+      "glider": [
+        "ASH25 EB28",
+        "EB28",
+        "EB29",
+        "EB29D"
+      ]
+    }
+  },
+  "Bölkow": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/B%C3%B6lkow_Phoebus",
+    "models": {
+      "glider": [
+        "Phoebus"
+      ]
+    }
+  },
+  "Breezer": {
+    "manufacturer_website": "https://www.breezeraircraft.de/en/",
+    "models": {
+      "ultralight": [
+        "B400-6",
+        "B600 LSA"
+      ]
+    }
+  },
+  "BRM": {
+    "manufacturer_website": "http://www.landafrica.com",
+    "models": {
+      "ultralight": [
+        "Argos",
+        "Citius",
+        "Land Africa",
+        "Okavango"
+      ]
+    }
+  },
+  "Caproni": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Caproni",
+    "models": {
+      "glider": [
+        "Calif A-20",
+        "Calif A-21"
+      ]
+    }
+  },
+  "Carmam": {
+    "models": {
+      "glider": [
+        "M-200 Foehn"
+      ]
+    }
+  },
+  "Cessna": {
+    "manufacturer_website": "https://cessna.txtav.com/",
+    "models": {
+      "airplane": [
+        "120",
+        "140",
+        "150",
+        "152",
+        "162",
+        "170",
+        "172",
+        "175",
+        "182",
+        "205",
+        "TU206",
+        "336",
+        "337",
+        "421"
+      ]
+    }
+  },
+  "Centrair": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/SA_Centrair",
+    "models": {
+      "glider": [
+        "201 Marianne"
+      ]
+    }
+  },
+  "Cirrus": {
+    "manufacturer_website": "https://cirrusaircraft.com/",
+    "models": {
+      "airplane": [
+        "SR20",
+        "SR22"
+      ]
+    }
+  },
+  "Colomban": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Michel_Colomban",
+    "models": {
+      "airplane": [
+        "MC-10 CriCri",
+        "MC-12 CriCri",
+        "MC-15 CriCri"
+      ]
+    }
+  },
+  "Comco Ikarus": {
+    "manufacturer_website": "http://www.comco-ikarus.de/",
+    "models": {
+      "ultralight": [
+        "C22",
+        "C42"
+      ]
+    }
+  },
+  "De Havilland": {
+    "models": {
+      "airplane": [
+        "DHC-1",
+        "DHC-2",
+        "DHC-3",
+        "DH.82"
+      ]
+    }
+  },
+  "DFS": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Deutsche_Forschungsanstalt_f%C3%BCr_Segelflug",
+    "models": {
+      "glider": [
+        "Rhönsperber",
+        "Habicht",
+        "Kranich",
+        "SG38",
+        "Reiher",
+        "Rhönbussard"
+      ]
+    }
+  },
+  "DG Flugzeugbau": {
+    "manufacturer_website": "https://www.dg-flugzeugbau.de/en/",
+    "models": {
+      "glider": [
+        "DG-100",
+        "DG-200",
+        "DG-300",
+        "DG-400",
+        "DG-500",
+        "DG-505",
+        "DG-505B",
+        "DG-505M",
+        "DG-505MB",
+        "DG-600",
+        "DG-600M",
+        "DG-800",
+        "DG-800S",
+        "DG-800B",
+        "DG-808C",
+        "DG-808S",
+        "DG-1000S",
+        "DG-1000T",
+        "DG-1000M"
+      ]
+    }
+  },
+  "Diamond Aircraft": {
+    "models": {
+      "airplane": [
+        "DA20",
+        "DA40",
+        "DA42",
+        "DA50"
+      ],
+      "tmg": [
+        "Super Dimona HK36"
+      ]
+    }
+  },
+  "DynAero": {
+    "manufacturer_website": "http://www.dynaero.com",
+    "models": {
+      "ultralight": [
+        "MCR01"
+      ]
+    }
+  },
+  "Eiri Avion": {
+    "models": {
+      "glider": [
+        "PIK-20"
+      ]
+    }
+  },
+  "Extra": {
+    "models": {
+      "airplane": [
+        "300",
+        "330"
+      ]
+    }
+  },
+  "Flight Design": {
+    "manufacturer_website": "https://flightdesign.com/",
+    "models": {
+      "ultralight": [
+        "CTLS",
+        "CT2K",
+        "CTSW"
+      ]
+    }
+  },
+  "Glasflügel": {
+    "models": {
+      "glider": [
+        "304",
+        "Kestrel",
+        "303 Mosquito",
+        "Standard Libelle",
+        "Club-Libelle",
+        "H-301 Libelle",
+        "206 Hornet",
+        "H-101 Salto"
+      ]
+    }
+  },
+  "Grob": {
+    "models": {
+      "glider": [
+        "Twin Astir",
+        "Astir"
+      ],
+      "tmg": [
+        "G109a",
+        "G109b"
+      ]
+    }
+  },
+  "Grumman American": {
+    "models": {
+      "airplane": [
+        "Grumman American AA-5"
+      ]
+    }
+  },
+  "Jodel": {
+    "models": {
+      "airplane": [
+        "DR 1050 Ambassadeur"
+      ]
+    }
+  },
+  "Jonker": {
+    "manufacturer_website": "https://jonkersailplanes.co.za/",
+    "models": {
+      "glider": [
+        "JS1 B",
+        "JS1 C",
+        "JS1C TJ",
+        "JS3"
+      ]
+    }
+  },
+  "Lake Aircraft": {
+    "manufacturer_website": "http://www.lakeamphib.com/lakeamphib.htm",
+    "models": {
+      "airplane": [
+        "LA 4",
+        "LA4-200 Buccaneer"
+      ]
+    }
+  },
+  "Lancair": {
+    "manufacturer_website": "https://www.lancair.com",
+    "models": {
+      "airplane": [
+        "Barracuda",
+        "Mako",
+        "235",
+        "320",
+        "360",
+        "Legacy",
+        "Trigress",
+        "Propjet",
+        "Sentry",
+        "Evolution"
+      ]
+    }
+  },
+  "Lange": {
+    "manufacturer_website": "https://www.lange-aviation.com",
+    "models": {
+      "glider": [
+        "Antares 18T",
+        "Antares 20E",
+        "Antares 21E",
+        "Antares 23E",
+        "Antares 23T"
+      ]
+    }
+  },
+  "Mooney": {
+    "models": {
+      "airplane": [
+        "M20"
+      ]
+    }
+  },
+  "Morane-Saulnier": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Morane-Saulnier",
+    "models": {
+      "airplane": [
+        "MS-893"
+      ]
+    }
+  },
+  "Neukom": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Neukom_Elfe",
+    "models": {
+      "glider": [
+        "S-4 Elfe 15",
+        "S-4 Elfe 17"
+      ]
+    }
+  },
+  "Pilatus": {
+    "manufacturer_website": "https://www.pilatus-aircraft.com/",
+    "models": {
+      "glider": [
+        "B4"
+      ]
+    }
+  },
+  "Piper": {
+    "manufacturer_website": "https://www.piper.com/",
+    "models": {
+      "airplane": [
+        "PA-19",
+        "PA-20",
+        "PA-22",
+        "PA-23",
+        "PA-24",
+        "PA-27",
+        "PA-28",
+        "PA-34",
+        "PA-42",
+        "J-3 Cub"
+      ]
+    }
+  },
+  "Pipistrel": {
+    "models": {
+      "ultralight": [
+        "Alpha",
+        "Panthera",
+        "Sinus",
+        "Taurus",
+        "Virus"
+      ]
+    }
+  },
+  "ProFe": {
+    "manufacturer_website": "http://www.profe.cz",
+    "models": {
+      "glider": [
+        "Banjo",
+        "Banjo-MH",
+        "DuoBanjo"
+      ]
+    }
+  },
+  "PZL Bielsko": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Szybowcowy_Zak%C5%82ad_Do%C5%9Bwiadczalny",
+    "models": {
+      "glider": [
+        "SZD-9 Bocian",
+        "SZD-12 Mucha 100",
+        "SZD-24",
+        "SZD-25",
+        "SZD-30 Pirat",
+        "SZD-32",
+        "SZD-45",
+        "SZD-48",
+        "SZD-50",
+        "SZD-51",
+        "SZD-54 Perkoz",
+        "SZD-55-1 Promyk",
+        "SZD-56"
+      ]
+    }
+  },
+  "Quest": {
+    "manufacturer_website": "http://www.questaircraft.com",
+    "models": {
+      "airplane": [
+        "Kodiak"
+      ]
+    }
+  },
+  "Robin": {
+    "manufacturer_website": "https://www.robin-aircraft.com/en/",
+    "models": {
+      "airplane": [
+        "HR100",
+        "HR200",
+        "DR315 Petit Prince",
+        "DR300",
+        "DR400",
+        "DR401",
+        "DR500",
+        "R1000",
+        "R2000",
+        "R3000"
+      ]
+    }
+  },
+  "Robinson Helicopter": {
+    "manufacturer_website": "https://robinsonheli.com",
+    "models": {
+      "helicopter": [
+        "R22",
+        "R44",
+        "R66"
+      ]
+    }
+  },
+  "Rolladen Schneider": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Rolladen-Schneider_Flugzeugbau",
+    "models": {
+      "glider": [
+        "LS1",
+        "LS2",
+        "LS3",
+        "LS4",
+        "LS6",
+        "LS8",
+        "LS9",
+        "LS10"
+      ]
+    }
+  },
+  "Rutan": {
+    "manufacturer_website": "https://www.rutanaircraftflyingexperience.org/",
+    "models": {
+      "airplane": [
+        "27 VariViggen",
+        "31 VariEze",
+        "33 VariEze",
+        "35 AD-1",
+        "40/74 Defiant",
+        "54 Quickie",
+        "61 Long-EZ",
+        "202 Boomerang"
+      ]
+    }
+  },
+  "Scheibe": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Scheibe_Flugzeugbau",
+    "models": {
+      "glider": [
+        "L-Spatz",
+        "Spatz 55",
+        "L-Spatz 55",
+        "Specht",
+        "Bergfalke III",
+        "SF 27",
+        "SF 26"
+      ],
+      "tmg": [
+        "SF 25",
+        "Motorspatz"
+      ]
+    }
+  },
+  "Schempp-Hirth": {
+    "manufacturer_website": "https://www.schempp-hirth.com/",
+    "models": {
+      "glider": [
+        "Arcus",
+        "Arcus M",
+        "Arcus T",
+        "Janus cT",
+        "Standard Cirrus",
+        "Standard Cirrus WL",
+        "Mini-Nimbus",
+        "Nimbus 2",
+        "Nimbus 2M",
+        "Nimbus 3",
+        "Nimbus 3T",
+        "Nimbus 4",
+        "Nimbus 4D",
+        "Nimbus 4DM",
+        "Discus",
+        "Discus CS",
+        "Discus 2a",
+        "Discus 2b",
+        "Duo Discus",
+        "Ventus a",
+        "Ventus b",
+        "Ventus bT",
+        "Ventus c",
+        "Ventus cT",
+        "Ventus cM",
+        "Ventus 2a",
+        "Ventus 2b",
+        "Ventus 2cx",
+        "Ventus 2c",
+        "Ventus 3",
+        "Ventus 3T",
+        "Quintus M"
+      ]
+    }
+  },
+  "Schneider": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Schneider_Grunau_Baby",
+    "models": {
+      "glider": [
+        "Grunau Baby",
+        "Motor-Baby"
+      ]
+    }
+  },
+  "Siebert": {
+    "manufacturer_website": "https://www.siebert.aero/",
+    "models": {
+      "glider": [
+        "Sie 3"
+      ]
+    }
+  },
+  "Socata": {
+    "manufacturer_website": "https://www.daher.com/en/aircraft-manufacturer/",
+    "models": {
+      "airplane": [
+        "TB 10",
+        "TB20",
+        "TB200"
+      ]
+    }
+  },
+  "Sonex": {
+    "manufacturer_website": "https://www.sonexaircraft.com/",
+    "models": {
+      "airplane": [
+        "Sonex",
+        "Waiex",
+        "SubSonex"
+      ]
+    }
+  },
+  "Sportavia": {
+    "manufacturer_website": "https://de.wikipedia.org/wiki/Sportavia-P%C3%BCtzer",
+    "models": {
+      "tmg": [
+        "Fournier RF-5"
+      ]
+    }
+  },
+  "Sportinė Aviacija": {
+    "manufacturer_website": "http://lak.lt/",
+    "models": {
+      "glider": [
+        "LAK-17a",
+        "LAK-17AT",
+        "LAK-17a FES",
+        "LAK-17b",
+        "LAK-17bT",
+        "LAK-17b FES"
+      ]
+    }
+  },
+  "Stemme": {
+    "manufacturer_website": "https://www.stemme.com",
+    "models": {
+      "tmg": [
+        "S6",
+        "S6-RT",
+        "S12-SW",
+        "S10-V",
+        "S10-VT"
+      ]
+    }
+  },
+  "Technoflug": {
+    "manufacturer_website": "https://www.technoflug.de/",
+    "models": {
+      "tmg": [
+        "Piccolo"
+      ]
+    }
+  },
+  "Tecnam": {
+    "manufacturer_website": "http://www.tecnam.com/",
+    "models": {
+      "airplane": [
+        "P92",
+        "P96",
+        "P2002",
+        "P2008",
+        "P2006t",
+        "P2010",
+        "P2012"
+      ]
+    }
+  },
+  "TL Ultralight": {
+    "manufacturer_website": "http://www.tl-ultralight.cz/en",
+    "models": {
+      "ultralight": [
+        "TL-22 Duo",
+        "TL-32 Typhoon",
+        "Tl-96 Star",
+        "TL-96 Sting",
+        "TL-3000 Sirius",
+        "TL-2000 Sting S4",
+        "TL-2000 Sting RG",
+        "Stream"
+      ]
+    }
+  },
+  "Vans": {
+    "manufacturer_website": "http://www.vansaircraft.com",
+    "models": {
+      "airplane": [
+        "RV-4",
+        "RV-5",
+        "RV-6",
+        "RV-7",
+        "RV-8"
+      ]
+    }
+  },
+  "Vivat": {
+    "models": {
+      "glider": [
+        "L-13",
+        "L-23"
+      ]
+    }
+  },
+  "Zlin": {
+    "manufacturer_website": "https://www.zlinaircraft.eu/en/",
+    "models": {
+      "airplane": [
+        "Z-22",
+        "Z-24",
+        "Z-25",
+        "Z-26",
+        "Z-35",
+        "Z-37",
+        "Z-42",
+        "Z-43",
+        "Z-50",
+        "Z-126",
+        "Z-135",
+        "Z-142",
+        "Z-143",
+        "Z-226",
+        "Z-242",
+        "Z-326",
+        "Z-381",
+        "Z-526",
+        "Z-726"
+      ]
+    }
+  }
+}

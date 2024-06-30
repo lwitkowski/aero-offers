@@ -1,0 +1,30 @@
+# /etc/systemd/system/pyramid.service
+
+[Unit]
+Description=Aero-Offers API
+
+# Requirements
+Requires=network.target
+
+# Dependency ordering
+After=network.target
+
+[Service]
+TimeoutStartSec=0
+RestartSec=10
+Restart=always
+
+# path to app
+WorkingDirectory=/usr/share/AircraftOffers/web
+# the user that you want to run app by
+User=uwsgi
+
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+# Main process
+ExecStart=/usr/local/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
