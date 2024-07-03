@@ -10,7 +10,7 @@ DB_USER = "aircraft_offers"
 DB_PW = ""
 DB_NAME = "aircraft_offers"
 DB_HOST = "localhost"
-DB_PORT = 5432
+DB_PORT = 25432
 
 # mailer
 SEND_RESULT_MAIL = False

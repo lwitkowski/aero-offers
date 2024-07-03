@@ -1,11 +1,11 @@
 import axios from 'axios'; /* eslint-disable */
 
-const baseURL = '/api/'; // is now done via proxy 
-let HTTP = axios.create({ baseURL }); 
+const baseURL = 'http://127.0.0.1:5000/'; // is now done via proxy
+let HTTP = axios.create({ baseURL });
 
 // FIXME
-export function setHTTPInstance(newInstance) { 
+export function setHTTPInstance(newInstance) {
     HTTP = newInstance; /* eslint-disable */
 }
 
-export { HTTP as default }; 
+export { HTTP as default };

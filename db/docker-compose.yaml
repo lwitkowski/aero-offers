@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=aircraft_offers
+      - POSTGRES_USER=aircraft_offers
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '25432:5432'
+    volumes:
+      - ./ddl.sql:/docker-entrypoint-initdb.d/ddl.sql

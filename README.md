@@ -1,22 +1,43 @@
 # www.aero-offers.com
 
-## lokale Entwicklung
+# Local development
+## Prerequisites (one time activity)
+- python 3, pip3, flask
+- docker (compose)
+- npm
 
-Backend starten mit 
+```bash
+pip3 install -r requirements.txt
+```
+update settings.py & settings_dev.py
 
-```/usr/local/bin/python3.7 /Users/ralf/Desktop/AircraftOffers/web/flask_app.py```
+Start local Postgres
+```bash
+cd db && docker-compose up -d
+```
 
-Frontend starten mit
- 
-````npm run serve````
+restore some data from backup
+```bash
+cd db && unzip -c prod_dump_2024_06_31.sql.zip | psql -h localhost -p 25432 -U aircraft_offers -d aircraft_offers
+```
+
+Start backend api (python app):
+```
+python3 ./web/flask_app.py
+```
+
+Start frontend (vue app):
+```
+cd frontend
+npm run serve
+```
 
 ## Deployment
-
-Das Backend (die API mit Python/Flask) läuft mit uwsgi auf einem nginx Server.
+The backend (the API with Python/Flask) runs with uwsgi on an nginx server.
 
 ### UWSGI
 
-läuft mit User uwsgi:nginx 
+runs with user uwsgi:nginx 
 
 ### systemd
 wird verwendet, um UWSGI zu starten (was dann die Python Prozesse startet)

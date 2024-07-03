@@ -1,82 +1,31 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^1.7.2",
     "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.4",
-    "core-js": "^3.9.0",
+    "core-js": "^3.37.1",
     "moment": "^2.29.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^9.0.0",
     "primeicons": "^5.0.0",
     "primevue": "^3.10.0",
-    "sass-loader": "^8.0.2",
+    "sass-loader": "^14.2.1",
     "sweetalert2": "^9.17.2",
-    "vue": "^3.1.0",
+    "vue": "^3.4.31",
     "vue-chartist": "^3.0.0",
     "vue-gtag": "^2.0.1",
-    "vue-router": "^4.0.0",
-    "vue-select": "^4.0.0-beta.2",
-    "webpack": "^4.46.0"
+    "vue-router": "^4.4.0",
+    "vue-select": "4.0.0-beta.2",
+    "webpack": "^5.92.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.11",
-    "@vue/cli-plugin-eslint": "^4.5.11",
-    "@vue/cli-plugin-router": "^4.5.11",
-    "@vue/cli-plugin-unit-jest": "^4.5.11",
-    "@vue/cli-service": "^4.5.11",
-    "@vue/eslint-config-airbnb": "^4.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "moxios": "^0.4.0",
-    "vue-template-compiler": "^2.6.14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/airbnb"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)",
-          "**/tests/unit/**/*.spec.{j,t}s?(x)"
-        ],
-        "env": {
-          "jest": true
-        }
-      },
-      {
-        "files": [
-          "**/*OfferComponent.vue"
-        ],
-        "rules": {
-          "max-len": "off"
-        }
-      }
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "@vue/cli-service": "^5.0.8"
   },
   "browserslist": [
     "> 1%",
