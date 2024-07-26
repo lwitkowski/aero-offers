@@ -1,23 +1,23 @@
 services:
-  frontend:
+  aerooffers-frontend:
     build: ./frontend
     ports:
       - '8080:80'
     depends_on:
-      - backend
+      - aerooffers-backend
 
-  backend:
+  aerooffers-backend:
     build: ./backend
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=aerooffers-db
       - DB_PORT=5432
       - DB_NAME=aircraft_offers
       - DB_USER=aircraft_offers
       - DB_PW=aircraft_offers
     depends_on:
-      - postgres
+      - aerooffers-db
 
-  postgres:
+  aerooffers-db:
     image: postgres:15-alpine
     restart: always
     environment:
