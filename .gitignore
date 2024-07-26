@@ -1,4 +1,6 @@
 .DS_Store
 .idea
 *.log
+__pycache__
 node_modules
+db/prod_dump_2024_06_31.sql

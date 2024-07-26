@@ -6,14 +6,14 @@ ITEM_PIPELINES = {
 }
 
 # database
-DB_USER = "aircraftoffers"
-DB_PW = ""
-DB_NAME = "aircraft_offers"
-DB_HOST = "localhost"
+DB_HOST = "postgres"
 DB_PORT = 5432
+DB_NAME = "aircraft_offers"
+DB_USER = "aircraft_offers"
+DB_PW = "aircraft_offers"
 
 # mailer
-SEND_RESULT_MAIL = True
+SEND_RESULT_MAIL = False
 SMTP_USER = ""
 SMTP_PASSWORD = ""
 SMTP_HOST = ""

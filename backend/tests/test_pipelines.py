@@ -1,5 +1,5 @@
 import unittest
-import pipelines
+from backend import pipelines
 from scrapy.exceptions import DropItem
 from ddt import ddt, data
 

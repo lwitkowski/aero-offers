@@ -1,0 +1,25 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - '8080:8080'
+
+  backend_api:
+    build: ./backend
+    ports:
+      - '8081:5000'
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=aircraft_offers
+      - POSTGRES_USER=aircraft_offers
+      - POSTGRES_PASSWORD=aircraft_offers
+    ports:
+      - '25432:5432'
+    volumes:
+      - ./db/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
+      - ./db/prod_dump_2024_06_31.sql:/docker-entrypoint-initdb.d/prod_dump_2024_06_31.sql

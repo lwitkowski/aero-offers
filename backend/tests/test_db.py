@@ -1,5 +1,5 @@
 import unittest
-import db
+from backend import db
 
 
 class DbTest(unittest.TestCase):
