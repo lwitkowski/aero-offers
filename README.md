@@ -6,7 +6,7 @@
 # Local development
 
 ## Prerequisites
-- python 3, pip3, flask
+- python 3.9+, pip3, flask
 - docker (compose)
 - npm
 

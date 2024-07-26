@@ -5,7 +5,6 @@ from nltk.util import ngrams
 from nltk.corpus import stopwords
 from my_logging import *
 from nltk.metrics import distance
-from sklearn.metrics import confusion_matrix
 
 logger = logging.getLogger('classifier')
 
@@ -17,13 +16,6 @@ def get_all_models():
     with open(os.path.dirname(os.path.realpath(__file__)) + os.sep + models_file) as json_file:
         manufacturers = json.load(json_file)
     return manufacturers
-
-
-def get_confusion_matrix(test_data):
-    y_actual, y_predicted = get_actual_and_predicted(test_data)
-    cm = confusion_matrix(y_actual, y_predicted)
-    return cm
-
 
 def get_actual_and_predicted(test_data):
     model_classifier = ModelClassifier()

@@ -2,7 +2,6 @@ import datetime
 
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-from validate_email import validate_email
 from classifier import classifier
 
 import db
@@ -23,26 +22,6 @@ def offers():
                                       order_by=request.args.get('orderBy'),
                                       offset=request.args.get('offset'),
                                       aircraft_type=request.args.get('aircraft_type')))
-
-
-@app.route("/feedback", methods=['POST'])
-def contact():
-    if not request.json or 'email' not in request.json or 'message' not in request.json:
-        logger.info("aborting feedback request because of missing email / message")
-        abort(400)
-    if not validate_email(request.json['email']):
-        logger.info("aborting feedback request because of incorrect email")
-        abort(500)
-    if len(request.json['message']) == 0 or len(request.json['message']) > 1000:
-        logger.info("aborting feedback request because message too big (or empty)")
-        abort(500)
-    feedback = db.Feedback(
-        email=request.json['email'],
-        message=request.json['message'],
-        creation_datetime=datetime.datetime.now())
-    db.store_entity(feedback)
-    return jsonify(None), 201
-
 
 @app.route("/model/<manufacturer>/<model>")
 def model_information(manufacturer, model):
