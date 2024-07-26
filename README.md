@@ -1,7 +1,14 @@
-# www.aero-offers.com
+# www.aero-offers.com 
 
-# Running locally
+[![Continuous Deployment](https://github.com/lwitkowski/aero-offers/actions/workflows/cd.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd.yaml)
+
+# Running locally in Docker
 `docker compose up --build` - starts postgres, python backend and frontend apps (http://localhost:8080/)
+
+This project has 3 building blocks:
+- frontend - vue.js application deployed as dockerized static web app served by nginx
+- backend - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). Spiders/crawlers that scrape different portals reside here as well.
+- PostgreSQL database 
 
 # Local development
 

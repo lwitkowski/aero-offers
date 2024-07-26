@@ -1,0 +1,103 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOCKER_REPO: lwitkowski.azurecr.io
+
+jobs:
+  build-ui:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          echo "DOCKER_IMAGE=${DOCKER_REPO}/aero-offers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: 'Build UI'
+        working-directory: ./frontend
+        run: |
+          docker build . -t ${DOCKER_IMAGE}
+
+      - name: 'Push images to ACR'
+        uses: azure/docker-login@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          login-server: ${{ env.DOCKER_REPO }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - run: |
+          docker push ${DOCKER_IMAGE}
+
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          echo "DOCKER_IMAGE=${DOCKER_REPO}/aero-offers-backend:${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: 'Build Backend API'
+        working-directory: ./backend
+        run: |
+          docker build . -t ${DOCKER_IMAGE}
+
+      - name: 'Push image to ACR'
+        uses: azure/docker-login@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          login-server: ${{ env.DOCKER_REPO }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - run: |
+          docker push ${DOCKER_IMAGE}
+
+  # only for main builds, and only if both components get built correctly
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build-ui
+      - build-backend
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          echo "BACKEND_DOCKER_IMAGE=${DOCKER_REPO}/aero-offers-backend:${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "UI_DOCKER_IMAGE=${DOCKER_REPO}/aero-offers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: 'Azure Login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Deploy Backend'
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          resourceGroup: aerooffers
+          containerAppEnvironment: aerooffers-prod
+          containerAppName: aerooffers-backend
+          imageToDeploy: ${{ env.BACKEND_DOCKER_IMAGE }}
+          disableTelemetry: true
+
+      - name: 'Deploy UI'
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          resourceGroup: aerooffers
+          containerAppName: aerooffers-ui
+          containerAppEnvironment: aerooffers-prod
+          imageToDeploy: ${{ env.UI_DOCKER_IMAGE }}
+          disableTelemetry: true
