@@ -8,22 +8,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  fronend:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Frontend
+      - name: 'Build Frontend'
         working-directory: ./frontend
-        run: docker build .
+        run: docker build . -t aerooffers-ui:${{ github.sha }}
 
-  backend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Backend
+      - name: 'Build Backend'
         working-directory: ./backend
-        run: docker build .
+        run: docker build . -t aerooffers-backend:${{ github.sha }}
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Push images to ACR'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-ui:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-backend:${{ github.sha }}
