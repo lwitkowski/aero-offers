@@ -21,7 +21,7 @@
     "vue-chartist": "^3.0.0",
     "vue-router": "^4.4.0",
     "vue-select": "4.0.0-beta.2",
-    "webpack": "^5.92.1"
+    "webpack": "^5.93.0"
   },
   "devDependencies": {
     "@vue/cli-service": "^5.0.8"
