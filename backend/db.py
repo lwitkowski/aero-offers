@@ -69,6 +69,7 @@ class ExchangeRate(Base):
     last_update = Column(DateTime)
 
 
+logger.info('DB: postgresql+psycopg2://{0}:***@{1}:{2}/{3}'.format(DB_USER, DB_HOST, DB_PORT, DB_NAME))
 engine = create_engine('postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(DB_USER, DB_PW, DB_HOST, DB_PORT, DB_NAME))
 Session = sessionmaker(bind=engine)
 
