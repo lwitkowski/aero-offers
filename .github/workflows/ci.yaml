@@ -23,7 +23,7 @@ jobs:
         run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aero-offers-ui:${GITHUB_SHA::7}
 
       - name: 'Login via Azure CLI'
-        uses: azure/login@v1
+        uses: azure/login@v2
         if: github.ref == 'refs/heads/main'
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
