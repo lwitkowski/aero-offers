@@ -29,7 +29,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Push images to ACR'
-        uses: azure/docker-login@v1
+        uses: azure/docker-login@v2
         if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
