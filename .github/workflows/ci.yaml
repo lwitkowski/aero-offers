@@ -16,11 +16,11 @@ jobs:
 
       - name: 'Build Backend'
         working-directory: ./backend
-        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-backend:${GITHUB_SHA::7}
+        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aero-offers-backend:${GITHUB_SHA::7}
 
       - name: 'Build UI'
         working-directory: ./frontend
-        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-ui:${GITHUB_SHA::7}
+        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aero-offers-ui:${GITHUB_SHA::7}
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
@@ -34,5 +34,5 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-ui:${GITHUB_SHA::7}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aerooffers-backend:${GITHUB_SHA::7}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aero-offers-ui:${GITHUB_SHA::7}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aero-offers-backend:${GITHUB_SHA::7}

@@ -15,7 +15,7 @@ app.config['JSON_AS_ASCII'] = False
 logger = logging.getLogger("api")
 
 
-@app.route('/offers')
+@app.route('/api/offers')
 def offers():
     logger.debug("Received request {0}".format(request))
     return jsonify(db.get_offers_dict(limit=request.args.get('limit'),
@@ -23,7 +23,7 @@ def offers():
                                       offset=request.args.get('offset'),
                                       aircraft_type=request.args.get('aircraft_type')))
 
-@app.route("/model/<manufacturer>/<model>")
+@app.route("/api/model/<manufacturer>/<model>")
 def model_information(manufacturer, model):
     """
     Returns statistics for a specific manufacturer and model
@@ -37,7 +37,7 @@ def model_information(manufacturer, model):
     return jsonify(manufacturer_info)
 
 
-@app.route("/models")
+@app.route("/api/models")
 def aircraft_models():
     """
     Returns list of matching models in the format:

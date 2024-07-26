@@ -1,4 +1,3 @@
-import VueGtag from 'vue-gtag';
 import vSelect from 'vue-select';
 import ToastService from 'primevue/toastservice';
 import PrimeVue from 'primevue/config';
@@ -17,9 +16,6 @@ const app = createApp({
 
 app.component('v-select', vSelect);
 app.use(router);
-app.use(VueGtag, {
-  config: { id: 'UA-154630401-1' },
-}, router);
 app.use(require('vue-chartist'), {
   messageNoData: 'Not enough data for display',
 });

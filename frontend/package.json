@@ -19,7 +19,6 @@
     "sweetalert2": "^11.12.3",
     "vue": "^3.4.34",
     "vue-chartist": "^3.0.0",
-    "vue-gtag": "^2.0.1",
     "vue-router": "^4.4.0",
     "vue-select": "4.0.0-beta.2",
     "webpack": "^5.92.1"

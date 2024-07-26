@@ -2,9 +2,11 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - '8080:8080'
+      - '8080:80'
+    depends_on:
+      - backend
 
-  backend_api:
+  backend:
     build: ./backend
     environment:
       - DB_HOST=postgres
@@ -12,8 +14,6 @@ services:
       - DB_NAME=aircraft_offers
       - DB_USER=aircraft_offers
       - DB_PW=aircraft_offers
-    ports:
-      - '8081:5000'
     depends_on:
       - postgres
 

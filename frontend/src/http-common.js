@@ -1,6 +1,6 @@
 import axios from 'axios'; /* eslint-disable */
 
-const baseURL = 'http://localhost:8081/'; // is now done via proxy
+const baseURL = '/api/';
 let HTTP = axios.create({ baseURL });
 
 // FIXME
