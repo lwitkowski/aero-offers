@@ -24,11 +24,13 @@ jobs:
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
+        if: github.ref == 'refs/heads/main'
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Push images to ACR'
         uses: azure/docker-login@v1
+        if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
