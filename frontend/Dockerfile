@@ -1,6 +1,4 @@
-FROM node:22
-
-RUN npm install -g http-server
+FROM node:22 AS builder
 
 WORKDIR /app
 
@@ -12,6 +10,15 @@ RUN npm install
 COPY . .
 
 RUN npm run build
+
+
+FROM node:22-slim
+
+RUN npm install -g http-server
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 8080
 
