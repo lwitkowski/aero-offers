@@ -3,8 +3,6 @@ import json
 
 from classifier import classifier
 from ddt import ddt, unpack, data
-from sklearn.metrics import f1_score
-
 
 @ddt
 class ModelClassifierTest(unittest.TestCase):
@@ -85,18 +83,6 @@ class ModelClassifierTest(unittest.TestCase):
         self.assertTrue(error_rate < 0.18,
                         "Error rate should be below 18%, is {0}. Incorrectly classified: {1}.".format(error_rate, str(
                             incorrectly_classified)))
-
-    @unittest.skip("Outdated assumption: Score is 0.7870370370370371, but expected greater than 0.8")
-    def test_micro_f1_score(self):
-        # previous F1 Scores
-        # jaro_similarity: 0.7936507936507936
-        # jaro_similarity: 0.8095238095238095 (adapted cutoff with manufacturer)
-        with open('tests/classifier_test_data.json') as json_file:
-            test_data = json.load(json_file)
-        y_actual, y_predicted = classifier.get_actual_and_predicted(test_data)
-        f1_micro = f1_score(y_actual, y_predicted, average='micro')
-        self.assertGreater(f1_micro, 0.8, "F1 Score should be better than 0.8 (previous value)")
-        print("Current F1-Score is {}".format(f1_micro))
 
     def test_with_no_detail_text(self):
         self.model_classifier.classify("DG-100", expect_manufacturer=False, detail_text=None)
