@@ -34,6 +34,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: 'Push image to ACR'
+        if: github.ref == 'refs/heads/main'
         run: |
           docker push ${DOCKER_IMAGE}
 
@@ -71,6 +72,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: 'Push image to ACR'
+        if: github.ref == 'refs/heads/main'
         run: |
           docker push ${DOCKER_IMAGE}
 
