@@ -1,6 +1,6 @@
 import axios from 'axios'; /* eslint-disable */
 
-const baseURL = '/api/';
+const baseURL = process.env.VUE_APP_BASE_URI;
 let HTTP = axios.create({ baseURL });
 
 // FIXME

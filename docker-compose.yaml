@@ -8,6 +8,8 @@ services:
 
   aerooffers-backend:
     build: ./backend
+    ports:
+      - '8081:80' # exposed for debugging and local frontend development without python
     environment:
       - DB_HOST=aerooffers-db
       - DB_PORT=5432
