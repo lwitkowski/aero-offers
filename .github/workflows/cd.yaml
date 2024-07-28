@@ -62,6 +62,7 @@ jobs:
   # only for main builds, and only if both components get built correctly
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     if: github.ref == 'refs/heads/main'
     needs:
       - build-ui
@@ -87,17 +88,17 @@ jobs:
       - name: 'Deploy API'
         uses: azure/container-apps-deploy-action@v2
         with:
-          resourceGroup: aerooffers
-          containerAppEnvironment: aerooffers-prod
-          containerAppName: aerooffers-api
+          resourceGroup: rg-aerooffers
+          containerAppEnvironment: cae-aerooffers-prod
+          containerAppName: ca-aerooffers-api
           imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
           disableTelemetry: true
 
       - name: 'Deploy UI'
         uses: azure/container-apps-deploy-action@v2
         with:
-          resourceGroup: aerooffers
-          containerAppName: aerooffers-ui
-          containerAppEnvironment: aerooffers-prod
+          resourceGroup: rg-aerooffers
+          containerAppEnvironment: cae-aerooffers-prod
+          containerAppName: ca-aerooffers-ui
           imageToDeploy: ${{ env.UI_DOCKER_IMAGE }}
           disableTelemetry: true

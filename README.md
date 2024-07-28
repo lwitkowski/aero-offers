@@ -35,7 +35,7 @@ Unzip database backup (optional)
 cd db && unzip -qq prod_dump_2024_06_31.sql.zip
 ```
 
-Start postgres in docker (exposed on port 25432):
+Start Postgres in docker (available for debugging via `localhost:25432`):
 ```bash
 docker-compose up postgres
 ```
@@ -48,13 +48,19 @@ pip3 install -r requirements.txt
 Start backend api (python app):
 ```
 cd backend
-python3 ./web/flask_app.py
+./run_api
 ```
 
 Start frontend (vue app):
 ```
 cd frontend
 npm run serve
+```
+
+Run crawlers/spiders:
+```
+cd backend
+./run_spiders
 ```
 
 ## Further development / bug fixing (from Ralf)

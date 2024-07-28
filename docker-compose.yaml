@@ -1,25 +1,25 @@
 services:
-  aerooffers-frontend:
+  ca-aerooffers-ui:
     build: ./frontend
     ports:
       - '8080:80'
     depends_on:
-      - aerooffers-api
+      - ca-aerooffers-api
 
-  aerooffers-api:
+  ca-aerooffers-api:
     build: ./backend
     ports:
       - '8081:80' # exposed for debugging and local frontend development without python
     environment:
-      - DB_HOST=aerooffers-db
+      - DB_HOST=ca-aerooffers-db
       - DB_PORT=5432
       - DB_NAME=aircraft_offers
       - DB_USER=aircraft_offers
       - DB_PW=aircraft_offers
     depends_on:
-      - aerooffers-db
+      - ca-aerooffers-db
 
-  aerooffers-db:
+  ca-aerooffers-db:
     image: postgres:15-alpine
     restart: always
     environment:
