@@ -12,6 +12,11 @@ docker run \
     -v ${PWD}'/../db/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql' \
     postgres:15-alpine
 
-python3 -m unittest
+python3 -m unittest -f
 
-docker rm -f test-db
+if [[ $? -ne 0 ]]; then
+    docker rm -f test-db
+    exit 1
+else
+    docker rm -f test-db
+fi

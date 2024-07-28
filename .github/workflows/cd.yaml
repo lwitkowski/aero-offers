@@ -25,14 +25,16 @@ jobs:
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
-      - name: 'Push image to ACR'
+      - name: 'Login to ACR'
         uses: azure/docker-login@v2
         if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ env.DOCKER_REPO }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-      - run: |
+
+      - name: 'Push image to ACR'
+        run: |
           docker push ${DOCKER_IMAGE}
 
   build-api:
@@ -60,14 +62,16 @@ jobs:
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
-      - name: 'Push image to ACR'
+      - name: 'Login to ACR'
         uses: azure/docker-login@v2
         if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ env.DOCKER_REPO }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-      - run: |
+
+      - name: 'Push image to ACR'
+        run: |
           docker push ${DOCKER_IMAGE}
 
   # only for main builds, and only if both components get built correctly
