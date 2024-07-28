@@ -4,9 +4,9 @@ services:
     ports:
       - '8080:80'
     depends_on:
-      - aerooffers-backend
+      - aerooffers-api
 
-  aerooffers-backend:
+  aerooffers-api:
     build: ./backend
     ports:
       - '8081:80' # exposed for debugging and local frontend development without python
