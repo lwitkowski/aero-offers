@@ -25,14 +25,17 @@ jobs:
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
-      - name: 'Push image to ACR'
+      - name: 'Login to ACR'
         uses: azure/docker-login@v2
         if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ env.DOCKER_REPO }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-      - run: |
+
+      - name: 'Push image to ACR'
+        if: github.ref == 'refs/heads/main'
+        run: |
           docker push ${DOCKER_IMAGE}
 
   build-api:
@@ -44,19 +47,33 @@ jobs:
       - run: |
           echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 'Run tests'
+        working-directory: ./backend
+        run: |
+          pip3 install --quiet -r requirements.txt -r tests/requirements.txt
+          ./run_tests.sh
+
       - name: 'Build Backend API'
         working-directory: ./backend
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
-      - name: 'Push image to ACR'
+      - name: 'Login to ACR'
         uses: azure/docker-login@v2
         if: github.ref == 'refs/heads/main'
         with:
           login-server: ${{ env.DOCKER_REPO }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-      - run: |
+
+      - name: 'Push image to ACR'
+        if: github.ref == 'refs/heads/main'
+        run: |
           docker push ${DOCKER_IMAGE}
 
   # only for main builds, and only if both components get built correctly

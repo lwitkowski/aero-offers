@@ -9,7 +9,7 @@ class AircraftTypeClassifierTest(unittest.TestCase):
         self.classifier = AircraftTypeClassifier()
 
     def test_aircraft_type_is_classified_even_when_model_is_unknown(self):
-        with open('classifier_test_data_aircraft_type.json') as json_file:
+        with open('tests/classifier_test_data_aircraft_type.json') as json_file:
             data = json.load(json_file)
             for item in data:
                 title = item["title"]

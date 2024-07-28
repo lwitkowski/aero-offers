@@ -6,6 +6,9 @@ from nltk.corpus import stopwords
 from my_logging import *
 from nltk.metrics import distance
 
+import nltk
+nltk.download('stopwords')
+
 logger = logging.getLogger('classifier')
 
 aircraft_types = ["glider", "tmg", "ultralight", "airplane", "helicopter"]
