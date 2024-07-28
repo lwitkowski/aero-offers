@@ -12,6 +12,8 @@ docker run \
     -v ${PWD}'/../db/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql' \
     postgres:15-alpine
 
+sleep 5
+
 python3 -m unittest -f
 
 if [[ $? -ne 0 ]]; then
