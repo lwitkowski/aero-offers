@@ -44,6 +44,11 @@ jobs:
       - run: |
           echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
+      - name: 'Run tests'
+        working-directory: ./backend
+        run: |
+          ./run_tests.sh
+
       - name: 'Build Backend API'
         working-directory: ./backend
         run: |
