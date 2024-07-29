@@ -213,10 +213,3 @@ class AircraftTypeClassifier:
         if spider == "planecheck_com":
             return "airplane"
         return "glider"
-
-
-if __name__ == '__main__':
-    classifier = ModelClassifier()
-    test_input = "originale Piper PA-22-108 von 1962 mit Papieren"
-    solution = classifier.classify(test_input, expect_manufacturer=True)
-    print(solution)

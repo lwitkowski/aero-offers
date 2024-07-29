@@ -12,6 +12,14 @@ az containerapp env create \
   --resource-group $RESOURCE_GROUP \
   --location "$LOCATION"
 
+az identity create \
+  --name id-aerooffers \
+  --resource-group $RESOURCE_GROUP \
+  --location "$LOCATION"
+
+# assign identity a 'Contributor' role to resource group  'rg-aerooffers'
+# create federated credential for identity with subject identifier repo:lwitkowski/aero-offers:environment:production
+
 docker login $ACR
 
 az containerapp create \

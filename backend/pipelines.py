@@ -4,7 +4,7 @@ from scrapy.exceptions import DropItem
 
 import db
 from my_logging import *
-from spiders import SegelflugDeSpider, FlugzeugMarktDeSpider, PlaneCheckComSpider
+from spiders import SoaringDeSpider, FlugzeugMarktDeSpider, PlaneCheckComSpider
 from exchange_rates import get_currency_code
 
 logger = logging.getLogger('pipeline')
@@ -14,7 +14,7 @@ class DuplicateDetection(object):
 
     def process_item(self, item, spider):
         logger.debug("Detecting duplicates for item %s", str(item))
-        if spider.name in [SegelflugDeSpider.SegelflugDeSpider.name,
+        if spider.name in [SoaringDeSpider.SoaringDeSpider.name,
                            FlugzeugMarktDeSpider.FlugzeugMarktDeSpider.name,
                            PlaneCheckComSpider.PlaneCheckComSpider.name]:
             has_offer = db.has_offer_url(item["offer_url"])

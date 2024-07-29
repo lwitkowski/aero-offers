@@ -35,6 +35,8 @@ class AircraftOffer(Base):
     manufacturer = Column(Unicode)
     model = Column(Unicode)
 
+    classified = Column(Boolean, default=False)
+
     def as_dict(self):
         return {
             "id": self.id,
@@ -48,18 +50,9 @@ class AircraftOffer(Base):
             "location": self.location,
             "aircraft_type": self.aircraft_type,
             "manufacturer": self.manufacturer,
-            "model": self.model
+            "model": self.model,
+            "classified": self.classified
         }
-
-
-class Feedback(Base):
-    __tablename__ = "feedback"
-
-    id = Column('id', Integer, primary_key=True)
-    creation_datetime = Column(DateTime)
-    email = Column(Unicode)
-    message = Column(Unicode)
-
 
 class ExchangeRate(Base):
     __tablename__ = "exchange_rates"
@@ -172,8 +165,3 @@ def get_offers_dict(order_by=None, limit=None, offset=None, aircraft_type=None):
         return ret
     finally:
         session.close()
-
-
-if __name__ == '__main__':
-    # update_exchange_rate(ExchangeRate(currency="EUR", rate="123.34"))
-    print(get_offers_dict())

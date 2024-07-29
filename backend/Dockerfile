@@ -12,7 +12,7 @@ RUN \
  python3 -m pip install -r requirements.txt --no-cache-dir && \
  apk --purge del .build-deps
 
-ENV FLASK_APP=./web/flask_app.py
+ENV FLASK_APP=./api/flask_app.py
 
 COPY . .
 

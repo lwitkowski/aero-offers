@@ -74,14 +74,14 @@
         name: "run crawler"
         minute: "0"
         hour: "5"
-        job: "cd {{ code_dir }} && python3 fetch_offers.py && python3 reclassify_offers.py"
+        job: "cd {{ code_dir }} && python3 job_fetch_offers.py && python3 job_reclassify_offers.py"
 
     - name: "Ensure Exchange rates are fetched from ECB every day at 16:00 UTC (they are updated usually at 16:00 CET)"
       cron:
         name: "fetch exchange rates"
         minute: "0"
         hour: "16"
-        job: "cd {{ code_dir }} && python3 get_exchange_rates.py"
+        job: "cd {{ code_dir }} && python3 job_update_exchange_rates.py"
 
     - name: "Change user for frontend dist to nginx"
       file:

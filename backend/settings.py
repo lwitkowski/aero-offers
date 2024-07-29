@@ -13,7 +13,7 @@ SMTP_USER = ""
 SMTP_PASSWORD = ""
 SMTP_HOST = ""
 
-
+# scrapy pipeline components config, do not delete this
 ITEM_PIPELINES = {
     'pipelines.DuplicateDetection': 100,
     'pipelines.FilterUnreasonablePrices': 200,

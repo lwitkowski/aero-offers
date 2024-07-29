@@ -1,4 +1,5 @@
 import scrapy
+from scrapy.spidermiddlewares.httperror import HttpError
 import datetime
 import re
 from price_parser import Price
@@ -6,10 +7,11 @@ from my_logging import *
 
 GLIDER_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=118"
 ENGINE_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=119"
+BROKEN_OFFER_URL = "https://soaring.de/osclass/index.php?page=item&id="
 
-
-class SegelflugDeSpider(scrapy.Spider):
-    name = "segelflug_de_kleinanzeigen"
+# former SegelflugDeSpider
+class SoaringDeSpider(scrapy.Spider):
+    name = "segelflug_de_kleinanzeigen" # fixme, possibly needs db rows update
     logger = logging.getLogger(name)
 
     start_urls = [GLIDER_OFFERS_URL, ENGINE_OFFERS_URL]
@@ -24,18 +26,26 @@ class SegelflugDeSpider(scrapy.Spider):
 
     def parse(self, response):
         for detail_url in response.css('div.listing-attr a::attr(href)').extract():
+            if(detail_url == BROKEN_OFFER_URL):
+                continue
+
             if response.request.url == ENGINE_OFFERS_URL:
                 aircraft_type = "airplane"
             else:
                 aircraft_type = "glider"
-            self.logger.debug("yielding url %s", detail_url)
+
+            self.logger.debug("Scraping offer detail url %s", detail_url)
             yield scrapy.Request(detail_url,
                                  callback=self.parse_detail_page,
                                  errback=self.errback,
                                  meta={"aircraft_type": aircraft_type})
 
     def errback(self, failure):
-        self.logger.error("%s", repr(failure))
+        if failure.check(HttpError):
+            response = failure.value.response
+            self.logger.error("Crawler HttpError status=%s url=%s", response.status, response.url)
+        else:
+            self.logger.error("Crawler generic exception: %s", repr(failure))
 
     def parse_detail_page(self, response):
         price_str = response.css('#item-content .item-header li::text').extract()[1]
