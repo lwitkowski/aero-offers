@@ -2,6 +2,8 @@ export PYTHONPATH=$PYTHONPATH':./'
 
 export DB_PORT=35432
 
+echo "Starting Postgres docker container"
+
 docker run \
     --name test-db \
     -d \

@@ -1,1 +1,1 @@
-python3 fetch_offers.py
+python3 job_fetch_offers.py

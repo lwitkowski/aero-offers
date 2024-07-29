@@ -1,14 +1,14 @@
 import unittest
 
-from spiders import SegelflugDeSpider
+from spiders import SoaringDeSpider
 from datetime import date
 from tests.util import fake_response_from_file
 
 
-class SegelflugDeSpiderTest(unittest.TestCase):
+class SoaringDeSpiderTest(unittest.TestCase):
 
     def setUp(self):
-        self.spider = SegelflugDeSpider.SegelflugDeSpider()
+        self.spider = SoaringDeSpider.SoaringDeSpider()
 
     def test_parse_detail_page(self):
         item = next(self.spider.parse_detail_page(
