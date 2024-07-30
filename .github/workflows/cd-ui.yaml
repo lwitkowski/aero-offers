@@ -31,15 +31,15 @@ jobs:
       - name: Setup node_modules cache
         uses: actions/cache@v3
         with:
-          path: frontend/node_modules
+          path: |
+            **/node_modules
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-
-            ${{ runner.os }}-
 
       - name: 'Install dependencies'
         working-directory: ./frontend
-        run: npm ci
+        run: npm install
 
       - name: 'Build VueJS app'
         working-directory: ./frontend
