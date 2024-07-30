@@ -7,12 +7,12 @@ on:
       - db/**
   pull_request:
     branches: [ main ]
+    paths:
+      - db/**
   workflow_dispatch:
-paths:
-
 
 jobs:
-  build-ui:
+  db-schema-migration:
     runs-on: ubuntu-latest
 
     steps:
