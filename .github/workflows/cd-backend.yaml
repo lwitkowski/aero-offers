@@ -85,3 +85,17 @@ jobs:
           containerAppName: ca-aerooffers-api
           imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
           disableTelemetry: true
+
+      - name: 'Deploy Job - update fx rates'
+        run: |
+          az containerapp job update \
+             -g rg-aerooffers \
+            --name aerooffers-update-fx-job \
+            --image ${{ env.API_DOCKER_IMAGE }}
+
+      - name: 'Deploy Job - update offers'
+        run: |
+          az containerapp job update \
+             -g rg-aerooffers \
+            --name aerooffers-update-offers-job \
+            --image ${{ env.API_DOCKER_IMAGE }}

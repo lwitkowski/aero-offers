@@ -11,16 +11,16 @@ services:
     ports:
       - '8081:80' # exposed for debugging and local frontend development without python
     environment:
-      - DB_HOST=ca-aerooffers-db
+      - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=aircraft_offers
       - DB_USER=aircraft_offers
       - DB_PW=aircraft_offers
     depends_on:
-      - ca-aerooffers-db
+      - postgres
       - flyway
 
-  ca-aerooffers-db:
+  postgres:
     image: postgres:16.3-alpine
     environment:
       - POSTGRES_DB=aircraft_offers
@@ -31,8 +31,8 @@ services:
 
   flyway:
     image: flyway/flyway:10-alpine
-    command: -url=jdbc:postgresql://ca-aerooffers-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
+    command: -url=jdbc:postgresql://postgres:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
     volumes:
       - ./db/migrations:/flyway/sql
     depends_on:
-      - ca-aerooffers-db
+      - postgres

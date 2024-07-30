@@ -10,24 +10,24 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
 ### Project structure (building blocks /  deployment units)
 - `frontend` - vue.js application deployed as dockerized static web app served by nginx
 - `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). 
-- `backend/jobs` - python scripts triggered by scheduled job (e.g once a day)
+- `backend/jobs` - python scripts triggered by scheduled job (e.g once a day). Please mind those jobs may be much much more resource heavy than API, and should not be triggered from within `api` container which is optimised to handle REST api traffic.
     - `job_fetch_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified)
     - `job_reclassify_offers` - assigns manufacturer and model to new (not yet classified) offers stored in the database
     - `job_update_exchange_rates` - updates currency exchange rates based ok ECP api
-- `db` - PostgreSQL 16 database with DDL scripts managed by Flyway
+- `db` - PostgreSQL 16 database with DDL scripts managed by Flyway. Currently running inside cheapest possible Azure VM.
 
 ### Prod environment
-Currently the project is being onboarded to Azure Cloud (still WIP).
+Currently, the project is being onboarded to Azure Cloud (still WIP).
 
 ### TODO
 - [x] deploy working ui, api and db to Azure
 - [x] fix segelflug spider/crawler
-- [ ] managed db with persistent storage (it's running in ephemeral container atm)
-- [ ] fix other spiders/crawlers
-- [ ] use Azure secrets for db credentials
-- [ ] setup cron triggers for crawlers, reclassifier and FX rates updater (Azure Functions?)
+- [x] good enough DB setup (cheap VM)
+- [x] use Azure secrets for db credentials
+- [x] setup cron triggers for crawlers, reclassifier and FX rates updater
 - [ ] infra as code (biceps or terraform)
 - [ ] document infra and env topology
+- [ ] fix other spiders/crawlers
 - [ ] human readable domain (aero-offers.com?)
 - [ ] fix aircraft type dropdown
 - [ ] fix & polish CSS in UI
@@ -44,7 +44,7 @@ Currently the project is being onboarded to Azure Cloud (still WIP).
 
 Start Postgres in docker (available for debugging via `localhost:25432`):
 ```bash
-docker-compose up ca-aerooffers-db flyway
+docker-compose up postgres flyway
 ```
 
 Unzip database backup (optional) and load into DB
