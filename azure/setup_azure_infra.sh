@@ -33,7 +33,7 @@ az containerapp create \
     --ingress internal \
     --transport tcp \
     --cpu 0.25 --memory 0.5Gi \
-    --min-replicas 0 --max-replicas 1
+    --min-replicas 1 --max-replicas 1
 
 az containerapp create \
     --name ca-aerooffers-api \
@@ -44,8 +44,9 @@ az containerapp create \
     --env-vars DB_HOST="ca-aerooffers-db" DB_PORT="5432" DB_NAME="aircraft_offers" DB_USER="aircraft_offers" DB_PW="aircraft_offers" \
     --target-port 80 \
     --ingress internal \
+    --transport tcp \
     --cpu 0.25 --memory 0.5Gi \
-    --min-replicas 0 --max-replicas 1
+    --min-replicas 1 --max-replicas 1
 
 az containerapp create \
     --name ca-aerooffers-ui \
@@ -55,7 +56,7 @@ az containerapp create \
     --image $ACR/aerooffers-ui:a7e18a5 \
     --target-port 80 \
     --cpu 0.25 --memory 0.5Gi \
-    --min-replicas 0 --max-replicas 1 \
+    --min-replicas 1 --max-replicas 1 \
     --ingress external \
     --query properties.configuration.ingress.fqdn
 
