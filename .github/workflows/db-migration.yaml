@@ -1,0 +1,24 @@
+name: DB Migration
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - db/**
+  pull_request:
+    branches: [ main ]
+    paths:
+      - db/**
+  workflow_dispatch:
+
+jobs:
+  db-schema-migration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Test flyway migration scripts'
+        working-directory: ./db
+        run: |
+          ./run_migrations_test.sh

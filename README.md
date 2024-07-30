@@ -13,7 +13,7 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
     - `job_fetch_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified)
     - `job_reclassify_offers` - assigns manufacturer and model to new (not yet classified) offers stored in the database
     - `job_update_exchange_rates` - updates currency exchange rates based ok ECP api
-- `db` - PostgreSQL 15 database
+- `db` - PostgreSQL 15 database with DDL scripts managed by Flyway
 
 ### TODO
 - use Azure secrets for db credentials
@@ -35,14 +35,14 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
 - docker (compose)
 - npm
 
-Unzip database backup (optional)
-```bash
-cd db && unzip -qq prod_dump_2024_06_31.sql.zip
-```
-
 Start Postgres in docker (available for debugging via `localhost:25432`):
 ```bash
-docker-compose up ca-aerooffers-db
+docker-compose up ca-aerooffers-db flyway
+```
+
+Unzip database backup (optional) and load into DB
+```bash
+cd db && unzip -qq prod_dump_2024_06_31.sql.zip
 ```
 
 Install python packages

@@ -18,16 +18,21 @@ services:
       - DB_PW=aircraft_offers
     depends_on:
       - ca-aerooffers-db
+      - flyway
 
   ca-aerooffers-db:
     image: postgres:15-alpine
-    restart: always
     environment:
       - POSTGRES_DB=aircraft_offers
       - POSTGRES_USER=aircraft_offers
       - POSTGRES_PASSWORD=aircraft_offers
     ports:
       - '25432:5432'
+
+  flyway:
+    image: flyway/flyway
+    command: -url=jdbc:postgresql://ca-aerooffers-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
     volumes:
-      - ./db/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
-      #- ./db/prod_dump_2024_06_31.sql:/docker-entrypoint-initdb.d/prod_dump_2024_06_31.sql
+      - ./db/migrations:/flyway/sql
+    depends_on:
+      - ca-aerooffers-db

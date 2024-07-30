@@ -1,5 +1,3 @@
-SET client_encoding = 'UTF8';
-
 CREATE TABLE aircraft_offer (
     id SERIAL PRIMARY KEY,
     date DATE,
