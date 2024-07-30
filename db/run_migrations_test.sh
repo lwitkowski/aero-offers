@@ -9,7 +9,7 @@ docker run --rm \
     -e 'POSTGRES_DB=aircraft_offers' \
     -e 'POSTGRES_USER=aircraft_offers' \
     -e 'POSTGRES_PASSWORD=aircraft_offers' \
-    postgres:15-alpine
+    postgres:16.3-alpine
 
 sleep 2
 

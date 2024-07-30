@@ -59,4 +59,3 @@ az containerapp create \
     --min-replicas 1 --max-replicas 1 \
     --ingress external \
     --query properties.configuration.ingress.fqdn
-

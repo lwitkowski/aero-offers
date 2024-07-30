@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  db-schema-migration:
+  validate-migrations:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,3 +22,21 @@ jobs:
         working-directory: ./db
         run: |
           ./run_migrations_test.sh
+
+  apply-migrations:
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.ref == 'refs/heads/main'
+    needs: validate-migrations
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run migration
+        uses: docker://flyway/flyway:9
+        env:
+          FLYWAY_URL: ${{ secrets.DB_JDBC_URL }}
+          FLYWAY_USER: ${{ secrets.DB_FLYWAY_USER }}
+          FLYWAY_PASSWORD: ${{ secrets.DB_FLYWAY_PASSWORD }}
+          FLYWAY_LOCATIONS: filesystem:./db/migrations
+          FLYWAY_VALIDATE_MIGRATION_NAMING: true
