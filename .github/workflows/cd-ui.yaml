@@ -24,7 +24,21 @@ jobs:
       - run: |
           echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: 'Install dependencies'
+        working-directory: ./frontend
+        run: npm ci
+
       - name: 'Build UI'
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: 'Build docker image'
         working-directory: ./frontend
         run: |
           docker build . -t ${DOCKER_IMAGE}
