@@ -1,10 +1,11 @@
 # Aero-offers
 
-This project aims at reviving www.aero-offers.com - invaluable source of price trends for gliders and other aircrafts.
+This project aims at reviving www.aero-offers.com - invaluable source of price trends for gliders and other aircrafts, originally developed and maintained by @rthaenert
 
 ## Development
 
-[![Continuous Deployment](https://github.com/lwitkowski/aero-offers/actions/workflows/cd.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd.yaml)
+[![CD - UI](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-ui.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-ui.yaml) 
+[![CD - Backend (api, jobs)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml)
 
 ### Project structure (building blocks /  deployment units)
 - `frontend` - vue.js application deployed as dockerized static web app served by nginx
@@ -16,16 +17,18 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
 - `db` - PostgreSQL 15 database with DDL scripts managed by Flyway
 
 ### TODO
-- use Azure secrets for db credentials
-- managed db with persistent storage (it's running in ephemeral container atm)
-- fix spiders/crawlers
-- setup cron triggers (Azure Functions?)
-- infra as code (biceps or terraform)
-- document infra and env topology
-- human readable domain (aero-offers.com?)
-- fix aircraft type dropdown
-- fix css
-- update/simplify legal subpage
+- [x] deploy working ui, api and db to Azure
+- [x] fix segelflug spider/crawler
+- [ ] managed db with persistent storage (it's running in ephemeral container atm)
+- [ ] fix other spiders/crawlers
+- [ ] use Azure secrets for db credentials
+- [ ] setup cron triggers for crawlers, reclassifier and FX rates updater (Azure Functions?)
+- [ ] infra as code (biceps or terraform)
+- [ ] document infra and env topology
+- [ ] human readable domain (aero-offers.com?)
+- [ ] fix aircraft type dropdown
+- [ ] fix & polish CSS in UI
+- [ ] update/simplify legal subpage
 
 ### Running locally without Python nor NodeJS
 `docker compose up --build` - starts postgres, python backend and frontend apps (http://localhost:8080/)
