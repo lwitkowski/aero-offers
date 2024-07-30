@@ -27,11 +27,13 @@
           </template>
         </v-select>
       </div>
+
     </div>
     <div id="body">
       <Toast />
       <router-view :key="$route.path" />
     </div>
+    <div id="footer">{{ buildInfo }}</div>
   </div>
 </template>
 
@@ -237,6 +239,7 @@ export default {
     return {
       options: [],
       selected: '',
+      buildInfo: 'Build: v.' + process.env.VUE_APP_GIT_HASH + ", " + process.env.VUE_APP_BUILD_TIMESTAMP
     };
   },
 

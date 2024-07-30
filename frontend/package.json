@@ -23,7 +23,8 @@
     "webpack": "^5.93.0"
   },
   "devDependencies": {
-    "@vue/cli-service": "^5.0.8"
+    "@vue/cli-service": "^5.0.8",
+    "git-describe": "^4.1.1"
   },
   "browserslist": [
     "> 1%",
