@@ -18,7 +18,7 @@ echo "Running migrations"
 docker run --rm \
     --network test-network \
     -v ${PWD}'/migrations/:/flyway/sql' \
-    flyway/flyway \
+    flyway/flyway:10-alpine \
     -url=jdbc:postgresql://test-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
 
 docker rm -f test-db

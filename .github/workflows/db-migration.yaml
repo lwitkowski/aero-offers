@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run migration
-        uses: docker://flyway/flyway:9
+        uses: docker://flyway/flyway:10-alpine
         env:
           FLYWAY_URL: ${{ secrets.DB_JDBC_URL }}
           FLYWAY_USER: ${{ secrets.DB_FLYWAY_USER }}

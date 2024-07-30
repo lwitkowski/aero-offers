@@ -30,7 +30,7 @@ services:
       - '25432:5432'
 
   flyway:
-    image: flyway/flyway
+    image: flyway/flyway:10-alpine
     command: -url=jdbc:postgresql://ca-aerooffers-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
     volumes:
       - ./db/migrations:/flyway/sql
