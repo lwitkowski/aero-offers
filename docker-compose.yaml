@@ -21,7 +21,7 @@ services:
       - flyway
 
   ca-aerooffers-db:
-    image: postgres:15-alpine
+    image: postgres:16.3-alpine
     environment:
       - POSTGRES_DB=aircraft_offers
       - POSTGRES_USER=aircraft_offers
@@ -30,7 +30,7 @@ services:
       - '25432:5432'
 
   flyway:
-    image: flyway/flyway
+    image: flyway/flyway:10-alpine
     command: -url=jdbc:postgresql://ca-aerooffers-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
     volumes:
       - ./db/migrations:/flyway/sql

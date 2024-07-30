@@ -9,7 +9,7 @@ docker run --rm \
     -e 'POSTGRES_DB=aircraft_offers' \
     -e 'POSTGRES_USER=aircraft_offers' \
     -e 'POSTGRES_PASSWORD=aircraft_offers' \
-    postgres:15-alpine
+    postgres:16.3-alpine
 
 sleep 2
 
@@ -18,7 +18,7 @@ echo "Running migrations"
 docker run --rm \
     --network test-network \
     -v ${PWD}'/migrations/:/flyway/sql' \
-    flyway/flyway \
+    flyway/flyway:10-alpine \
     -url=jdbc:postgresql://test-db:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
 
 docker rm -f test-db

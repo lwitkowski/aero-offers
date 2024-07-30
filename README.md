@@ -14,7 +14,7 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
     - `job_fetch_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified)
     - `job_reclassify_offers` - assigns manufacturer and model to new (not yet classified) offers stored in the database
     - `job_update_exchange_rates` - updates currency exchange rates based ok ECP api
-- `db` - PostgreSQL 15 database with DDL scripts managed by Flyway
+- `db` - PostgreSQL 16 database with DDL scripts managed by Flyway
 
 ### Prod environment
 Currently the project is being onboarded to Azure Cloud (still WIP).
