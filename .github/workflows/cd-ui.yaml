@@ -24,7 +24,28 @@ jobs:
       - run: |
           echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: 'Build UI'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: 'Install dependencies'
+        working-directory: ./frontend
+        run: npm install
+
+      - name: 'Build VueJS app'
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: 'Build docker image'
         working-directory: ./frontend
         run: |
           docker build . -t ${DOCKER_IMAGE}
