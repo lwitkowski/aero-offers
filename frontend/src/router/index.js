@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Offers from '../views/Offers.vue';
-import Impressum from '../views/Impressum.vue';
-import Datenschutz from '../views/Datenschutz.vue';
 import ModelInformation from '../views/ModelInformation.vue';
 import { createApp, nextTick } from 'vue';
 
@@ -70,18 +68,6 @@ const router = createRouter({
         props: {
           filter: 'aircraft_type=airplane',
         },
-      },
-      {
-        path: '/impressum',
-        name: 'Impressum',
-        component: Impressum,
-        meta: { title: 'Impressum / Legal Notice' },
-      },
-      {
-        path: '/datenschutz',
-        name: 'Datenschutz',
-        component: Datenschutz,
-        meta: { title: 'Datenschutz' },
       },
       {
         path: '/',

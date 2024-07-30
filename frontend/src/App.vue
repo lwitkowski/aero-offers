@@ -27,15 +27,10 @@
           </template>
         </v-select>
       </div>
-      <FeedbackComponent />
     </div>
     <div id="body">
       <Toast />
       <router-view :key="$route.path" />
-    </div>
-    <div id="footer">
-      <router-link to="/impressum">Impressum</router-link> |
-      <router-link to="/datenschutz">Datenschutzhinweis</router-link>
     </div>
   </div>
 </template>
@@ -236,7 +231,6 @@
 <script>
 import Toast from 'primevue/toast';
 import HTTP from './http-common';
-import FeedbackComponent from './components/FeedbackComponent.vue';
 
 export default {
   data() {
@@ -247,7 +241,6 @@ export default {
   },
 
   components: {
-    FeedbackComponent,
     Toast,
   },
 
