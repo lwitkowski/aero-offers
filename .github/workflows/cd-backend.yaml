@@ -1,43 +1,20 @@
-name: Continuous Deployment
+name: CD - Backend (api, jobs)
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - backend/**
   pull_request:
     branches: [ main ]
+    paths:
+      - backend/**
   workflow_dispatch:
 
 env:
   DOCKER_REPO: lwitkowski.azurecr.io
 
 jobs:
-  build-ui:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: |
-          echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      - name: 'Build UI'
-        working-directory: ./frontend
-        run: |
-          docker build . -t ${DOCKER_IMAGE}
-
-      - name: 'Login to ACR'
-        uses: azure/docker-login@v2
-        if: github.ref == 'refs/heads/main'
-        with:
-          login-server: ${{ env.DOCKER_REPO }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: 'Push image to ACR'
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker push ${DOCKER_IMAGE}
-
   build-api:
     runs-on: ubuntu-latest
 
@@ -82,7 +59,6 @@ jobs:
     environment: production
     if: github.ref == 'refs/heads/main'
     needs:
-      - build-ui
       - build-api
     permissions:
       id-token: write
@@ -93,7 +69,6 @@ jobs:
 
       - run: |
           echo "API_DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
-          echo "UI_DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: 'Azure Login'
         uses: azure/login@v2
@@ -109,13 +84,4 @@ jobs:
           containerAppEnvironment: cae-aerooffers-prod
           containerAppName: ca-aerooffers-api
           imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
-          disableTelemetry: true
-
-      - name: 'Deploy UI'
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          resourceGroup: rg-aerooffers
-          containerAppEnvironment: cae-aerooffers-prod
-          containerAppName: ca-aerooffers-ui
-          imageToDeploy: ${{ env.UI_DOCKER_IMAGE }}
           disableTelemetry: true
