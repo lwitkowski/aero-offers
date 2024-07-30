@@ -34,7 +34,7 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: 'Build UI'
+      - name: 'Build VueJS app'
         working-directory: ./frontend
         run: npm run build
 
