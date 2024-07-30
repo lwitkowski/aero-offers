@@ -16,6 +16,9 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
     - `job_update_exchange_rates` - updates currency exchange rates based ok ECP api
 - `db` - PostgreSQL 15 database with DDL scripts managed by Flyway
 
+### Prod environment
+Currently the project is being onboarded to Azure Cloud (still WIP).
+
 ### TODO
 - [x] deploy working ui, api and db to Azure
 - [x] fix segelflug spider/crawler
@@ -29,6 +32,7 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
 - [ ] fix aircraft type dropdown
 - [ ] fix & polish CSS in UI
 - [ ] update/simplify legal subpage
+- [ ] use https://github.com/weglide/GliderList  
 
 ### Running locally without Python nor NodeJS
 `docker compose up --build` - starts postgres, python backend and frontend apps (http://localhost:8080/)
