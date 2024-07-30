@@ -66,7 +66,7 @@ az containerapp job create \
     --image $ACR/aerooffers-api:$DOCKER_IMAGE_TAG \
     --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
     --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
-    --command "run_update_fx_rates.sh" \
+    --command "sh" "./run_update_fx_rates.sh" \
     --cpu "0.25" --memory "0.5Gi"
 
 az containerapp job create \
@@ -80,5 +80,5 @@ az containerapp job create \
     --image $ACR/aerooffers-api:$DOCKER_IMAGE_TAG \
     --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
     --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
-    --command "run_update_offers.sh" \
+    --command "sh" "./run_update_offers.sh" \
     --cpu "1" --memory "2Gi"
