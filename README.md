@@ -36,7 +36,7 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [ ] use https://github.com/weglide/GliderList  
 
 ### Running locally without Python nor NodeJS
-`docker compose up --build` - starts postgres, python backend and frontend apps (http://localhost:8080/)
+`docker compose up --build` - starts postgres, python backend and UI apps (http://localhost:8080/)
 
 ### Prerequisites for local development with hot reloads
 - python 3.12+, pip3, flask

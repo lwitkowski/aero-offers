@@ -4,11 +4,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - frontend/**
+      - ui/**
   pull_request:
     branches: [ main ]
     paths:
-      - frontend/**
+      - ui/**
   workflow_dispatch:
 
 env:
@@ -33,7 +33,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('ui/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-
 
