@@ -38,15 +38,27 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: 'Install dependencies'
-        working-directory: ./frontend
+        working-directory: ./ui
         run: npm install
 
+      - name: 'Check code formatting'
+        working-directory: ./ui
+        run: npx prettier . --check
+
+      - name: 'Static analysis (esLint)'
+        working-directory: ./ui
+        run: npm run lint
+
+      - name: 'Run tests'
+        working-directory: ./ui
+        run: CI=true npm run test:unit
+
       - name: 'Build VueJS app'
-        working-directory: ./frontend
+        working-directory: ./ui
         run: npm run build
 
       - name: 'Build docker image'
-        working-directory: ./frontend
+        working-directory: ./ui
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
