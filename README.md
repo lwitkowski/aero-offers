@@ -25,10 +25,11 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [x] good enough DB setup (cheap VM)
 - [x] use Azure secrets for db credentials
 - [x] setup cron triggers for crawlers, reclassifier and FX rates updater
+- [x] human readable domain (aero-offers.pl)
 - [ ] infra as code (biceps or terraform)
 - [ ] document infra and env topology
 - [ ] fix other spiders/crawlers
-- [ ] human readable domain (aero-offers.com?)
+- [ ] redirect from aero-offers.com
 - [ ] fix aircraft type dropdown
 - [ ] fix & polish CSS in UI
 - [ ] update/simplify legal subpage
@@ -83,10 +84,11 @@ cd backend
 - Euro on y-axis
 - Top 10 aircraft offered per category
 - Add more spiders
-- https://www.aircraft24.de
-- http://www.airplanemart.com
-- http://www.aeronave.de/1-luftfahrzeuge/listings.html
-- https://plane-sale.com
+   - facebook marketplace
+   - https://www.aircraft24.de
+   - http://www.airplanemart.com
+   - http://www.aeronave.de/1-luftfahrzeuge/listings.html
+   - https://plane-sale.com
 
 ### Legal (from Ralf)
 - Opt-out option / banner, pop-up due to analytics cookies
