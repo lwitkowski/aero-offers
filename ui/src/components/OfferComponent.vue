@@ -23,7 +23,7 @@
           <router-link
             :to="{
               name: 'ModelInformation',
-              params: { manufacturer: this.offer.manufacturer, model: this.offer.model }
+              params: { manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
             <a>Model: {{ offer.manufacturer }} {{ offer.model }}</a></router-link
@@ -33,12 +33,24 @@
     </div>
     <div class="icon">
       <small
-        ><a v-bind:href="offer.url" target="_blank">
+        ><a :href="offer.url" target="_blank">
           <img :src="'url_icon.png'" alt="Link to Offer" height="30" width="30" /></a
       ></small>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'OfferComponent',
+  props: {
+    offer: {
+      type: Object,
+      default: null
+    }
+  }
+}
+</script>
 
 <style lang="css">
 .icon {
@@ -74,10 +86,3 @@
   }
 }
 </style>
-
-<script>
-export default {
-  name: 'OfferComponent',
-  props: ['offer']
-}
-</script>

@@ -12,7 +12,7 @@ const app = createApp({
   render: () => h(App)
 })
 
-app.component('v-select', vSelect)
+app.component('VSelect', vSelect)
 app.use(router)
 app.use(vueChartist)
 app.use(PrimeVue)

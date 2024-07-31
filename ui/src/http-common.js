@@ -1,4 +1,4 @@
-import axios from 'axios' /* eslint-disable */
+import axios from 'axios'
 
 const baseURL = import.meta.env.VITE_API_URI
 

@@ -22,14 +22,8 @@ npm run build
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Lint with [ESLint](https://eslint.org/) and Prettier checks/fixes
 
 ```sh
 npm run lint
-```
-
-### Reformat sources
-
-```sh
-npx prettier --write .
 ```
