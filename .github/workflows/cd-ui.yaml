@@ -41,11 +41,7 @@ jobs:
         working-directory: ./ui
         run: npm install
 
-      - name: 'Check code formatting'
-        working-directory: ./ui
-        run: npx prettier . --check
-
-      - name: 'Static analysis (esLint)'
+      - name: 'Static analysis (esLint) and formatting checks'
         working-directory: ./ui
         run: npm run lint
 
