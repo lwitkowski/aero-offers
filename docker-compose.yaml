@@ -1,6 +1,6 @@
 services:
   ca-aerooffers-ui:
-    build: ./frontend
+    build: ./ui
     ports:
       - '8080:80'
     depends_on:
@@ -9,7 +9,7 @@ services:
   ca-aerooffers-api:
     build: ./backend
     ports:
-      - '8081:80' # exposed for debugging and local frontend development without python
+      - '8081:80' # exposed for debugging and local UI development without python
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432

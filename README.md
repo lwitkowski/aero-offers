@@ -8,7 +8,7 @@ This project aims at reviving www.aero-offers.com - invaluable source of price t
 [![CD - Backend (api, jobs)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml)
 
 ### Project structure (building blocks /  deployment units)
-- `frontend` - vue.js application deployed as dockerized static web app served by nginx
+- `ui` - vue.js application deployed as dockerized static web app served by nginx
 - `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). 
 - `backend/jobs` - python scripts triggered by scheduled job (e.g once a day). Please mind those jobs may be much much more resource heavy than API, and should not be triggered from within `api` container which is optimised to handle REST api traffic.
     - `job_fetch_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified)
@@ -36,7 +36,7 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [ ] use https://github.com/weglide/GliderList  
 
 ### Running locally without Python nor NodeJS
-`docker compose up --build` - starts postgres, python backend and frontend apps (http://localhost:8080/)
+`docker compose up --build` - starts postgres, python backend and UI apps (http://localhost:8080/)
 
 ### Prerequisites for local development with hot reloads
 - python 3.12+, pip3, flask
@@ -65,10 +65,10 @@ cd backend
 ./start_api.sh
 ```
 
-Start frontend (vue app):
+Start UI (vue app):
 ```
-cd frontend
-npm run serve
+cd ui
+npm run dev
 ```
 
 Run crawlers/spiders & reclassifier:
@@ -84,7 +84,7 @@ cd backend
 - Euro on y-axis
 - Top 10 aircraft offered per category
 - Add more spiders
-   - facebook marketplace
+   - Facebook Marketplace?
    - https://www.aircraft24.de
    - http://www.airplanemart.com
    - http://www.aeronave.de/1-luftfahrzeuge/listings.html

@@ -20,14 +20,16 @@
         </div>
       </div>
       <div>
-        <v-select class="style-chooser" v-model="selected" @search="fetchOptions" :options="options"
-          placeholder="choose aircraft model">
-          <template slot="no-options">
-            no model found
-          </template>
+        <v-select
+          class="style-chooser"
+          v-model="selected"
+          @search="fetchOptions"
+          :options="options"
+          placeholder="choose aircraft model"
+        >
+          <template v-slot:no-options> no model found </template>
         </v-select>
       </div>
-
     </div>
     <div id="body">
       <Toast />
@@ -38,7 +40,7 @@
 </template>
 
 <style lang="scss">
-@import "vue-select/src/scss/vue-select.scss";
+@import 'vue-select/src/scss/vue-select.scss';
 
 * {
   box-sizing: border-box;
@@ -231,44 +233,50 @@
 </style>
 
 <script>
-import Toast from 'primevue/toast';
-import HTTP from './http-common';
+/*global __COMMIT_HASH__*/
+/*global __BUILD_TIMESTAMP__*/
+
+import Toast from 'primevue/toast'
+import HTTP from './http-common'
 
 export default {
   data() {
     return {
       options: [],
       selected: '',
-      buildInfo: 'Build: v.' + process.env.VUE_APP_GIT_HASH + ", " + process.env.VUE_APP_BUILD_TIMESTAMP
-    };
+      buildInfo: 'Build: ' + __COMMIT_HASH__ + ', ' + __BUILD_TIMESTAMP__
+    }
   },
 
   components: {
-    Toast,
+    Toast
   },
 
   methods: {
     fetchOptions(search, loading) {
-      loading(true);
-      this.options = [];
+      loading(true)
+      this.options = []
       HTTP.get(`/models?search=${search}`).then((response) => {
-        const options = response.data;
+        const options = response.data
         // add labels for displaying the data
         for (let i = 0; i < options.length; i += 1) {
-          options[i].label = `${options[i].manufacturer} ${options[i].model}`;
+          options[i].label = `${options[i].manufacturer} ${options[i].model}`
         }
-        this.options = options;
-      });
-      loading(false);
-    },
+        this.options = options
+      })
+      loading(false)
+    }
   },
 
   watch: {
     selected(val) {
       if (val !== null) {
-        this.$router.push({ name: 'ModelInformation', params: { manufacturer: val.manufacturer, model: val.model } });
+        this.$router.push({
+          name: 'ModelInformation',
+          params: { manufacturer: val.manufacturer, model: val.model }
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
