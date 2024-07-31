@@ -1,33 +1,35 @@
 <template>
   <div id="app">
     <div class="header">
-      <div id="logo"><img src="/logo_v3.png" width="300" height="109" /></div>
+      <div id="logo">
+        <img src="/logo_v3.png" width="300" height="109" />
+      </div>
       <div id="nav">
         <div class="nav-element">
-          <router-link to="/offers">All Offers</router-link>
+          <router-link to="/offers"> All Offers </router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/gliders">Gliders</router-link>
+          <router-link to="/gliders"> Gliders </router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/tmg">TMG</router-link>
+          <router-link to="/tmg"> TMG </router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/ultralight">Ultralight</router-link>
+          <router-link to="/ultralight"> Ultralight </router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/airplane">Airplanes</router-link>
+          <router-link to="/airplane"> Airplanes </router-link>
         </div>
       </div>
       <div>
         <v-select
-          class="style-chooser"
           v-model="selected"
-          @search="fetchOptions"
+          class="style-chooser"
           :options="options"
           placeholder="choose aircraft model"
+          @search="fetchOptions"
         >
-          <template v-slot:no-options> no model found </template>
+          <template #no-options> no model found </template>
         </v-select>
       </div>
     </div>
@@ -35,9 +37,59 @@
       <Toast />
       <router-view :key="$route.path" />
     </div>
-    <div id="footer">{{ buildInfo }}</div>
+    <div id="footer">
+      {{ buildInfo }}
+    </div>
   </div>
 </template>
+
+<script>
+/*global __COMMIT_HASH__*/
+/*global __BUILD_TIMESTAMP__*/
+
+import Toast from 'primevue/toast'
+import HTTP from './http-common'
+
+export default {
+  components: {
+    Toast
+  },
+  data() {
+    return {
+      options: [],
+      selected: '',
+      buildInfo: 'Build: ' + __COMMIT_HASH__ + ', ' + __BUILD_TIMESTAMP__
+    }
+  },
+
+  watch: {
+    selected(val) {
+      if (val !== null) {
+        this.$router.push({
+          name: 'ModelInformation',
+          params: { manufacturer: val.manufacturer, model: val.model }
+        })
+      }
+    }
+  },
+
+  methods: {
+    fetchOptions(search, loading) {
+      loading(true)
+      this.options = []
+      HTTP.get(`/models?search=${search}`).then((response) => {
+        const options = response.data
+        // add labels for displaying the data
+        for (let i = 0; i < options.length; i += 1) {
+          options[i].label = `${options[i].manufacturer} ${options[i].model}`
+        }
+        this.options = options
+      })
+      loading(false)
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 @import 'vue-select/src/scss/vue-select.scss';
@@ -231,52 +283,3 @@
   visibility: visible;
 }
 </style>
-
-<script>
-/*global __COMMIT_HASH__*/
-/*global __BUILD_TIMESTAMP__*/
-
-import Toast from 'primevue/toast'
-import HTTP from './http-common'
-
-export default {
-  data() {
-    return {
-      options: [],
-      selected: '',
-      buildInfo: 'Build: ' + __COMMIT_HASH__ + ', ' + __BUILD_TIMESTAMP__
-    }
-  },
-
-  components: {
-    Toast
-  },
-
-  methods: {
-    fetchOptions(search, loading) {
-      loading(true)
-      this.options = []
-      HTTP.get(`/models?search=${search}`).then((response) => {
-        const options = response.data
-        // add labels for displaying the data
-        for (let i = 0; i < options.length; i += 1) {
-          options[i].label = `${options[i].manufacturer} ${options[i].model}`
-        }
-        this.options = options
-      })
-      loading(false)
-    }
-  },
-
-  watch: {
-    selected(val) {
-      if (val !== null) {
-        this.$router.push({
-          name: 'ModelInformation',
-          params: { manufacturer: val.manufacturer, model: val.model }
-        })
-      }
-    }
-  }
-}
-</script>

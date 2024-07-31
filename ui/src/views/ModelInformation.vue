@@ -9,7 +9,7 @@
       </p>
       <h2>Price Chart</h2>
       <div id="chart">
-        <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions"></chartist>
+        <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions" />
       </div>
       <h2>Offers</h2>
       <p>There were {{ offers.length }} offer(s) for this Model. The average offer price is {{ medianPrice }} Euro.</p>
@@ -19,9 +19,9 @@
           <th>Title</th>
           <th>Location</th>
           <th>Price</th>
-          <th></th>
+          <th />
         </tr>
-        <tr v-for="offer in offers.slice().reverse()" v-bind:key="offer.id">
+        <tr v-for="offer in offers.slice().reverse()" :key="offer.id">
           <td>{{ offer.date }}</td>
           <td>{{ offer.title }}</td>
           <td>{{ offer.location }}</td>
@@ -29,7 +29,7 @@
           <td>
             <div class="icon">
               <small
-                ><a v-bind:href="offer.url" target="_blank">
+                ><a :href="offer.url" target="_blank">
                   <img :src="'../../url_icon.png'" alt="Link to Offer" height="30" width="30" /> </a
               ></small>
             </div>
@@ -40,38 +40,6 @@
   </div>
 </template>
 
-<style lang="scss">
-@import 'chartist/dist/scss/chartist.scss';
-@import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.scss';
-
-#chart {
-  margin: auto;
-  width: 600px;
-  height: 600px;
-}
-
-.chartist-tooltip::before {
-  border-top-color: #011627;
-}
-
-.chartist-tooltip {
-  color: #ffffff;
-  font-weight: 100;
-  background-color: #011627;
-}
-
-.modelinformation-table {
-  text-align: left;
-  margin: auto;
-}
-
-.modelinformation-table th {
-  text-align: center;
-  background-color: #011627;
-  color: #ffffff;
-}
-</style>
-
 <script>
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 import moment from 'moment'
@@ -79,7 +47,18 @@ import HTTP from '../http-common'
 
 export default {
   name: 'ModelInformation',
-  props: ['manufacturer', 'model'],
+
+  components: {},
+  props: {
+    manufacturer: {
+      type: String,
+      default: null
+    },
+    model: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       manufacturer_website: '',
@@ -100,6 +79,10 @@ export default {
         ]
       }
     }
+  },
+
+  created() {
+    this.fetchData()
   },
 
   methods: {
@@ -158,12 +141,38 @@ export default {
         this.medianPrice = Math.round((this.medianPrice / this.offers.length) * 100) / 100
       })
     }
-  },
-
-  components: {},
-
-  created() {
-    this.fetchData()
   }
 }
 </script>
+
+<style lang="scss">
+@import 'chartist/dist/scss/chartist.scss';
+@import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.scss';
+
+#chart {
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}
+
+.chartist-tooltip::before {
+  border-top-color: #011627;
+}
+
+.chartist-tooltip {
+  color: #ffffff;
+  font-weight: 100;
+  background-color: #011627;
+}
+
+.modelinformation-table {
+  text-align: left;
+  margin: auto;
+}
+
+.modelinformation-table th {
+  text-align: center;
+  background-color: #011627;
+  color: #ffffff;
+}
+</style>
