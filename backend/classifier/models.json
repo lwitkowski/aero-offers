@@ -625,6 +625,7 @@
         "LS3",
         "LS4",
         "LS6",
+        "LS7",
         "LS8",
         "LS9",
         "LS10"
@@ -752,13 +753,16 @@
     "manufacturer_website": "http://lak.lt/",
     "models": {
       "glider": [
+        "LAK-12",
         "LAK-17a",
         "LAK-17AT",
         "LAK-17a FES",
         "LAK-17b",
         "LAK-17bT",
         "LAK-17b FES",
-        "LAK-19"
+        "LAK-17c",
+        "LAK-19",
+        "LAK-20T"
       ]
     }
   },
