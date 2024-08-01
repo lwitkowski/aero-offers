@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import ChartistTooltip from 'chartist-plugin-tooltips-updated'
+import axios from 'axios'
 import moment from 'moment'
-import HTTP from '../http-common'
+import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 
 export default {
   name: 'ModelInformation',
@@ -97,7 +97,7 @@ export default {
 
     fetchData() {
       this.chartData.series = [[]]
-      HTTP.get(`/model/${this.manufacturer}/${this.model}`).then((response) => {
+      axios.get(`/model/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
         if (this.offers.length === 0) {

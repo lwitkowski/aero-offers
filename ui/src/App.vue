@@ -6,7 +6,7 @@
       </div>
       <div id="nav">
         <div class="nav-element">
-          <router-link to="/offers"> All Offers </router-link>
+          <router-link to="/"> All Offers </router-link>
         </div>
         <div class="nav-element">
           <router-link to="/gliders"> Gliders </router-link>
@@ -47,8 +47,8 @@
 /*global __COMMIT_HASH__*/
 /*global __BUILD_TIMESTAMP__*/
 
+import axios from 'axios'
 import Toast from 'primevue/toast'
-import HTTP from './http-common'
 
 export default {
   components: {
@@ -77,7 +77,7 @@ export default {
     fetchOptions(search, loading) {
       loading(true)
       this.options = []
-      HTTP.get(`/models?search=${search}`).then((response) => {
+      axios.get(`/models?search=${search}`).then((response) => {
         const options = response.data
         // add labels for displaying the data
         for (let i = 0; i < options.length; i += 1) {

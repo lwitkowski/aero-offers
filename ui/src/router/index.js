@@ -7,8 +7,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/offers',
-      name: 'Offers',
+      path: '/',
+      name: 'All Offers',
       component: Offers,
       meta: {
         title: 'Aircraft Offers Overview',
@@ -67,10 +67,6 @@ const router = createRouter({
       props: {
         filter: 'aircraft_type=airplane'
       }
-    },
-    {
-      path: '/',
-      redirect: '/offers'
     },
     {
       path: '/model/:manufacturer/:model',

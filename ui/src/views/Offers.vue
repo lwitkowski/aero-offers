@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import HTTP from '../http-common'
+import axios from 'axios'
 import OfferComponent from '../components/OfferComponent.vue'
 
 export default {
@@ -40,7 +40,7 @@ export default {
 
   methods: {
     fetchData() {
-      HTTP.get(`/offers?${this.filter}&limit=${this.limit}&orderBy=creation_datetime&offset=${this.offset}`).then(
+      axios.get(`/offers?${this.filter}&limit=${this.limit}&orderBy=creation_datetime&offset=${this.offset}`).then(
         (response) => {
           this.offers = this.offers.concat(response.data)
         }
