@@ -35,6 +35,7 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [ ] update/simplify legal subpage
 - [ ] cookies info
 - [ ] use https://github.com/weglide/GliderList  
+- [ ] admin panel for manual (re) classification (or community-based)
 - [ ] crawler for Facebook Marketplace - do they have nice api?
 - [ ] crawler for https://www.aircraft24.de
 - [ ] crawler for http://www.airplanemart.com
