@@ -27,6 +27,7 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [x] setup cron triggers for crawlers, reclassifier and FX rates updater
 - [x] human readable domain (aero-offers.pl)
 - [x] fix aircraft type dropdown
+- [ ] database daily backups
 - [ ] infra as code (biceps or terraform)
 - [ ] document infra and env topology
 - [ ] fix other spiders/crawlers
