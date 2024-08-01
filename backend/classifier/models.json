@@ -7,6 +7,15 @@
       ]
     }
   },
+  "Aeromot": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Aeromot",
+    "models": {
+      "tmg": [
+        "AMT-100 Ximango",
+        "AMT-200 Super Ximango"
+      ]
+    }
+  },
   "Akaflieg Braunschweig": {
     "manufacturer_website": "https://de.wikipedia.org/wiki/Akaflieg#Akaflieg_Braunschweig",
     "models": {
