@@ -21,20 +21,8 @@
           <router-link to="/airplane"> Airplanes </router-link>
         </div>
       </div>
-      <div>
-        <v-select
-          v-model="selected"
-          class="style-chooser"
-          :options="options"
-          placeholder="choose aircraft model"
-          @search="fetchOptions"
-        >
-          <template #no-options> no model found </template>
-        </v-select>
-      </div>
     </div>
     <div id="body">
-      <Toast />
       <router-view :key="$route.path" />
     </div>
     <div id="footer">
@@ -47,53 +35,17 @@
 /*global __COMMIT_HASH__*/
 /*global __BUILD_TIMESTAMP__*/
 
-import axios from 'axios'
-import Toast from 'primevue/toast'
-
 export default {
-  components: {
-    Toast
-  },
+  components: {},
   data() {
     return {
-      options: [],
-      selected: '',
       buildInfo: 'Build: ' + __COMMIT_HASH__ + ', ' + __BUILD_TIMESTAMP__
-    }
-  },
-
-  watch: {
-    selected(val) {
-      if (val !== null) {
-        this.$router.push({
-          name: 'ModelInformation',
-          params: { manufacturer: val.manufacturer, model: val.model }
-        })
-      }
-    }
-  },
-
-  methods: {
-    fetchOptions(search, loading) {
-      loading(true)
-      this.options = []
-      axios.get(`/models?search=${search}`).then((response) => {
-        const options = response.data
-        // add labels for displaying the data
-        for (let i = 0; i < options.length; i += 1) {
-          options[i].label = `${options[i].manufacturer} ${options[i].model}`
-        }
-        this.options = options
-      })
-      loading(false)
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import 'vue-select/src/scss/vue-select.scss';
-
 * {
   box-sizing: border-box;
   margin: 0px;
@@ -201,11 +153,6 @@ export default {
 #nav a.router-link-exact-active {
   color: #f71735;
   text-decoration: none;
-}
-
-#feedback-button {
-  align-content: right;
-  text-align: right;
 }
 
 #body {

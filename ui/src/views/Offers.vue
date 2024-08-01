@@ -1,8 +1,21 @@
 <template>
   <div id="offers-content">
-    <div id="explanation">
-      aero-offers.com gathers data from various aircraft marketplaces and makes them available for insights.
+    <div id="aircraft-type-filter">
+      <multiselect
+        v-model="selected"
+        :options="available_aircraft_types"
+        group-values="models"
+        group-label="manufacturer"
+        :group-select="false"
+        label="model"
+        :placeholder="'Filter ' + (aircraft_type ? aircraft_type + ' ' : 'aircraft ') + 'type'"
+      >
+        <template #noResult>
+          <span>Oops! Aircraft type not found. Try different phrase.</span>
+        </template>
+      </multiselect>
     </div>
+
     <div id="offers-div">
       <OfferComponent v-for="offer in offers" :key="offer.id" :offer="offer" />
       <button class="click-button" @click="fetchData">Load more Offers</button>
@@ -13,15 +26,17 @@
 <script>
 import axios from 'axios'
 import OfferComponent from '../components/OfferComponent.vue'
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'Offers',
 
   components: {
-    OfferComponent
+    OfferComponent,
+    Multiselect
   },
   props: {
-    filter: {
+    aircraftType: {
       type: String,
       default: null
     }
@@ -30,37 +45,82 @@ export default {
     return {
       offers: [],
       offset: 0,
-      limit: 30
+      limit: 30,
+
+      available_aircraft_types: [],
+      selected: ''
+    }
+  },
+
+  watch: {
+    selected(val) {
+      if (val !== null) {
+        this.$router.push({
+          name: 'ModelInformation',
+          params: { manufacturer: val.manufacturer, model: val.model }
+        })
+      }
     }
   },
 
   created() {
     this.fetchData()
+    this.fetchAircraftTypes()
   },
 
   methods: {
     fetchData() {
       axios
-        .get(`/offers?${this.filter}&limit=${this.limit}&orderBy=creation_datetime&offset=${this.offset}`)
+        .get(`/offers`, {
+          params: {
+            aircraft_type: this.aircraftType,
+            limit: this.limit,
+            offset: this.offset
+          }
+        })
         .then((response) => {
           this.offers = this.offers.concat(response.data)
         })
       this.offset += this.limit
+    },
+    fetchAircraftTypes() {
+      axios.get(`/models`).then((response) => {
+        this.available_aircraft_types = []
+        for (const manufacturer in response.data) {
+          const modelsToDisplay = []
+
+          const modelsByAircraftType = response.data[manufacturer].models
+          for (const type in modelsByAircraftType) {
+            if (this.aircraft_type == type || this.aircraft_type == null) {
+              for (const model in modelsByAircraftType[type]) {
+                modelsToDisplay.push({
+                  manufacturer: manufacturer,
+                  model: modelsByAircraftType[type][model]
+                })
+              }
+            }
+          }
+
+          this.available_aircraft_types.push({
+            manufacturer: manufacturer,
+            models: modelsToDisplay
+          })
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="css">
-#explanation {
-  box-shadow:
-    0 2px 3px rgba(10, 10, 10, 0.1),
-    0 0 0 1px rgba(10, 10, 10, 0.1);
-  background-color: #ffffff;
-  color: #373737;
-}
+@import 'vue-multiselect/dist/vue-multiselect.css';
 
 #offers-div {
   padding: 10px;
+}
+
+#aircraft-type-filter {
+  padding: 5px;
+  width: 400px;
 }
 </style>

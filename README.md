@@ -1,6 +1,6 @@
 # Aero-offers
 
-This project aims at reviving www.aero-offers.com - invaluable source of price trends for gliders and other aircrafts, originally developed and maintained by @rthaenert
+This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable source of price trends for gliders and other aircrafts, originally developed and maintained by @rthaenert
 
 ## Development
 
@@ -26,14 +26,20 @@ Currently, the project is being onboarded to Azure Cloud (still WIP).
 - [x] use Azure secrets for db credentials
 - [x] setup cron triggers for crawlers, reclassifier and FX rates updater
 - [x] human readable domain (aero-offers.pl)
+- [x] fix aircraft type dropdown
 - [ ] infra as code (biceps or terraform)
 - [ ] document infra and env topology
 - [ ] fix other spiders/crawlers
 - [ ] redirect from aero-offers.com
-- [ ] fix aircraft type dropdown
 - [ ] fix & polish CSS in UI
 - [ ] update/simplify legal subpage
+- [ ] cookies info
 - [ ] use https://github.com/weglide/GliderList  
+- [ ] crawler for Facebook Marketplace - do they have nice api?
+- [ ] crawler for https://www.aircraft24.de
+- [ ] crawler for http://www.airplanemart.com
+- [ ] crawler for http://www.aeronave.de/1-luftfahrzeuge/listings.html
+- [ ] crawler for https://plane-sale.com
 
 ### Running locally without Python nor NodeJS
 `docker compose up --build` - starts postgres, python backend and UI apps (http://localhost:8080/)
@@ -70,29 +76,10 @@ Start UI (vue app):
 cd ui
 npm run dev
 ```
+UI has own, detailed README.md file.
 
 Run crawlers/spiders & reclassifier:
 ```
 cd backend
 ./run_spiders.sh && ./run_classifier.sh
 ```
-
-## Further development / bug fixing (from Ralf)
-
-- Model information
-- Scale axes correctly (!)
-- Euro on y-axis
-- Top 10 aircraft offered per category
-- Add more spiders
-   - Facebook Marketplace?
-   - https://www.aircraft24.de
-   - http://www.airplanemart.com
-   - http://www.aeronave.de/1-luftfahrzeuge/listings.html
-   - https://plane-sale.com
-
-### Legal (from Ralf)
-- Opt-out option / banner, pop-up due to analytics cookies
-- Imprint generator: https://www.e-recht24.de/impressum-generator.html
-- Data protection declaration generator: https://datenschutz-generator.de
-
-Imprint and data protection declaration must be listed separately, but may refer to the same page (if desired).
