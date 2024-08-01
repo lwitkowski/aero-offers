@@ -40,11 +40,11 @@ export default {
 
   methods: {
     fetchData() {
-      axios.get(`/offers?${this.filter}&limit=${this.limit}&orderBy=creation_datetime&offset=${this.offset}`).then(
-        (response) => {
+      axios
+        .get(`/offers?${this.filter}&limit=${this.limit}&orderBy=creation_datetime&offset=${this.offset}`)
+        .then((response) => {
           this.offers = this.offers.concat(response.data)
-        }
-      )
+        })
       this.offset += this.limit
     }
   }

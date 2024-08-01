@@ -9,7 +9,7 @@ import 'primeicons/primeicons.css'
 import App from './App.vue'
 import router from './router'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URI;
+axios.defaults.baseURL = import.meta.env.VITE_API_URI
 
 const app = createApp({
   render: () => h(App)
