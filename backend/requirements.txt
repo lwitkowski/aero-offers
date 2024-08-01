@@ -6,6 +6,7 @@ Scrapy==2.11.2
 nltk==3.8.1
 Flask==3.0.3
 Flask-Cors==4.0.1
+Flask-Headers==1.0
 uWSGI==2.0.26
 defusedxml==0.7.1
 requests==2.32.3

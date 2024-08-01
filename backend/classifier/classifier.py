@@ -20,21 +20,6 @@ def get_all_models():
         manufacturers = json.load(json_file)
     return manufacturers
 
-def get_actual_and_predicted(test_data):
-    model_classifier = ModelClassifier()
-    y_actual = []
-    y_predicted = []
-    for item in test_data:
-        expect_manufacturer = "expect_manufacturer" in item and item["expect_manufacturer"] is True
-        detail_text = "" if "detail_text" not in item else item["detail_text"]
-        # actual vs predicted ("" marks None or unknown model)
-        predicted_class = model_classifier.classify(item["input"], expect_manufacturer, detail_text)
-        predicted_class = "" if predicted_class[0] is None else predicted_class[0] + " " + predicted_class[1]
-        actual_class = "" if item["manufacturer"] is None else item["manufacturer"] + " " + item["model"]
-        y_actual.append(actual_class)
-        y_predicted.append(predicted_class)
-    return y_actual, y_predicted
-
 
 class ModelClassifier:
     manufacturers = {}

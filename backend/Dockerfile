@@ -12,10 +12,8 @@ RUN \
  python3 -m pip install -r requirements.txt --no-cache-dir && \
  apk --purge del .build-deps
 
-ENV FLASK_APP=./api/flask_app.py
-
 COPY . .
 
 EXPOSE 80
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]
+CMD [ "python3", "-m" , "flask", "--app=./api/flask_app.py", "run", "--host=0.0.0.0", "--port=80"]

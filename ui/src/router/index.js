@@ -15,9 +15,7 @@ const router = createRouter({
         description:
           'Aircraft Offers from various marketplaces. Ranging from Gliders like ASK21 to Cessna and much more (Gliders, TMG, Ultralight, Airplanes)'
       },
-      props: {
-        filter: ''
-      }
+      props: {}
     },
     {
       path: '/gliders',
@@ -28,7 +26,7 @@ const router = createRouter({
         description: 'Glider Offers from various marketplaces with prices in EUR.'
       },
       props: {
-        filter: 'aircraft_type=glider'
+        aircraftType: 'glider'
       }
     },
     {
@@ -41,7 +39,7 @@ const router = createRouter({
           'Touring Motor Glider (like Super Dimona, Stemme) offers from various marketplaces with prices in EUR.'
       },
       props: {
-        filter: 'aircraft_type=tmg'
+        aircraftType: 'tmg'
       }
     },
     {
@@ -53,7 +51,7 @@ const router = createRouter({
         description: 'Ultralight (like C42) offers from various marketplaces with prices in EUR.'
       },
       props: {
-        filter: 'aircraft_type=ultralight'
+        aircraftType: 'ultralight'
       }
     },
     {
@@ -65,7 +63,7 @@ const router = createRouter({
         description: 'Small Airplane (like Cessna) offers from various marketplaces with prices in EUR.'
       },
       props: {
-        filter: 'aircraft_type=airplane'
+        aircraftType: 'airplane'
       }
     },
     {
