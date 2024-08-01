@@ -478,6 +478,14 @@
       ]
     }
   },
+  "Margański & Mysłowski": {
+    "models": {
+      "glider": [
+        "MDM-1 Fox",
+        "Swift S-1"
+      ]
+    }
+  },
   "Mooney": {
     "models": {
       "airplane": [
