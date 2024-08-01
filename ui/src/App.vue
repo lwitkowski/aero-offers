@@ -6,19 +6,19 @@
       </div>
       <div id="nav">
         <div class="nav-element">
-          <router-link to="/"> All Offers </router-link>
+          <router-link to="/">All Offers</router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/gliders"> Gliders </router-link>
+          <router-link to="/gliders">Gliders</router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/tmg"> TMG </router-link>
+          <router-link to="/tmg">TMG</router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/ultralight"> Ultralight </router-link>
+          <router-link to="/ultralight">Ultralight</router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/airplane"> Airplanes </router-link>
+          <router-link to="/airplane">Airplanes</router-link>
         </div>
       </div>
     </div>

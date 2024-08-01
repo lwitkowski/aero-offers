@@ -7,35 +7,36 @@
       <p>
         <small>{{ offer.date }}, {{ offer.location }}</small>
         ,
-        <small
-          ><strong
-            >{{ offer.price_in_euro }}
+        <small>
+          <strong>
+            {{ offer.price_in_euro }}
             <div v-if="offer.currency_code != 'EUR'" class="tooltip">
-              <span class="tooltiptext"> converted from {{ offer.price }} {{ offer.currency }}</span
-              >€
+              <span class="tooltiptext">converted from {{ offer.price }} {{ offer.currency }}</span>
+              €
             </div>
             <div v-else style="display: inline">€</div>
-          </strong></small
-        >
+          </strong>
+        </small>
       </p>
-      <small
-        ><p v-if="offer.manufacturer">
+      <small>
+        <p v-if="offer.manufacturer">
           <router-link
             :to="{
               name: 'ModelInformation',
               params: { manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
-            <a>Model: {{ offer.manufacturer }} {{ offer.model }}</a></router-link
-          >
-        </p></small
-      >
+            <a>Model: {{ offer.manufacturer }} {{ offer.model }}</a>
+          </router-link>
+        </p>
+      </small>
     </div>
     <div class="icon">
-      <small
-        ><a :href="offer.url" target="_blank">
-          <img :src="'url_icon.png'" alt="Link to Offer" height="30" width="30" /></a
-      ></small>
+      <small>
+        <a :href="offer.url" target="_blank">
+          <img :src="'url_icon.png'" alt="Link to Offer" height="30" width="30" />
+        </a>
+      </small>
     </div>
   </div>
 </template>

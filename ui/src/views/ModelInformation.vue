@@ -28,10 +28,11 @@
           <td>{{ offer.price_in_euro }} €</td>
           <td>
             <div class="icon">
-              <small
-                ><a :href="offer.url" target="_blank">
-                  <img :src="'../../url_icon.png'" alt="Link to Offer" height="30" width="30" /> </a
-              ></small>
+              <small>
+                <a :href="offer.url" target="_blank">
+                  <img :src="'../../url_icon.png'" alt="Link to Offer" height="30" width="30" />
+                </a>
+              </small>
             </div>
           </td>
         </tr>
