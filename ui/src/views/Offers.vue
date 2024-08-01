@@ -8,7 +8,7 @@
         group-label="manufacturer"
         :group-select="false"
         label="model"
-        :placeholder="'Filter ' + (aircraft_type ? aircraft_type + ' ' : 'aircraft ') + 'type'"
+        :placeholder="'Filter ' + (aircraftType ? aircraftType + ' ' : 'aircraft ') + 'type'"
       >
         <template #noResult>
           <span>Oops! Aircraft type not found. Try different phrase.</span>
@@ -91,7 +91,7 @@ export default {
 
           const modelsByAircraftType = response.data[manufacturer].models
           for (const type in modelsByAircraftType) {
-            if (this.aircraft_type == type || this.aircraft_type == null) {
+            if (this.aircraftType == type || this.aircraftType == null) {
               for (const model in modelsByAircraftType[type]) {
                 modelsToDisplay.push({
                   manufacturer: manufacturer,
