@@ -53,6 +53,7 @@
         "ASH 30 Mi",
         "ASH 31 Mi",
         "ASG 32 Mi",
+        "AS 33",
         "ASW 15",
         "ASW 17",
         "ASW 19",
@@ -61,7 +62,8 @@
         "ASW 22 BLE",
         "ASW 24",
         "ASW 27",
-        "ASW 28"
+        "ASW 28",
+        "ASW 28 E"
       ],
       "tmg": [
         "ASK 14",
@@ -248,6 +250,7 @@
     "manufacturer_website": "https://en.wikipedia.org/wiki/SA_Centrair",
     "models": {
       "glider": [
+        "C101 Pegase",
         "201 Marianne"
       ]
     }
@@ -325,7 +328,8 @@
         "DG-808S",
         "DG-1000S",
         "DG-1000T",
-        "DG-1000M"
+        "DG-1000M",
+        "DG-1001"
       ]
     }
   },
@@ -386,6 +390,16 @@
         "H-301 Libelle",
         "206 Hornet",
         "H-101 Salto"
+      ]
+    }
+  },
+  "GP Gliders": {
+    "manufacturer_website": "https://www.gpgliders.com/",
+    "models": {
+      "glider": [
+        "GP 11",
+        "GP 14",
+        "GP 15"
       ]
     }
   },
@@ -540,17 +554,29 @@
       "glider": [
         "SZD-9 Bocian",
         "SZD-12 Mucha 100",
-        "SZD-24",
-        "SZD-25",
+        "SZD-24 Foka",
+        "SZD-25 Lis",
         "SZD-30 Pirat",
-        "SZD-32",
-        "SZD-45",
-        "SZD-48",
-        "SZD-50",
-        "SZD-51",
+        "SZD-32 Foka 5",
+        "SZD-38 Jantar 1",
+        "SZD-41 Jantar Standard",
+        "SZD-42 Jantar 2B",
+        "SZD-45 Ogar",
+        "SZD-48 Jantar Standard 2/3",
+        "SZD-50 Puchacz",
+        "SZD-51 Junior",
         "SZD-54 Perkoz",
         "SZD-55-1 Promyk",
-        "SZD-56"
+        "SZD-56 Diana",
+        "SZD-59 Acro"
+      ]
+    }
+  },
+  "PZL Swidnik": {
+    "models": {
+      "glider": [
+        "PW-5 Smyk",
+        "PW-6U Kingo"
       ]
     }
   },
@@ -730,7 +756,8 @@
         "LAK-17a FES",
         "LAK-17b",
         "LAK-17bT",
-        "LAK-17b FES"
+        "LAK-17b FES",
+        "LAK-19"
       ]
     }
   },
