@@ -62,6 +62,7 @@ export default {
         default:
           this.aircraft_type = null
           this.selected = null
+          this.updateAircraftTypes()
       }
     },
 
