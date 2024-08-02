@@ -422,6 +422,15 @@
       ]
     }
   },
+  "HPH": {
+    "manufacturer_website": "https://hph.cz/",
+    "models": {
+      "glider": [
+        "304S SHARK",
+        "304TS TWIN SHARK"
+      ]
+    }
+  },
   "Jodel": {
     "models": {
       "airplane": [
