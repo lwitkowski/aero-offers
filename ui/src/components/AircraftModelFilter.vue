@@ -5,6 +5,7 @@
     group-values="models"
     group-label="manufacturer"
     :group-select="false"
+    :show-labels="false"
     label="model"
     :placeholder="'Search ' + (aircraft_type || 'aircraft')"
     :max-height="500"

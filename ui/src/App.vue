@@ -240,6 +240,6 @@ export default {
 
 #aircraft-type-filter {
   padding: 5px;
-  width: 500px;
+  width: 280px;
 }
 </style>
