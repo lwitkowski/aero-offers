@@ -2,7 +2,7 @@
   <div id="app">
     <div class="header">
       <div id="logo">
-        <img src="/logo_v3.png" width="300" height="109" />
+        <img src="/logo_v3.png" width="150" />
       </div>
       <div id="nav">
         <div class="nav-element">
@@ -97,11 +97,6 @@ export default {
   grid-row: 3;
 }
 
-.feedback-component {
-  grid-column: 1;
-  grid-row: 3;
-}
-
 /* desktop version */
 @media all and (min-width: 500px) {
   .header {
@@ -166,33 +161,6 @@ export default {
 #body {
   background: #fdfffc;
   margin-bottom: 10px;
-}
-
-.click-button {
-  background-color: #011627;
-  color: #ffffff;
-  width: 40%;
-  height: 40px;
-  display: block;
-  clear: left;
-  border-radius: 2px;
-  padding: 10px;
-  margin: 0 auto;
-  font-size: 14px;
-}
-
-.close-button {
-  background-color: #f71735;
-  float: right;
-  width: 25px;
-  height: 25px;
-  margin: 10px;
-}
-
-#footer a {
-  text-decoration: none;
-  font-size: 14px;
-  color: #000000;
 }
 
 #footer {
