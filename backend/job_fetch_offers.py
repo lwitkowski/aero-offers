@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
         spiders = {
             SoaringDeSpider.SoaringDeSpider: None,
-            #FlugzeugMarktDeSpider.FlugzeugMarktDeSpider: None,
+            FlugzeugMarktDeSpider.FlugzeugMarktDeSpider: None,
             #PlaneCheckComSpider.PlaneCheckComSpider: None
         }
         for spider_cls in spiders.keys():
