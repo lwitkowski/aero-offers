@@ -92,13 +92,11 @@ def update_exchange_rate(exchange_rate):
 
 
 def has_offer_url(offer_url):
-    logger.debug("Starting new database connection")
     try:
-        s = select(AircraftOffer.offer_url).where(AircraftOffer.offer_url == offer_url)
+        query = select(select(AircraftOffer.offer_url).where(AircraftOffer.offer_url == offer_url).exists())
         conn = engine.connect()
-        if conn.execute(s).fetchone():
-            return True
-        return False
+        result = conn.execute(query).fetchone()
+        return result is not None and result[0] == True
     except Exception as e:
         logger.error(e)
         logger.error("database error, assuming we don't have this offer already")

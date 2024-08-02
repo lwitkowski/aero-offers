@@ -11,7 +11,18 @@ AIRCRAFT_OFFERS_URL = "https://www.flugzeugmarkt.de/flugzeug-kaufen"
 class FlugzeugMarktDeSpider(scrapy.Spider):
     name = "flugzeugmarkt_de"
     logger = logging.getLogger(name)
-    start_urls = [AIRCRAFT_OFFERS_URL]
+    start_urls = [
+        AIRCRAFT_OFFERS_URL,
+        AIRCRAFT_OFFERS_URL + "/seite-2.html",
+        AIRCRAFT_OFFERS_URL + "/seite-3.html",
+        AIRCRAFT_OFFERS_URL + "/seite-4.html",
+        AIRCRAFT_OFFERS_URL + "/seite-5.html",
+        AIRCRAFT_OFFERS_URL + "/seite-6.html",
+        AIRCRAFT_OFFERS_URL + "/seite-7.html",
+        AIRCRAFT_OFFERS_URL + "/seite-8.html",
+        AIRCRAFT_OFFERS_URL + "/seite-9.html",
+        AIRCRAFT_OFFERS_URL + "/seite-10.html"
+    ]
 
     aircraft_type_mapping = {
         "Motorsegler": "tmg",
