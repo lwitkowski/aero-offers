@@ -163,6 +163,12 @@ export default {
   margin-bottom: 10px;
 }
 
+#footer a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #000000;
+}
+
 #footer {
   width: 350px;
   margin: auto;

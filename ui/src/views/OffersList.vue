@@ -58,4 +58,17 @@ export default {
 #offers-div {
   padding: 10px;
 }
+
+.click-button {
+  background-color: #011627;
+  color: #ffffff;
+  width: 40%;
+  height: 40px;
+  display: block;
+  clear: left;
+  border-radius: 2px;
+  padding: 10px;
+  margin: 0 auto;
+  font-size: 14px;
+}
 </style>
