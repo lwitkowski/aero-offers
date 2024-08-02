@@ -28,6 +28,12 @@ export default {
   components: {
     Multiselect
   },
+  props: {
+    models: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       aircraft_type: null,
@@ -39,6 +45,26 @@ export default {
 
   watch: {
     $route() {
+      this.parseAndApplyRoute()
+    },
+
+    selected(val) {
+      if (val == null) {
+        return
+      }
+      this.$router.push({
+        name: 'offer_details',
+        params: { aircraftType: val.aircraft_type, manufacturer: val.manufacturer, model: val.model }
+      })
+    }
+  },
+
+  created() {
+    this.loadAircraftTypes()
+  },
+
+  methods: {
+    parseAndApplyRoute() {
       const pathSegments = this.$route.path.split('/')
       switch (pathSegments[1]) {
         case 'glider':
@@ -65,26 +91,18 @@ export default {
           this.updateAircraftTypes()
       }
     },
+    loadAircraftTypes() {
+      if (this.models) {
+        this.all_aircraft_types = this.models
 
-    selected(val) {
-      if (val == null) {
+        this.parseAndApplyRoute()
+        this.updateAircraftTypes()
         return
       }
-      this.$router.push({
-        name: 'offer_details',
-        params: { aircraftType: val.aircraft_type, manufacturer: val.manufacturer, model: val.model }
-      })
-    }
-  },
 
-  created() {
-    this.loadAircraftTypes()
-  },
-
-  methods: {
-    loadAircraftTypes() {
       axios.get(`/models`).then((response) => {
         this.all_aircraft_types = response.data
+        this.parseAndApplyRoute()
         this.updateAircraftTypes()
       })
     },
