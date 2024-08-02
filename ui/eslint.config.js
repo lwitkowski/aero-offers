@@ -8,9 +8,6 @@ export default [
   eslintPluginPrettierRecommended,
   {
     files: ['**/*.vue', '**/*..js', '**/*..jsx', '**/*..cjs', '**/*..mjs'],
-    ignores: ['.gitignore'],
-    rules: {
-      'vue/multi-word-component-names': 'warn'
-    }
+    ignores: ['.gitignore']
   }
 ]

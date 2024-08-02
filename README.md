@@ -20,23 +20,16 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 Currently, the project is being onboarded to Azure Cloud (still WIP).
 
 ### TODO
-- [x] deploy working ui, api and db to Azure
-- [x] fix segelflug spider/crawler
-- [x] good enough DB setup (cheap VM)
-- [x] use Azure secrets for db credentials
-- [x] setup cron triggers for crawlers, reclassifier and FX rates updater
-- [x] human readable domain (aero-offers.pl)
-- [x] fix aircraft type dropdown
-- [ ] database daily backups
-- [ ] infra as code (biceps or terraform)
+- [ ] UI: consent banner for GA
+- [ ] Infra: db daily backups
+- [ ] Infra: infra as code (biceps or terraform)
 - [ ] document infra and env topology
-- [ ] fix other spiders/crawlers
-- [ ] redirect from aero-offers.com
-- [ ] fix & polish CSS in UI
-- [ ] update/simplify legal subpage
-- [ ] cookies info
-- [ ] use https://github.com/weglide/GliderList  
-- [ ] admin panel for manual (re) classification (or community-based)
+- [ ] Backend: fix and enable other spiders/crawlers
+- [ ] UI: aero-offers.com
+- [ ] Improve aircraft types structure and introduce 2 levels: glider (e.g Discus 2c 18m) and model (Discus 2cFES 18m) as prices between models sometimes differ significantly
+- [ ] UI: fix & polish CSS in UI
+- [ ] utilize https://github.com/weglide/GliderList as source of truth for glider types/models
+- [ ] UI: admin panel for manual (re) classification (or community-based)
 - [ ] crawler for Facebook Marketplace - do they have nice api?
 - [ ] crawler for https://www.aircraft24.de
 - [ ] crawler for http://www.airplanemart.com
