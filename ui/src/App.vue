@@ -9,7 +9,7 @@
           <router-link to="/">All Offers</router-link>
         </div>
         <div class="nav-element">
-          <router-link to="/gliders">Gliders</router-link>
+          <router-link to="/glider">Gliders</router-link>
         </div>
         <div class="nav-element">
           <router-link to="/tmg">TMG</router-link>
@@ -20,6 +20,10 @@
         <div class="nav-element">
           <router-link to="/airplane">Airplanes</router-link>
         </div>
+      </div>
+
+      <div id="aircraft-type-filter">
+        <AircraftModelFilter />
       </div>
     </div>
     <div id="body">
@@ -35,8 +39,12 @@
 /*global __COMMIT_HASH__*/
 /*global __BUILD_TIMESTAMP__*/
 
+import AircraftModelFilter from './components/AircraftModelFilter.vue'
+
 export default {
-  components: {},
+  components: {
+    AircraftModelFilter
+  },
   data() {
     return {
       buildInfo: 'Build: ' + __COMMIT_HASH__ + ', ' + __BUILD_TIMESTAMP__
@@ -150,7 +158,7 @@ export default {
   color: #ffffff;
 }
 
-#nav a.router-link-exact-active {
+#nav a.router-link-active {
   color: #f71735;
   text-decoration: none;
 }
@@ -228,5 +236,10 @@ export default {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+#aircraft-type-filter {
+  padding: 5px;
+  width: 500px;
 }
 </style>

@@ -22,8 +22,8 @@
         <p v-if="offer.manufacturer">
           <router-link
             :to="{
-              name: 'ModelInformation',
-              params: { manufacturer: offer.manufacturer, model: offer.model }
+              name: 'offer_details',
+              params: { aircraftType: offer.aircraft_type, manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
             <a>Model: {{ offer.manufacturer }} {{ offer.model }}</a>
@@ -34,7 +34,7 @@
     <div class="icon">
       <small>
         <a :href="offer.url" target="_blank">
-          <img :src="'url_icon.png'" alt="Link to Offer" height="30" width="30" />
+          <img :src="'/url_icon.png'" alt="Link to Offer" height="30" width="30" />
         </a>
       </small>
     </div>
@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: 'OfferComponent',
+  name: 'OfferThumb',
   props: {
     offer: {
       type: Object,

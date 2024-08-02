@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import OfferComponent from '../OfferComponent.vue'
+import OfferThumb from '../OfferThumb.vue'
 
-describe('OfferComponent', () => {
+describe('OfferThumb', () => {
   it('renders properly', () => {
     const offer = {
       aircraft_typ: 'glider',
@@ -23,7 +23,7 @@ describe('OfferComponent', () => {
       url: 'https://www.segelflug.de/osclass/index.php?page=item&id=42370'
     }
 
-    const wrapper = mount(OfferComponent, { props: { offer: offer } })
+    const wrapper = mount(OfferThumb, { props: { offer: offer } })
 
     expect(wrapper.text()).contains('Rolladen Schneider LS4').contains('2020-02-26')
   })

@@ -47,7 +47,7 @@ import moment from 'moment'
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 
 export default {
-  name: 'ModelInformation',
+  name: 'OfferDetails',
 
   components: {},
   props: {
