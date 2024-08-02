@@ -8,7 +8,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'all_listing',
+      name: 'all_offers',
       component: OffersList,
       meta: {
         title: 'Aircraft Offers Overview',
@@ -19,10 +19,10 @@ const router = createRouter({
     },
     {
       path: '/:aircraftType',
-      name: 'category_listing',
       children: [
         {
           path: '/:aircraftType',
+          name: 'offers_for_type',
           component: OffersList,
           props: true
         },
@@ -39,10 +39,17 @@ const router = createRouter({
 
 router.afterEach((to) => {
   nextTick(() => {
-    if (to.name === 'offer_details') {
-      document.title = `${to.params.aircraftType} ${to.params.manufacturer} ${to.params.model}`
-    } else {
-      document.title = to.meta.title
+    switch (to.name) {
+      case 'offers_for_type':
+        document.title = `${to.params.aircraftType.charAt(0).toUpperCase()}${to.params.aircraftType.slice(1)} offers`
+        break
+
+      case 'offer_details':
+        document.title = `${to.params.manufacturer} ${to.params.model} (${to.params.aircraftType}) offers`
+        break
+
+      default:
+        document.title = to.meta.title
     }
   })
 })
