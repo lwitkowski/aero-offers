@@ -139,17 +139,10 @@ def get_offers_for_model(manufacturer, model):
         session.close()
 
 
-def get_offers_dict(order_by=None, limit=None, offset=None, aircraft_type=None):
-    # FIXME validations (security risks!)
+def get_offers_dict(limit=None, offset=None, aircraft_type=None):
     session = Session()
     try:
-        offers = session.query(AircraftOffer)
-
-        if order_by is None:
-            offers = offers.order_by(AircraftOffer.creation_datetime.desc())
-        else:
-            # TODO think about allowed attributes for ordering
-            offers = offers.order_by(AircraftOffer.creation_datetime.desc())
+        offers = session.query(AircraftOffer).order_by(AircraftOffer.date.desc())
         if aircraft_type is not None:
             offers = offers.filter(AircraftOffer.aircraft_type == aircraft_type)
         if limit is not None:

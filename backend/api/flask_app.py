@@ -11,8 +11,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def offers():
     return jsonify(db.get_offers_dict(aircraft_type=request.args.get('aircraft_type'),
                                       offset=request.args.get('offset'),
-                                      limit=request.args.get('limit'),
-                                      order_by='creation_datetime'))
+                                      limit=request.args.get('limit')))
 
 @app.route("/api/model/<manufacturer>/<model>")
 def model_information(manufacturer, model):
