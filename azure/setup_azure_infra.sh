@@ -74,7 +74,7 @@ az containerapp job create \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --trigger-type "Schedule" \
-    --cron-expression "17 3 * * *" \
+    --cron-expression "17 3/11 * * *" \
     --replica-timeout 1800 \
     --registry-server $ACR \
     --image $ACR/aerooffers-api:$DOCKER_IMAGE_TAG \
