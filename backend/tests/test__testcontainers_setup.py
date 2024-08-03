@@ -6,7 +6,7 @@ from pathlib import Path
 from testcontainers.postgres import PostgresContainer
 
 db_migration_scripts_location = Path(__file__).parent.parent.parent / "db" / "migrations"
-postgres = PostgresContainer("postgres:16-alpine")
+postgres = PostgresContainer("postgres:16.3-alpine")
 postgres.with_volume_mapping(host=str(db_migration_scripts_location), container=f"/docker-entrypoint-initdb.d/")
 postgres.start()
 

@@ -17,7 +17,7 @@ class DuplicateDetection(object):
         return item
 
 
-class FilterUnreasonablePrices(object):
+class PriceParser(object):
 
     def process_item(self, item, _):
         price = Price.fromstring(item['raw_price'])

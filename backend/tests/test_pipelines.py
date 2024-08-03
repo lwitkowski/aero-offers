@@ -1,4 +1,5 @@
 import unittest
+from decimal import Decimal
 
 from price_parser import Price
 from scrapy.exceptions import DropItem
@@ -35,21 +36,27 @@ class DuplicateDetectionTest(unittest.TestCase):
         self.assertRaises(DropItem, self.detection.process_item, {"offer_url": "https://offers.com/1"}, None)
 
 @ddt
-class FilterUnreasonablePricesTest(unittest.TestCase):
+class PriceParserTest(unittest.TestCase):
     def setUp(self):
         self.sample_offer = buildOfferWithUrl("https://offers.com/1")
-        self.detection = pipelines.FilterUnreasonablePrices()
+        self.detection = pipelines.PriceParser()
 
     @data(
-        {"raw_price": "2,01 Euro €", "offer_url": "https://offers.com/1"},
-        {"raw_price": "1.234,00 Euro €", "offer_url": "https://offers.com/2"},
-        {"raw_price": "123.456,00 Euro €", "offer_url": "https://offers.com/3"},
+        ({"raw_price": "2,01 Euro €", "offer_url": "https://offers.com/1"}, 2.01),
+        ({"raw_price": "1.234,00 Euro €", "offer_url": "https://offers.com/2"}, 1_234.00),
+        ({"raw_price": "123.456,00 Euro €", "offer_url": "https://offers.com/3"}, 123_456.00),
     )
-    def test_should_allow_valid_prices(self, offer_with_valid_price):
+    def test_parse_valid_prices(self, testInput):
+        offer_with_valid_price = testInput[0]
+        expected_price = Decimal(testInput[1])
+        CENTS = Decimal(10) ** -2
         try:
             self.detection.process_item(offer_with_valid_price, None)
         except DropItem:
-            self.fail("FilterUnreasonablePrices unexpectedly dropped offer with valid price!")
+            self.fail("PriceParser unexpectedly dropped offer with valid price!")
+
+        self.assertEqual(offer_with_valid_price["price"].amount.quantize(CENTS), expected_price.quantize(CENTS))
+        self.assertEqual(offer_with_valid_price["price"].currency, "€")
 
     @data(
         {"raw_price": "", "offer_url": "https://offers.com/1"},
