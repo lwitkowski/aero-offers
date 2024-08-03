@@ -9,8 +9,7 @@ def send_mail(text=""):
     if not SEND_RESULT_MAIL:
         return
     msg = email.mime.text.MIMEText(text)
-    # TODO put your mail address here
-    # me = u'ralf.thaenert@googlemail.com'
+    me = 'dev@aerooffers.pl'
     msg['Subject'] = 'Aircraft Offers Crawling Result'
     msg['From'] = SMTP_USER
     msg['To'] = me

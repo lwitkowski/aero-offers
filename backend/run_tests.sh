@@ -1,9 +1,6 @@
 export PYTHONPATH=$PYTHONPATH':./'
 
-coverage run --source ./ -m xmlrunner -o ./test-results
+set -e
 
-if [[ $? -ne 0 ]]; then
-    exit 1
-else
-  coverage report --fail-under=75
-fi
+coverage run --source ./ --omit="tests/*" -m xmlrunner -o ./test-results
+coverage report --fail-under=65

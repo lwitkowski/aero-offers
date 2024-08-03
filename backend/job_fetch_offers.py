@@ -1,7 +1,6 @@
 from datetime import datetime
 from scrapy.utils.project import get_project_settings
-from twisted.internet import reactor
-from scrapy.crawler import CrawlerRunner
+from scrapy.crawler import CrawlerProcess
 
 import pprint
 from my_logging import *
@@ -13,7 +12,7 @@ logger = logging.getLogger("fetch_offers")
 if __name__ == '__main__':
     try:
         settings = get_project_settings()
-        runner = CrawlerRunner(settings)
+        process = CrawlerProcess(settings)
 
         spiders = {
             SoaringDeSpider.SoaringDeSpider: None,
@@ -21,13 +20,11 @@ if __name__ == '__main__':
             #PlaneCheckComSpider.PlaneCheckComSpider: None
         }
         for spider_cls in spiders.keys():
-            crawler = runner.create_crawler(spider_cls)
+            crawler = process.create_crawler(spider_cls)
             spiders[spider_cls] = crawler
-            runner.crawl(crawler)
+            process.crawl(crawler)
 
-        d = runner.join()
-        d.addBoth(lambda _: reactor.stop())
-        reactor.run()  # the script will block here until all crawling jobs are finished
+        process.start() # the script will block here until all crawling jobs are finished
 
         stats_per_spider = {}
 
