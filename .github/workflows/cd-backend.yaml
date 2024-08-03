@@ -48,7 +48,7 @@ jobs:
           files: |
             ./backend/test-results/**/*.xml
 
-      - name: 'Build Backend API'
+      - name: 'Build docker image'
         working-directory: ./backend
         run: |
           docker build . -t ${DOCKER_IMAGE}
