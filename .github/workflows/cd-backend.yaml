@@ -36,7 +36,7 @@ jobs:
         run: |
           pip3 install --quiet -r requirements.txt -r tests/requirements.txt
 
-      - name: 'Run tests'
+      - name: 'Run tests and check coverage'
         working-directory: ./backend
         run: |
           ./run_tests.sh
