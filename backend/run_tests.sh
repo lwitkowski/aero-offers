@@ -3,4 +3,4 @@ export PYTHONPATH=$PYTHONPATH':./'
 set -e
 
 coverage run --source ./ -m xmlrunner -o ./test-results
-coverage report --fail-under=75
+coverage report --fail-under=80
