@@ -20,6 +20,7 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 Currently, the project is being onboarded to Azure Cloud (still WIP).
 
 ### TODO
+- [ ] Scraper: update db offer if price or location (or any other parameter) has changed
 - [ ] UI: consent banner for GA
 - [ ] Infra: db daily backups
 - [ ] Infra: infra as code (biceps or terraform)
