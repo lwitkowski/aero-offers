@@ -101,7 +101,7 @@ export default {
         return
       }
 
-      axios.get(`/models`).then((response) => {
+      axios.get(`/api/models`).then((response) => {
         this.all_aircraft_types = response.data
         this.parseAndApplyRoute()
         this.updateAircraftTypes()

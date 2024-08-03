@@ -2,7 +2,6 @@ import scrapy
 from scrapy.spidermiddlewares.httperror import HttpError
 import datetime
 import re
-from price_parser import Price
 from my_logging import *
 
 GLIDER_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=118"
@@ -52,7 +51,6 @@ class SoaringDeSpider(scrapy.Spider):
 
     def parse_detail_page(self, response):
         price_str = response.css('#item-content .item-header li::text').extract()[1]
-        parsed_price = Price.fromstring(price_str)
         date_str = response.css('#item-content .item-header li::text').extract()[3]
         date_str = date_str.replace('Veröffentlichungsdatum:', '').strip()
         date_obj = datetime.datetime.strptime(date_str, "%d/%m/%Y").date()
@@ -68,9 +66,9 @@ class SoaringDeSpider(scrapy.Spider):
             if 'Gesamtstarts' in aircraft_details:
                 starts = self._extract_first_number(aircraft_details)
 
-        yield {
+        yield {  # TODO introduce data class
             'title': response.css('#item-content .title strong::text').extract_first(),
-            'price': parsed_price,
+            'raw_price': price_str,
             'offer_url': response.url,
             'location': location,
             'date': date_obj,

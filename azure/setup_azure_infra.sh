@@ -34,7 +34,8 @@ az containerapp create \
     --environment $ENV_NAME \
     --registry-server $ACR \
     --image $ACR/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --env-vars DB_HOST="???" DB_PORT="5432" DB_NAME="???" DB_USER="???" DB_PW="???" \
+    --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
+    --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
     --target-port 80 \
     --ingress internal \
     --transport tcp \

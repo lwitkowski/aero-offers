@@ -1,1 +1,0 @@
-CREATE INDEX aircraft_offer_creation_datetime_idx ON aircraft_offer (creation_datetime);

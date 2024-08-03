@@ -1,1 +1,4 @@
 ddt==1.7.2
+psycopg==3.2.1
+pytest==8.3.2
+testcontainers[postgres]==4.7.2

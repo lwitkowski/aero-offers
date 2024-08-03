@@ -7,13 +7,18 @@ import db
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+@app.route("/api/models")
+@headers({'Cache-Control':'public, max-age=360'})
+def aircraft_models():
+    return jsonify(classifier.get_all_models())
+
 @app.route('/api/offers')
 def offers():
     return jsonify(db.get_offers_dict(aircraft_type=request.args.get('aircraft_type'),
                                       offset=request.args.get('offset'),
                                       limit=request.args.get('limit')))
 
-@app.route("/api/model/<manufacturer>/<model>")
+@app.route("/api/offers/<manufacturer>/<model>")
 def model_information(manufacturer, model):
     """
     Returns statistics for a specific manufacturer and model
@@ -26,10 +31,5 @@ def model_information(manufacturer, model):
     manufacturer_info["offers"] = db.get_offers_for_model(manufacturer, model)
     return jsonify(manufacturer_info)
 
-@app.route("/api/models")
-@headers({'Cache-Control':'public, max-age=360'})
-def aircraft_models():
-    return jsonify(classifier.get_all_models())
-
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=False)
