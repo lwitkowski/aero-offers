@@ -8,19 +8,22 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 [![CD - Backend (api, jobs)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml)
 
 ### Project structure (building blocks /  deployment units)
-- `ui` - vue.js application deployed as dockerized static web app served by nginx
-- `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). 
-- `backend/jobs` - python scripts triggered by scheduled job (e.g once a day). Please mind those jobs may be much much more resource heavy than API, and should not be triggered from within `api` container which is optimised to handle REST api traffic.
-    - `job_fetch_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified)
-    - `job_reclassify_offers` - assigns manufacturer and model to new (not yet classified) offers stored in the database
-    - `job_update_exchange_rates` - updates currency exchange rates based ok ECP api
+Currently, the project is running on Azure Cloud as a set of Azure Container Apps and Jobs.
+
+- `ui` - vue.js application, bundled as Docker image based on nginx. Deployed as Azure Container App (running 24/7)
+- `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). Deployed as Azure Container App (running 24/7) 
+- `backend/jobs` - python scripts triggered periodically. Much more resource-heavy than API, bundled in the same Docker image as `api`, deployed as Azure Container Job (with overridden command)
+    - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified), then assigns manufacturer and model to new (not yet classified) offers stored in the database
+    - `run_update_fx_rates` - updates currency exchange rates from ECP REST api
 - `db` - PostgreSQL 16 database with DDL scripts managed by Flyway. Currently running inside cheapest possible Azure VM.
 
-### Prod environment
-Currently, the project is being onboarded to Azure Cloud (still WIP).
+#### Deployment
+
+Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env.
 
 ### TODO
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
+- [ ] Dev: end 2 end tests of crawlers
 - [ ] UI: consent banner for GA
 - [ ] Infra: db daily backups
 - [ ] Infra: infra as code (biceps or terraform)
