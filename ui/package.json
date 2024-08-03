@@ -12,17 +12,17 @@
     "lint-fix": "eslint --fix"
   },
   "dependencies": {
-    "axios": "^1.7.2",
+    "axios": "^1.7.3",
     "chartist-plugin-tooltips-updated": "^0.1.4",
     "core-js": "^3.37.1",
     "moment": "^2.29.1",
     "vue": "^3.4.35",
     "vue-chartist": "^3.0.0",
     "vue-multiselect": "^3.0.0",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.2",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.8.0",
