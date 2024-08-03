@@ -52,7 +52,7 @@ class FilterUnreasonablePricesTest(unittest.TestCase):
             self.fail("FilterUnreasonablePrices unexpectedly dropped offer with valid price!")
 
     @data(
-        {"raw_price": None, "offer_url": "https://offers.com/1"},
+        {"raw_price": "", "offer_url": "https://offers.com/1"},
          {"raw_price": "Ask for price", "offer_url": "https://offers.com/2"}
     )
     def test_should_drop_if_price_is_missing(self, offer_with_invalid_price):
