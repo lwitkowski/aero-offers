@@ -36,7 +36,7 @@ jobs:
         run: |
           pip3 install --quiet -r requirements.txt -r tests/requirements.txt
 
-      - name: 'Run tests'
+      - name: 'Run tests and check coverage'
         working-directory: ./backend
         run: |
           ./run_tests.sh
@@ -48,7 +48,7 @@ jobs:
           files: |
             ./backend/test-results/**/*.xml
 
-      - name: 'Build Backend API'
+      - name: 'Build docker image'
         working-directory: ./backend
         run: |
           docker build . -t ${DOCKER_IMAGE}
