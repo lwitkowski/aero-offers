@@ -98,7 +98,7 @@ export default {
 
     fetchData() {
       this.chartData.series = [[]]
-      axios.get(`/model/${this.manufacturer}/${this.model}`).then((response) => {
+      axios.get(`/api/offers/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
         if (this.offers.length === 0) {

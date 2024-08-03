@@ -1,7 +1,6 @@
 import scrapy
 import datetime
 import re
-from price_parser import Price
 from my_logging import *
 
 BASE_URL = "https://www.flugzeugmarkt.de/"
@@ -48,7 +47,6 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
     def parse_detail_page(self, response):
         date = response.xpath("//tr/td[contains(.,'Eingestellt')]/../td[@class='value']/text()").extract_first()
         price_str = response.css('div.buy-it-now div.price::text').extract_first()
-        parsed_price = Price.fromstring(price_str)
         location = response.xpath("//tr/td[contains(.,'Standort')]/../td[@class='value']/text()").extract_first()
         hours = self._extract_number_from_cell("Gesamtzeit", response)
         starts = self._extract_number_from_cell("Landungen", response)
@@ -63,10 +61,10 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
             self.logger.info(
                 "Couldn't determine aircraft type for offer: {0} with url: {1}".format(title, response.url))
         self.logger.debug("yielding title %s", title)
-        yield {
+        yield {  # TODO introduce data class
             'title': title,
             'date': datetime.datetime.strptime(date, "%d.%m.%Y").date(),
-            'price': parsed_price,
+            'raw_price': price_str,
             'offer_url': response.url,
             'location': location,
             'aircraft_type': aircraft_type,

@@ -1,6 +1,5 @@
 import scrapy
 import datetime
-from price_parser import Price
 from my_logging import *
 
 BASE_URL = "https://www.planecheck.com/"
@@ -38,14 +37,13 @@ class PlaneCheckComSpider(scrapy.Spider):
             logging.info("price with VAT should be: {0}".format(price_str))
         else:
             price_str = response.xpath("//td[contains(.,'Price')]/../td[2][contains(.,',')]/b/text()").extract_first()
-        parsed_price = Price.fromstring(price_str)
         location = response.xpath("//td/b[contains(.,'Country')]/../../td[2]/text()").extract_first()
-        yield {
+        yield {  # TODO introduce data class
             'offer_url': response.url,
             'title': title,
             'aircraft_type': 'airplane',
             'date': datetime.datetime.strptime(date, "%d-%m-%Y").date(),  # last updated value
-            'price': parsed_price,
+            'raw_price': price_str,
             'detail_text': response.text,
             'location': location,  # TODO currently only the country is extracted,
             'hours': -1,

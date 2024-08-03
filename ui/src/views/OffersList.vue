@@ -38,7 +38,7 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get(`/offers`, {
+        .get(`/api/offers`, {
           params: {
             aircraft_type: this.aircraftType,
             limit: this.limit,

@@ -3,16 +3,15 @@ import datetime
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import select
+from sqlalchemy.sql import text
 from sqlalchemy.types import Date, DateTime, Unicode, Numeric, Integer
 
 from my_logging import *
-from settings import DB_NAME, DB_USER, DB_PW, DB_HOST, DB_PORT
+from settings import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PW
 
 logger = logging.getLogger('db')
 
 Base = declarative_base()
-
 
 class AircraftOffer(Base):
     __tablename__ = "aircraft_offer"
@@ -50,8 +49,7 @@ class AircraftOffer(Base):
             "location": self.location,
             "aircraft_type": self.aircraft_type,
             "manufacturer": self.manufacturer,
-            "model": self.model,
-            "classified": self.classified
+            "model": self.model
         }
 
 class ExchangeRate(Base):
@@ -66,10 +64,11 @@ logger.info('DB: postgresql+psycopg2://{0}:***@{1}:{2}/{3}'.format(DB_USER, DB_H
 engine = create_engine('postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(DB_USER, DB_PW, DB_HOST, DB_PORT, DB_NAME))
 Session = sessionmaker(bind=engine)
 
-
-def create_tables():
-    Base.metadata.create_all(engine)
-
+def truncate_offers():
+    session = Session()
+    session.execute(text("TRUNCATE aircraft_offer"))
+    session.commit()
+    session.close()
 
 def store_entity(entity):
     session = Session()
@@ -91,16 +90,18 @@ def update_exchange_rate(exchange_rate):
     session.commit()
 
 
-def has_offer_url(offer_url):
+def offer_url_exists(offer_url):
+    session = Session()
     try:
-        query = select(select(AircraftOffer.offer_url).where(AircraftOffer.offer_url == offer_url).exists())
-        conn = engine.connect()
-        result = conn.execute(query).fetchone()
-        return result is not None and result[0] == True
+        q = session.query(AircraftOffer).where(AircraftOffer.offer_url == offer_url).exists()
+        result = session.query(q).one()
+        return result is not None and result[0]
     except Exception as e:
         logger.error(e)
         logger.error("database error, assuming we don't have this offer already")
         return False
+    finally:
+        session.close()
 
 def get_exchange_rates_as_dict(session):
     all_exchange_rates = session.query(ExchangeRate).all()

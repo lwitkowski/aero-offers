@@ -14,7 +14,7 @@ class FlugzeugMarktDeSpiderTest(unittest.TestCase):
             fake_response_from_file('samples/flugzeugmarkt_de_offer.html')))
         self.assertIsNotNone(item["title"])
         self.assertEqual(item["date"], datetime.datetime.strptime("08.10.2019", "%d.%m.%Y").date())
-        self.assertIsNotNone(item["price"])
+        self.assertEqual("250.000 $", item["raw_price"])
         self.assertEqual(1492, item["hours"])
         self.assertTrue("IFR Approved" in item["detail_text"])
         self.assertEqual("airplane", item["aircraft_type"])

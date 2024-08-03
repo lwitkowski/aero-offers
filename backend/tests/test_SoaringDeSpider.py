@@ -16,7 +16,7 @@ class SoaringDeSpiderTest(unittest.TestCase):
         self.assertIsNotNone(item["date"])
         self.assertTrue(isinstance(item["date"], date))
         self.assertIsNotNone(item["title"])
-        self.assertIsNotNone(item["price"])
+        self.assertEqual("25.000,00 Euro €                  ", item["raw_price"])
         self.assertIsNotNone(item["offer_url"])
         self.assertIsNotNone(item["location"])
         self.assertEqual(item["hours"], str(2522))
@@ -35,8 +35,7 @@ class SoaringDeSpiderTest(unittest.TestCase):
         self.assertEqual("Dimona H36", item["title"])
         self.assertEqual("2880", item["hours"])
         self.assertEqual("5672", item["starts"])
-        self.assertEqual("22.000,00", item["price"].amount_text)
-        self.assertEqual("€", item["price"].currency)
+        self.assertEqual("22.000,00 Euro €\n                            ", item["raw_price"])
 
     def test_parse_detail_page_for_ls3(self):
         item = next(self.spider.parse_detail_page(
