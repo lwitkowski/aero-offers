@@ -40,6 +40,13 @@ jobs:
         run: |
           ./run_tests.sh
 
+      - name: 'Publish Test Results'
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            ./backend/test-results/**/*.xml
+
       - name: 'Build Backend API'
         working-directory: ./backend
         run: |
