@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import formatPrice from '@/utils.js'
+import { formatPrice } from '@/utils.js'
 
 export default {
   name: 'OfferThumb',

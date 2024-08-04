@@ -12,7 +12,10 @@
         <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions" />
       </div>
       <h2>Offers</h2>
-      <p>There were {{ offers.length }} offer(s). The average offer price is {{ formatPrice(avgPrice, 'EUR') }}.</p>
+      <p>
+        There were {{ offers.length }} offer(s). Median offer price is {{ formatPrice(medianPrice, 'EUR') }}, average
+        {{ formatPrice(avgPrice, 'EUR') }}.
+      </p>
       <table class="modelinformation-table">
         <tr>
           <th>Date</th>
@@ -45,7 +48,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
-import formatPrice from '@/utils.js'
+import { formatPrice, median } from '@/utils.js'
 
 export default {
   name: 'OfferDetails',
@@ -66,6 +69,7 @@ export default {
       manufacturer_website: '',
       offers: [],
       avgPrice: 0,
+      medianPrice: 0,
       chartData: {
         series: [[]]
       },
@@ -109,11 +113,11 @@ export default {
           return
         }
 
-        let priceSum = 0
+        let prices = []
         for (let i = 0; i < this.offers.length; i += 1) {
           const offer = this.offers[i]
           if (!isNaN(offer.price_in_euro)) {
-            priceSum += Number(offer.price_in_euro)
+            prices.push(Number(offer.price_in_euro))
           }
 
           const datapoint = {
@@ -146,7 +150,13 @@ export default {
             })
           ]
         }
+
+        let priceSum = 0
+        prices.forEach((num) => {
+          priceSum += num
+        })
         this.avgPrice = Math.round((priceSum / this.offers.length) * 100) / 100
+        this.medianPrice = median(prices)
       })
     }
   }
