@@ -8,14 +8,7 @@
         <small>{{ offer.date }}, {{ offer.location }}</small>
         ,
         <small>
-          <strong>
-            {{ offer.price_in_euro }}
-            <div v-if="offer.currency_code != 'EUR'" class="tooltip">
-              <span class="tooltiptext">converted from {{ offer.price }} {{ offer.currency }}</span>
-              €
-            </div>
-            <div v-else style="display: inline">€</div>
-          </strong>
+          <strong>{{ formatPrice(offer.price, offer.currency_code) }}</strong>
         </small>
       </p>
       <small>
@@ -26,7 +19,7 @@
               params: { aircraftType: offer.aircraft_type, manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
-            <a>Model: {{ offer.manufacturer }} {{ offer.model }}</a>
+            <a>all `{{ offer.model }}` offers</a>
           </router-link>
         </p>
       </small>
@@ -42,6 +35,8 @@
 </template>
 
 <script>
+import formatPrice from '@/utils.js'
+
 export default {
   name: 'OfferThumb',
   props: {
@@ -49,6 +44,9 @@ export default {
       type: Object,
       default: null
     }
+  },
+  methods: {
+    formatPrice
   }
 }
 </script>
