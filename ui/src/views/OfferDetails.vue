@@ -12,7 +12,7 @@
         <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions" />
       </div>
       <h2>Offers</h2>
-      <p>There were {{ offers.length }} offer(s) for this Model. The average offer price is {{ medianPrice }} Euro.</p>
+      <p>There were {{ offers.length }} offer(s). The average offer price is {{ avgPrice }} €.</p>
       <table class="modelinformation-table">
         <tr>
           <th>Date</th>
@@ -64,7 +64,7 @@ export default {
     return {
       manufacturer_website: '',
       offers: [],
-      medianPrice: 0,
+      avgPrice: 0,
       chartData: {
         series: [[]]
       },
@@ -98,6 +98,8 @@ export default {
 
     fetchData() {
       this.chartData.series = [[]]
+      this.avgPrice = 0
+
       axios.get(`/api/offers/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
@@ -105,9 +107,12 @@ export default {
           return
         }
 
+        let priceSum = 0
         for (let i = 0; i < this.offers.length; i += 1) {
           const offer = this.offers[i]
-          this.medianPrice += offer.price_in_euro
+          if (!isNaN(offer.price_in_euro)) {
+            priceSum += Number(offer.price_in_euro)
+          }
 
           const datapoint = {
             meta: offer.title,
@@ -139,7 +144,7 @@ export default {
             })
           ]
         }
-        this.medianPrice = Math.round((this.medianPrice / this.offers.length) * 100) / 100
+        this.avgPrice = Math.round((priceSum / this.offers.length) * 100) / 100
       })
     }
   }

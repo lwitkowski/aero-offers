@@ -146,6 +146,9 @@ def get_offers_dict(limit=None, offset=None, aircraft_type=None):
         offers = session.query(AircraftOffer).order_by(AircraftOffer.date.desc())
         if aircraft_type is not None:
             offers = offers.filter(AircraftOffer.aircraft_type == aircraft_type)
+        else:
+            offers = offers.filter(AircraftOffer.aircraft_type is not None)
+
         if limit is not None:
             offers = offers.limit(limit)
         if offset is not None:
