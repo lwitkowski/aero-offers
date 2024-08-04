@@ -25,6 +25,6 @@ describe('OfferThumb', () => {
 
     const wrapper = mount(OfferThumb, { props: { offer: offer } })
 
-    expect(wrapper.text()).toContain('Rolladen Schneider LS4', '2020-02-26')
+    expect(wrapper.text()).toContain('LS4', '2020-02-26', '€28,000')
   })
 })
