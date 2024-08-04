@@ -12,7 +12,7 @@
         <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions" />
       </div>
       <h2>Offers</h2>
-      <p>There were {{ offers.length }} offer(s). The average offer price is {{ avgPrice }} €.</p>
+      <p>There were {{ offers.length }} offer(s). The average offer price is {{ formatPrice(avgPrice, 'EUR') }}.</p>
       <table class="modelinformation-table">
         <tr>
           <th>Date</th>
@@ -25,7 +25,7 @@
           <td>{{ offer.date }}</td>
           <td>{{ offer.title }}</td>
           <td>{{ offer.location }}</td>
-          <td>{{ offer.price_in_euro }} €</td>
+          <td>{{ formatPrice(offer.price, offer.currency_code) }}</td>
           <td>
             <div class="icon">
               <small>
@@ -45,6 +45,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
+import formatPrice from '@/utils.js'
 
 export default {
   name: 'OfferDetails',
@@ -87,6 +88,7 @@ export default {
   },
 
   methods: {
+    formatPrice,
     dateAlreadyPresent(date) {
       for (let j = 0; j < this.chartData.series[0].length; j++) {
         if (moment(this.chartData.series[0][j].x).isSame(date, 'day')) {
@@ -117,7 +119,7 @@ export default {
           const datapoint = {
             meta: offer.title,
             x: new Date(offer.date),
-            y: offer.price_in_euro
+            y: Number(offer.price_in_euro)
           }
           if (this.dateAlreadyPresent(datapoint.x)) {
             this.chartData.series.push([datapoint])
@@ -139,7 +141,7 @@ export default {
           plugins: [
             this.$chartist.plugins.tooltip({
               transformTooltipTextFnc: (datapoint) => {
-                return datapoint.split(',')[1] + ' €'
+                return formatPrice(datapoint.split(',')[1], 'EUR')
               }
             })
           ]
