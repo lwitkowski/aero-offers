@@ -13,8 +13,9 @@
       </div>
       <h2>Offers</h2>
       <p>
-        There were {{ offers.length }} offer(s). Median offer price is {{ formatPrice(medianPrice, 'EUR') }}, average
-        {{ formatPrice(avgPrice, 'EUR') }}.
+        There were {{ offers.length }} offer(s). Median offer price is
+        <span class="median_price">{{ formatPrice(medianPrice, 'EUR') }}</span>
+        , average {{ formatPrice(avgPrice, 'EUR') }}.
       </p>
       <table class="modelinformation-table">
         <tr>
@@ -192,5 +193,10 @@ export default {
   text-align: center;
   background-color: #011627;
   color: #ffffff;
+}
+
+.median_price {
+  color: #ee6c4d;
+  font-weight: bold;
 }
 </style>
