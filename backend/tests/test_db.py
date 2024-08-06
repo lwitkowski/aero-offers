@@ -1,5 +1,6 @@
 import unittest
 from ddt import ddt, data
+from decimal import Decimal
 
 import tests.test__testcontainers_setup
 import db
@@ -16,11 +17,15 @@ class DbTest(unittest.TestCase):
 
         # when
         db.store_offer(sample_offer)
+        all_glider_offers = db.get_offers()
 
         # then
-        all_gliders_in_db = db.get_offers()
-        self.assertEqual(len(all_gliders_in_db), 1)
-        self.assertEqual(all_gliders_in_db[0]["title"], "Glider A")
+        self.assertEqual(len(all_glider_offers), 1)
+        glider_offer = all_glider_offers[0]
+        self.assertEqual(glider_offer["title"], "Glider A")
+        self.assertEqual(glider_offer["price"]["amount"], Decimal("29500"))
+        self.assertEqual(glider_offer["price"]["currency"], "€")
+        self.assertEqual(glider_offer["price"]["currency_code"], "EUR")
 
     def test_should_filter_offers_by_aircraft_type(self):
         # given

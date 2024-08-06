@@ -40,12 +40,15 @@ class AircraftOffer(Base):
         return {
             "id": self.id,
             "date": self.date.strftime("%Y-%m-%d"),
-            "creationDate": self.creation_datetime,
             "url": self.offer_url,
             "title": self.title,
-            "price": self.price,
-            "currency": self.currency,
-            "currency_code": self.currency_code,
+            "price": {
+                "amount": self.price,
+                "currency": self.currency,
+                "currency_code": self.currency_code
+            },
+            "hours": self.hours,
+            "starts": self.starts,
             "location": self.location,
             "aircraft_type": self.aircraft_type,
             "manufacturer": self.manufacturer,
@@ -117,13 +120,15 @@ def get_exchange_rates_as_dict(session):
 def convert_prices(offers, session):
     exchange_rates = get_exchange_rates_as_dict(session)
     for offer in offers:
-        offer["price_in_euro"] = offer["price"]
-        offer["exchange_rate"] = "1.0"
+        price = offer["price"]
 
-        if offer["currency_code"] and offer["currency_code"] != "EUR":
+        if price["currency_code"] and price["currency_code"] != "EUR":
             # EZB exchange rates are base=EUR, quote=X
-            offer["price_in_euro"] = round(offer["price"] / exchange_rates[offer["currency_code"]], 2)
-            offer["exchange_rate"] = exchange_rates[offer["currency_code"]]
+            price["amount_in_euro"] = round(price["amount"] / exchange_rates[price["currency_code"]], 2)
+            price["exchange_rate"] = exchange_rates[price["currency_code"]]
+        else:
+            price["amount_in_euro"] = price["amount"]
+            price["exchange_rate"] = "1.0"
     return offers
 
 

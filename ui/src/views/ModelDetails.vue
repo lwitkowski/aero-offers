@@ -22,6 +22,7 @@
           <th>Date</th>
           <th>Title</th>
           <th>Location</th>
+          <th>Hours / starts</th>
           <th>Price</th>
           <th />
         </tr>
@@ -29,7 +30,11 @@
           <td>{{ offer.date }}</td>
           <td>{{ offer.title }}</td>
           <td>{{ offer.location }}</td>
-          <td>{{ formatPrice(offer.price, offer.currency_code) }}</td>
+          <td>
+            <div v-if="offer.hours">{{ offer.hours }}h, {{ offer.starts }} starts</div>
+            <div v-else>n/a</div>
+          </td>
+          <td>{{ formatPrice(offer.price.amount, offer.price.currency_code) }}</td>
           <td>
             <div class="icon">
               <small>
@@ -52,7 +57,7 @@ import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 import { formatPrice, median } from '@/utils.js'
 
 export default {
-  name: 'OfferDetails',
+  name: 'ModelDetails',
 
   components: {},
   props: {
@@ -119,14 +124,14 @@ export default {
         let prices = []
         for (let i = 0; i < this.offers.length; i += 1) {
           const offer = this.offers[i]
-          if (!isNaN(offer.price_in_euro)) {
-            prices.push(Number(offer.price_in_euro))
+          if (!isNaN(offer.price.amount_in_euro)) {
+            prices.push(Number(offer.price.amount_in_euro))
           }
 
           const datapoint = {
             meta: offer.title,
             x: new Date(offer.date),
-            y: Number(offer.price_in_euro)
+            y: Number(offer.price.amount_in_euro)
           }
           if (this.dateAlreadyPresent(datapoint.x)) {
             this.chartData.series.push([datapoint])
