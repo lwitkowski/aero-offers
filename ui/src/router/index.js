@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import OffersList from '../views/OffersList.vue'
-import OfferDetails from '../views/OfferDetails.vue'
+import ModelDetails from '../views/ModelDetails.vue'
 import { nextTick } from 'vue'
 
 const router = createRouter({
@@ -28,8 +28,8 @@ const router = createRouter({
         },
         {
           path: '/:aircraftType/:manufacturer/:model',
-          name: 'offer_details',
-          component: OfferDetails,
+          name: 'model_details',
+          component: ModelDetails,
           props: true
         }
       ]
@@ -44,7 +44,7 @@ router.afterEach((to) => {
         document.title = `${to.params.aircraftType.charAt(0).toUpperCase()}${to.params.aircraftType.slice(1)} offers`
         break
 
-      case 'offer_details':
+      case 'model_details':
         document.title = `${to.params.manufacturer} ${to.params.model} (${to.params.aircraftType}) offers`
         break
 

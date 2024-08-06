@@ -8,14 +8,17 @@
         <small>{{ offer.date }}, {{ offer.location }}</small>
         ,
         <small>
-          <strong>{{ formatPrice(offer.price, offer.currency_code) }}</strong>
+          <strong>{{ formatPrice(offer.price.amount, offer.price.currency_code) }}</strong>
         </small>
       </p>
+      <small>
+        <p v-if="offer.hours">Total: {{ offer.hours }}h, {{ offer.starts }} starts</p>
+      </small>
       <small>
         <p v-if="offer.manufacturer">
           <router-link
             :to="{
-              name: 'offer_details',
+              name: 'model_details',
               params: { aircraftType: offer.aircraft_type, manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
@@ -65,7 +68,7 @@ export default {
   box-sizing: border-box;
   small {
     font-size: 12px;
-    color: #ee6c4d;
+    color: #cc6c4d;
   }
 }
 

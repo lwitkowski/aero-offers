@@ -17,8 +17,12 @@ describe('OfferThumb', () => {
       location: 'Edlb, L\u00fcdinghausen, Nordrhein-Westfalen, Germany',
       manufacturer: 'Rolladen Schneider',
       model: 'LS4',
-      price: '28000.00',
-      price_in_euro: '28000.00',
+      price: {
+        amount: '28000.00',
+        amount_in_euro: '28000.00',
+        currency: '€',
+        currency_code: 'EUR'
+      },
       title: 'LS-4',
       url: 'https://www.segelflug.de/osclass/index.php?page=item&id=42370'
     }
