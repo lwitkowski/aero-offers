@@ -13,7 +13,7 @@ import db
 class DuplicateDetectionTest(unittest.TestCase):
 
     def setUp(self):
-        db.truncate_offers()
+        db.truncate_all_tables()
 
         self.sample_offer = buildOfferWithUrl("https://offers.com/1")
         self.detection = pipelines.DuplicateDetection()
@@ -111,7 +111,7 @@ class FilterSearchAndCharterOffersTest(unittest.TestCase):
 class StoragePipelineTest(unittest.TestCase):
 
     def setUp(self):
-        db.truncate_offers()
+        db.truncate_all_tables()
         self.storage = pipelines.StoragePipeline()
 
     def test_should_store_offer(self):

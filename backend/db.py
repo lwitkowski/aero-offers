@@ -64,11 +64,13 @@ logger.info('DB: postgresql+psycopg2://{0}:***@{1}:{2}/{3}'.format(DB_USER, DB_H
 engine = create_engine('postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(DB_USER, DB_PW, DB_HOST, DB_PORT, DB_NAME))
 Session = sessionmaker(bind=engine)
 
-def truncate_offers():
+
+def truncate_all_tables():
     session = Session()
     session.execute(text("TRUNCATE aircraft_offer"))
     session.commit()
     session.close()
+
 
 def store_entity(entity):
     session = Session()
@@ -102,6 +104,7 @@ def offer_url_exists(offer_url):
         return False
     finally:
         session.close()
+
 
 def get_exchange_rates_as_dict(session):
     all_exchange_rates = session.query(ExchangeRate).all()
