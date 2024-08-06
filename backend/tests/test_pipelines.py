@@ -131,7 +131,7 @@ class StoragePipelineTest(unittest.TestCase):
         self.storage.process_item(sample_raw_offer, None)
 
         # then
-        all_gliders_in_db = db.get_offers_dict(aircraft_type="glider")
+        all_gliders_in_db = db.get_offers(aircraft_type="glider")
         self.assertEqual(len(all_gliders_in_db), 1)
         self.assertEqual(all_gliders_in_db[0]["title"], "Glider A")
         self.assertTrue(db.offer_url_exists("https://offers.com/1"))
