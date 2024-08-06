@@ -110,6 +110,8 @@ export default {
       axios.get(`/api/offers/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
+        this.offers.sort((a, b) => new Date(a.date) - new Date(b.date))
+
         if (this.offers.length === 0) {
           return
         }
