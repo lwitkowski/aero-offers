@@ -15,8 +15,8 @@ def aircraft_models():
 @app.route('/api/offers')
 def offers():
     return jsonify(db.get_offers_dict(aircraft_type=request.args.get('aircraft_type'),
-                                      offset=request.args.get('offset'),
-                                      limit=request.args.get('limit')))
+                                      offset=int(request.args.get('offset') or '0'),
+                                      limit=int(request.args.get('limit') or '30')))
 
 @app.route("/api/offers/<manufacturer>/<model>")
 def model_information(manufacturer, model):

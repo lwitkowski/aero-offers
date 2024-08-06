@@ -140,7 +140,7 @@ def get_offers_for_model(manufacturer, model):
         session.close()
 
 
-def get_offers_dict(limit=None, offset=None, aircraft_type=None):
+def get_offers_dict(limit: int = 30, offset: int = 0, aircraft_type=None):
     session = Session()
     try:
         offers = session.query(AircraftOffer).order_by(AircraftOffer.date.desc())
@@ -149,8 +149,8 @@ def get_offers_dict(limit=None, offset=None, aircraft_type=None):
         else:
             offers = offers.filter(AircraftOffer.aircraft_type is not None)
 
-        if limit is not None:
-            offers = offers.limit(limit)
+        offers = offers.limit(min(limit, 100))
+
         if offset is not None:
             offers = offers.offset(offset)
         offers = offers.all()
