@@ -8,7 +8,7 @@ import db
 class DbTest(unittest.TestCase):
 
     def setUp(self):
-        db.truncate_offers()
+        db.truncate_all_tables()
 
     def test_should_store_and_fetch_offer(self):
         # given
