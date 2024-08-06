@@ -54,7 +54,7 @@ export default {
         return
       }
       this.$router.push({
-        name: 'offer_details',
+        name: 'model_details',
         params: { aircraftType: val.aircraft_type, manufacturer: val.manufacturer, model: val.model }
       })
     }
