@@ -124,35 +124,26 @@ def convert_prices(offers, session):
     return offers
 
 
-def get_offers_for_model(manufacturer, model):
+def get_offers(offset: int = 0, limit: int = 30, aircraft_type=None, manufacturer=None, model=None):
     session = Session()
     try:
-        offers = session.query(AircraftOffer)
-        offers = offers.filter(AircraftOffer.manufacturer == manufacturer)
-        offers = offers.filter(AircraftOffer.model == model)
-        offers = offers.order_by(AircraftOffer.date.asc())
-        offers = offers.all()
+        offers = (session.query(AircraftOffer)
+                  .order_by(AircraftOffer.date.desc()))
 
-        ret = [offer.as_dict() for offer in offers]
-        ret = convert_prices(ret, session)
-        return ret
-    finally:
-        session.close()
-
-
-def get_offers_dict(limit: int = 30, offset: int = 0, aircraft_type=None):
-    session = Session()
-    try:
-        offers = session.query(AircraftOffer).order_by(AircraftOffer.date.desc())
         if aircraft_type is not None:
             offers = offers.filter(AircraftOffer.aircraft_type == aircraft_type)
         else:
             offers = offers.filter(AircraftOffer.aircraft_type is not None)
 
-        offers = offers.limit(min(limit, 100))
+        if manufacturer is not None:
+            offers = offers.filter(AircraftOffer.manufacturer == manufacturer)
 
-        if offset is not None:
-            offers = offers.offset(offset)
+        if model is not None:
+            offers = offers.filter(AircraftOffer.model == model)
+
+        offers = offers.offset(offset or 0)
+        offers = offers.limit(min(limit, 300))
+
         offers = offers.all()
 
         ret = [offer.as_dict() for offer in offers]

@@ -14,7 +14,7 @@ def aircraft_models():
 
 @app.route('/api/offers')
 def offers():
-    return jsonify(db.get_offers_dict(aircraft_type=request.args.get('aircraft_type'),
+    return jsonify(db.get_offers(aircraft_type=request.args.get('aircraft_type'),
                                       offset=int(request.args.get('offset') or '0'),
                                       limit=int(request.args.get('limit') or '30')))
 
@@ -28,7 +28,7 @@ def model_information(manufacturer, model):
         abort(404)
     manufacturer_info = manufacturers[manufacturer]
     del (manufacturer_info["models"])  # remove models info
-    manufacturer_info["offers"] = db.get_offers_for_model(manufacturer, model)
+    manufacturer_info["offers"] = db.get_offers(manufacturer=manufacturer, model=model)
     return jsonify(manufacturer_info)
 
 if __name__ == '__main__':
