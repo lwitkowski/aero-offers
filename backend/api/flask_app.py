@@ -28,7 +28,7 @@ def model_information(manufacturer, model):
         abort(404)
     manufacturer_info = manufacturers[manufacturer]
     del (manufacturer_info["models"])  # remove models info
-    manufacturer_info["offers"] = db.get_offers(manufacturer=manufacturer, model=model)
+    manufacturer_info["offers"] = db.get_offers(manufacturer=manufacturer, model=model, limit=300)
     return jsonify(manufacturer_info)
 
 if __name__ == '__main__':
