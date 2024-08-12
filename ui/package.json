@@ -19,7 +19,7 @@
     "vue": "^3.4.35",
     "vue-chartist": "^3.0.0",
     "vue-multiselect": "^3.0.0",
-    "vue-router": "^4.4.2"
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
