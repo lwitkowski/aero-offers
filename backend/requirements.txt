@@ -5,7 +5,7 @@ pylint==3.2.6
 SQLAlchemy==2.0.32
 price-parser==0.3.4
 Scrapy==2.11.2
-nltk==3.8.2
+nltk==3.9.1
 Flask==3.0.3
 Flask-Cors==4.0.1
 Flask-Headers==1.0
