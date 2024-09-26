@@ -487,6 +487,16 @@
       ]
     }
   },
+  "Let": {
+    "manufacturer_website": "https://en.wikipedia.org/wiki/Aircraft_Industries",
+    "models": {
+      "glider": [
+        "L-13 Blaník",
+        "L-23 Super Blaník",
+        "L-33 Solo"
+      ]
+    }
+  },
   "Margański & Mysłowski": {
     "models": {
       "glider": [
