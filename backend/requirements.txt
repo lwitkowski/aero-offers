@@ -9,7 +9,6 @@ nltk==3.9.1
 Flask==3.0.3
 Flask-Cors==5.0.0
 Flask-Headers==1.0
-uWSGI==2.0.27
 defusedxml==0.7.1
 requests==2.32.3
 Jinja2==3.1.4
