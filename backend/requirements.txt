@@ -1,8 +1,8 @@
-coverage==7.6.3
+coverage==7.6.4
 Twisted==24.7.0
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
 pylint==3.3.1
-SQLAlchemy==2.0.35
+SQLAlchemy==2.0.36
 price-parser==0.3.4
 Scrapy==2.11.2
 nltk==3.9.1
