@@ -1,12 +1,12 @@
-coverage==7.6.4
+coverage==7.6.7
 Twisted==24.10.0
 psycopg2-binary==2.9.10
 pylint==3.3.1
 SQLAlchemy==2.0.36
 price-parser==0.3.4
-Scrapy==2.11.2
+Scrapy==2.12.0
 nltk==3.9.1
-Flask==3.0.3
+Flask==3.1.0
 Flask-Cors==5.0.0
 Flask-Headers==1.0
 defusedxml==0.7.1
