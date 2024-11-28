@@ -15,6 +15,11 @@ class SoaringDeSpider(scrapy.Spider):
 
     start_urls = [
         GLIDER_OFFERS_URL,
+        GLIDER_OFFERS_URL + "&iPage=2",
+        GLIDER_OFFERS_URL + "&iPage=3",
+        GLIDER_OFFERS_URL + "&iPage=4",
+        GLIDER_OFFERS_URL + "&iPage=5",
+        GLIDER_OFFERS_URL + "&iPage=6",
         ENGINE_OFFERS_URL
     ]
 
