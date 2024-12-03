@@ -1,7 +1,7 @@
 coverage==7.6.8
-Twisted==24.10.0
+Twisted==24.11.0
 psycopg2-binary==2.9.10
-pylint==3.3.1
+pylint==3.3.2
 SQLAlchemy==2.0.36
 price-parser==0.3.4
 Scrapy==2.12.0
