@@ -1,4 +1,4 @@
-coverage==7.6.8
+coverage==7.6.9
 Twisted==24.11.0
 psycopg2-binary==2.9.10
 pylint==3.3.2
