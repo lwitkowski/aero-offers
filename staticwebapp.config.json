@@ -3,7 +3,11 @@
     {
       "route": "/api/*",
       "methods": [
-        "get"
+        "get",
+        "head",
+        "options",
+        "connect",
+        "trace"
       ],
       "redirect": "https://ca-aerooffers-api--zolmg8s.jollystone-0cdefbde.switzerlandnorth.azurecontainerapps.io/api/",
       "allowedRoles": [
