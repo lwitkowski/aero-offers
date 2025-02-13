@@ -8,9 +8,8 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 [![CD - Backend (api, jobs)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml/badge.svg)](https://github.com/lwitkowski/aero-offers/actions/workflows/cd-backend.yaml)
 
 ### Project structure (building blocks /  deployment units)
-Currently, the project is running on Azure Cloud as a set of Azure Container Apps and Jobs.
 
-- `ui` - vue.js application, bundled as Docker image based on nginx. Deployed as Azure Container App (running 24/7)
+- `ui` - vue.js application. Deployed as Azure Static Web App.
 - `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). Deployed as Azure Container App (running 24/7) 
 - `backend/jobs` - python scripts triggered periodically. Much more resource-heavy than API, bundled in the same Docker image as `api`, deployed as Azure Container Job (with overridden command)
     - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified), then assigns manufacturer and model to new (not yet classified) offers stored in the database
@@ -19,7 +18,7 @@ Currently, the project is running on Azure Cloud as a set of Azure Container App
 
 #### Deployment
 
-Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env.
+Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env. Currently, the project is running in Azure.
 
 ### TODO
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
