@@ -3,36 +3,26 @@ services:
     build: ./ui
     ports:
       - '8080:80'
+    volumes:
+      - ./ui/dist:/usr/share/nginx/html/
     depends_on:
       - ca-aerooffers-api
 
   ca-aerooffers-api:
     build: ./backend
     ports:
-      - '8081:80' # exposed for debugging and local UI development without python
+      - '8082:80' # exposed for debugging and local UI development without python
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=aircraft_offers
-      - DB_USER=aircraft_offers
-      - DB_PW=aircraft_offers
+      - 'COSMOSDB_URL=http://cosmosdb:8081'
+      - 'COSMOSDB_CREDENTIAL=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
+      - 'COSMOSDB_DB_NAME=aerooffers'
     depends_on:
-      - postgres
-      - flyway
+      - cosmosdb
 
-  postgres:
-    image: postgres:16.3-alpine
+  cosmosdb:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
     environment:
-      - POSTGRES_DB=aircraft_offers
-      - POSTGRES_USER=aircraft_offers
-      - POSTGRES_PASSWORD=aircraft_offers
+      - 'AZURE_COSMOS_EMULATOR_KEY=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
     ports:
-      - '25432:5432'
-
-  flyway:
-    image: flyway/flyway:10-alpine
-    command: -url=jdbc:postgresql://postgres:5432/aircraft_offers -user=aircraft_offers -password=aircraft_offers migrate
-    volumes:
-      - ./db/migrations:/flyway/sql
-    depends_on:
-      - postgres
+      - '8081:8081'
+      - '1234:1234' # admin ui

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 WORKDIR /app
 
@@ -16,4 +16,6 @@ COPY . .
 
 EXPOSE 80
 
-CMD [ "python3", "-m" , "flask", "--app=./api/flask_app.py", "run", "--host=0.0.0.0", "--port=80"]
+ENV PYTHONPATH=$PYTHONPATH':./src'
+
+CMD [ "python3", "-m" , "flask", "--app=./src/api/flask_app.py", "run", "--host=0.0.0.0", "--port=80"]

@@ -1,4 +1,4 @@
-export PYTHONPATH=$PYTHONPATH':./'
+export PYTHONPATH=$PYTHONPATH':./src'
 
 set -e
 

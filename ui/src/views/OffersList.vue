@@ -18,7 +18,7 @@ export default {
     OfferThumb
   },
   props: {
-    aircraftType: {
+    category: {
       type: String,
       default: null
     }
@@ -40,7 +40,7 @@ export default {
       axios
         .get(`/api/offers`, {
           params: {
-            aircraft_type: this.aircraftType,
+            category: this.category,
             limit: this.limit,
             offset: this.offset
           }

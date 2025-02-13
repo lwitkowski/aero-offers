@@ -4,7 +4,7 @@ from scrapy.crawler import CrawlerProcess
 
 import pprint
 from my_logging import *
-from spiders import SoaringDeSpider, FlugzeugMarktDeSpider, PlaneCheckComSpider
+from spiders import SoaringDeSpider, FlugzeugMarktDeSpider
 from mailer import send_mail
 
 logger = logging.getLogger("fetch_offers")
@@ -17,14 +17,13 @@ if __name__ == '__main__':
         spiders = {
             SoaringDeSpider.SoaringDeSpider: None,
             FlugzeugMarktDeSpider.FlugzeugMarktDeSpider: None,
-            #PlaneCheckComSpider.PlaneCheckComSpider: None
         }
         for spider_cls in spiders.keys():
             crawler = process.create_crawler(spider_cls)
             spiders[spider_cls] = crawler
             process.crawl(crawler)
 
-        process.start() # the script will block here until all crawling jobs are finished
+        process.start()  # the script will block here until all crawling jobs are finished
 
         stats_per_spider = {}
 
