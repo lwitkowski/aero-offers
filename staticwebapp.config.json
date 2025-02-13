@@ -2,14 +2,8 @@
   "routes": [
     {
       "route": "/api/models",
-      "methods": [
-        "get",
-        "head",
-        "options",
-        "connect",
-        "trace"
-      ],
-      "redirect": "https://ca-aerooffers-api--zolmg8s.jollystone-0cdefbde.switzerlandnorth.azurecontainerapps.io/api/"
+      "redirect": "https://ca-aerooffers-api--zolmg8s.jollystone-0cdefbde.switzerlandnorth.azurecontainerapps.io/api/models",
+      "statusCode": 301
     }
   ]
 }
