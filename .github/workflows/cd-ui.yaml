@@ -11,10 +11,6 @@ on:
       - ui/**
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-  DOCKER_REPO: ghcr.io/lwitkowski
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,9 +22,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - run: |
-          echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v4
         with:
@@ -59,25 +52,13 @@ jobs:
         working-directory: ./ui
         run: npm run build
 
-      - name: 'Build docker image'
-        working-directory: ./ui
-        run: |
-          docker build . -t ${DOCKER_IMAGE}
-
-      - name: 'Log in to the Container registry'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 'Push image to Container Registry'
+      - name: 'Archive dist artifacts'
+        uses: actions/upload-artifact@v4
         if: github.ref == 'refs/heads/main'
-        run: |
-          docker push ${DOCKER_IMAGE}
+        with:
+          name: ui-dist
+          path: ui/dist
 
-
-  # only for main builds, and only if both components get built correctly
   deploy:
     runs-on: ubuntu-latest
     environment: production
@@ -89,22 +70,17 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
-
-      - run: |
-          echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-ui:${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      - name: 'Azure Login'
-        uses: azure/login@v2
+      - name: 'Download dist artifacts'
+        uses: actions/download-artifact@v4
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: 'Deploy to Azure'
-        uses: azure/container-apps-deploy-action@v2
+          name: ui-dist
+          path: ui/dist
+
+      - name: 'Build And Deploy'
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          resourceGroup: rg-aerooffers
-          containerAppEnvironment: cae-aerooffers-prod
-          containerAppName: ca-aerooffers-ui
-          imageToDeploy: ${{ env.DOCKER_IMAGE }}
-          disableTelemetry: true
+          action: "upload"
+          app_location: "ui/dist"
+          skip_app_build: true
+          skip_api_build: true
+          azure_static_web_apps_api_token: ${{ secrets.UI_AZURE_STATIC_WEB_APPS_API_TOKEN }}

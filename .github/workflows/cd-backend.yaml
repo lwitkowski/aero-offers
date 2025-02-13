@@ -70,7 +70,7 @@ jobs:
         run: |
           docker push ${DOCKER_IMAGE}
 
-  # only for main builds, and only if both components get built correctly
+  # only for main builds
   deploy:
     runs-on: ubuntu-latest
     environment: production

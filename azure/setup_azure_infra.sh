@@ -27,6 +27,13 @@ az identity create \
 # assign identity a 'Contributor' role to resource group  'rg-aerooffers'
 # create federated credential for identity with subject identifier repo:lwitkowski/aero-offers:environment:production
 
+az staticwebapp create \
+    --name aerooffers-ui \
+    --resource-group $RESOURCE_GROUP
+
+# now setup custom domain for this app (TXT & A DNS records etc)
+
+# create backend container app
 az containerapp create \
     --name ca-aerooffers-api \
     --resource-group $RESOURCE_GROUP \
@@ -36,23 +43,10 @@ az containerapp create \
     --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
     --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
     --target-port 80 \
-    --ingress internal \
-    --transport tcp \
+    --ingress external \
+    --query properties.configuration.ingress.fqdn \
     --cpu 0.25 --memory 0.5Gi \
     --min-replicas 1 --max-replicas 1
-
-az containerapp create \
-    --name ca-aerooffers-ui \
-    --resource-group $RESOURCE_GROUP \
-    --environment $ENV_NAME \
-    --registry-server $CONTAINER_REGISTRY_SERVER \
-    --image $CONTAINER_REGISTRY/aerooffers-ui:$DOCKER_IMAGE_TAG \
-    --target-port 80 \
-    --cpu 0.25 --memory 0.5Gi \
-    --min-replicas 1 --max-replicas 1 \
-    --ingress external \
-    --query properties.configuration.ingress.fqdn
-
 
 # create scheduled jobs
 az containerapp job create \
