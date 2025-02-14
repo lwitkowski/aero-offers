@@ -26,3 +26,6 @@ class OfferPageItem:
     raw_price: str = None  # e.g "123.00 $"
     price: str = None  # e.g "123.00"
     currency: str = None  # e.g USD
+    price_in_euro: str = None
+    exchange_rate: float = None  # e.g. 1.0
+

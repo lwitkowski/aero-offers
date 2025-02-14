@@ -4,7 +4,6 @@ import uuid
 from azure.cosmos import PartitionKey, ThroughputProperties
 
 from db import database
-from fx_db import convert_prices
 from my_logging import *
 from offer import OfferPageItem, AircraftCategory
 
@@ -38,7 +37,9 @@ def store_offer(
         published_at=str(offer.published_at),
         price=dict(
             amount=offer.price,
-            currency=offer.currency
+            currency=offer.currency,
+            amount_in_euro=offer.price_in_euro,
+            exchange_rate=offer.exchange_rate,
         ),
         location=offer.location,
         hours=offer.hours,
@@ -116,7 +117,6 @@ def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = No
     ui_offers = list()
     for db_offer in db_offers:
         ui_offers.append({
-            "id": db_offer['id'],
             "url": db_offer['url'],
             "category": db_offer['category'],
             "title": db_offer['title'],
@@ -124,6 +124,8 @@ def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = No
             "price": {
                 "amount": db_offer['price']['amount'],
                 "currency": db_offer['price']['currency'],
+                "amount_in_euro": db_offer['price']['amount_in_euro'],
+                "exchange_rate": db_offer['price']['exchange_rate'],
             },
             "hours": db_offer['hours'],
             "starts": db_offer['starts'],
@@ -132,7 +134,7 @@ def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = No
             "model": db_offer['model']
         })
 
-    return convert_prices(ui_offers)
+    return ui_offers
 
 
 def get_unclassified_offers():

@@ -21,5 +21,5 @@ class ExchangeRatesTest(unittest.TestCase):
         fx.update_exchange_rates(read_file("eurofxref-daily.xml"))
 
         # then
-        fx_rates = fx_db.get_exchange_rates_as_dict()
+        fx_rates = fx_db.exchange_rates
         self.assertEqual(4.3250, fx_rates["PLN"])

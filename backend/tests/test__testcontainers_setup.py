@@ -7,7 +7,6 @@ from settings import COSMOSDB_DB_NAME
 
 # cosmosdb
 print("Starting CosmosDb")
-os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview'
 
 emulator = CosmosDBNoSQLEndpointContainer()
 emulator.start()

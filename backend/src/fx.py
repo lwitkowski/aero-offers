@@ -35,7 +35,7 @@ def update_exchange_rates(xml_data):
         curr_name = element.get('currency')
         if curr_name is None:
             continue
-        curr_rate = element.get('rate')
+        curr_rate = float(element.get('rate'))
         fx_db.update_exchange_rate(currency=curr_name, rate=curr_rate)
         count += 1
     return count

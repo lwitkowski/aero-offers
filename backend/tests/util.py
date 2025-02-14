@@ -27,6 +27,7 @@ def offer_with_raw_price(raw_price):
     offer.raw_price = raw_price
     return offer
 
+
 def read_file(name: str, encoding='utf8'):
     if not name[0] == '/':
         responses_dir = os.path.dirname(os.path.realpath(__file__))

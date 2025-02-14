@@ -15,7 +15,8 @@ describe('OfferThumb', () => {
       price: {
         amount: '28000.00',
         amount_in_euro: '28000.00',
-        currency: 'EUR'
+        currency: 'EUR',
+        exchange_rate: 1.0
       },
       title: 'LS-4',
       url: 'https://www.segelflug.de/osclass/index.php?page=item&id=42370'

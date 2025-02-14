@@ -2,6 +2,7 @@ from scrapy.exceptions import DropItem
 from price_parser import Price
 
 import offers_db
+from fx_db import convert_price
 from my_logging import *
 from fx import get_currency_code
 from offer import OfferPageItem
@@ -58,6 +59,9 @@ class PriceParser(object):
 
             item.price = str(price.amount)
             item.currency = get_currency_code(price)
+
+            convert_price(item)
+
             return item
 
         except Exception as e:
