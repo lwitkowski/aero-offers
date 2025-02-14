@@ -14,7 +14,7 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 - `backend/jobs` - python scripts triggered periodically. Much more resource-heavy than API, bundled in the same Docker image as `api`, deployed as Azure Container Job (with overridden command)
     - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified), then assigns manufacturer and model to new (not yet classified) offers stored in the database
     - `run_update_fx_rates` - updates currency exchange rates from ECP REST api
-- `db` - PostgreSQL 16 database with DDL scripts managed by Flyway. Currently running inside cheapest possible Azure VM.
+- `db` - Azure CosmosDb NoSQL fully managed database.
 
 #### Deployment
 
@@ -47,20 +47,15 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 - docker (compose)
 - npm
 
-Start Postgres in docker (available for debugging via `localhost:25432`):
+Start CosmosDb emulator in docker (available for debugging via `localhost:1234`):
 ```bash
-docker-compose up postgres flyway
+docker-compose up
 ```
 
-Unzip database backup (optional) and load into DB
-```bash
-cd db && unzip -qq prod_dump_2024_06_31.sql.zip
-```
-
-Install python packages
+Init python environment
 ```bash
 cd backend
-pip3 install -r requirements.txt -r tests/requirements.txt 
+./init_dev_env.sh
 ```
 
 Start backend api (python app):

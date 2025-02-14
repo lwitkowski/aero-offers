@@ -4,11 +4,9 @@ ENV_NAME=cae-aerooffers-prod
 CONTAINER_REGISTRY_SERVER=ghcr.io
 CONTAINER_REGISTRY=${CONTAINER_REGISTRY_SERVER}/lwitkowski
 DOCKER_IMAGE_TAG=e314458
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME="aerooffers"
-DB_USER="aerooffers"
-DB_PASS="aerooffers"
+COSMOSDB_URL=http://localhost:8082
+COSMOSDB_CREDENTIAL=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+COSMOSDB_DB_NAME=aerooffers
 
 az group create \
   --name $RESOURCE_GROUP \
@@ -33,6 +31,13 @@ az staticwebapp create \
 
 # now setup custom domain for this app (TXT & A DNS records etc)
 
+# create cosmosdb free tier
+az cosmosdb create \
+    --name "aerooffers-cosmosdb" \
+    --resource-group $RESOURCE_GROUP \
+    --enable-free-tier true \
+    --default-consistency-level "Session"
+
 # create backend container app
 az containerapp create \
     --name ca-aerooffers-api \
@@ -40,8 +45,8 @@ az containerapp create \
     --environment $ENV_NAME \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
-    --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
+    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --target-port 80 \
     --ingress external \
     --query properties.configuration.ingress.fqdn \
@@ -58,8 +63,8 @@ az containerapp job create \
     --replica-timeout 1800 \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
-    --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
+    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_fx_rates.sh" \
     --cpu "0.25" --memory "0.5Gi"
 
@@ -72,7 +77,7 @@ az containerapp job create \
     --replica-timeout 1800 \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-user=$DB_USER" "db-password=$DB_PASS" \
-    --env-vars "DB_HOST=$DB_HOST" "DB_PORT=$DB_PORT" "DB_NAME=$DB_NAME" "DB_USER=secretref:db-user" "DB_PW=secretref:db-password" \
+    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_offers.sh" \
     --cpu "1" --memory "2Gi"

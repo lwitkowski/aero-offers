@@ -1,5 +1,4 @@
 ddt==1.7.2
-psycopg==3.2.4
 pytest==8.3.4
-testcontainers[postgres]==4.9.1
+testcontainers[cosmosdb]==4.9.1
 unittest-xml-reporting==3.2.0

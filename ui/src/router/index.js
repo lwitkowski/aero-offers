@@ -18,16 +18,16 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/:aircraftType',
+      path: '/:category',
       children: [
         {
-          path: '/:aircraftType',
-          name: 'offers_for_type',
+          path: '/:category',
+          name: 'offers_for_category',
           component: OffersList,
           props: true
         },
         {
-          path: '/:aircraftType/:manufacturer/:model',
+          path: '/:category/:manufacturer/:model',
           name: 'model_details',
           component: ModelDetails,
           props: true
@@ -40,12 +40,12 @@ const router = createRouter({
 router.afterEach((to) => {
   nextTick(() => {
     switch (to.name) {
-      case 'offers_for_type':
-        document.title = `${to.params.aircraftType.charAt(0).toUpperCase()}${to.params.aircraftType.slice(1)} offers`
+      case 'offers_for_category':
+        document.title = `${to.params.category.charAt(0).toUpperCase()}${to.params.category.slice(1)} offers`
         break
 
       case 'model_details':
-        document.title = `${to.params.manufacturer} ${to.params.model} (${to.params.aircraftType}) offers`
+        document.title = `${to.params.manufacturer} ${to.params.model} (${to.params.category}) offers`
         break
 
       default:

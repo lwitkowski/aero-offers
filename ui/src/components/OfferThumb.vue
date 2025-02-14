@@ -5,10 +5,10 @@
         <strong>{{ offer.title }}</strong>
       </p>
       <p>
-        <small>{{ offer.date }}, {{ offer.location }}</small>
+        <small>{{ offer.published_at }}, {{ offer.location }}</small>
         ,
         <small>
-          <strong>{{ formatPrice(offer.price.amount, offer.price.currency_code) }}</strong>
+          <strong>{{ formatPrice(offer.price.amount, offer.price.currency) }}</strong>
         </small>
       </p>
       <small>
@@ -19,7 +19,7 @@
           <router-link
             :to="{
               name: 'model_details',
-              params: { aircraftType: offer.aircraft_type, manufacturer: offer.manufacturer, model: offer.model }
+              params: { category: offer.category, manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
             <a>all `{{ offer.model }}` offers</a>

@@ -1,19 +1,18 @@
 <template>
   <multiselect
     v-model="selected"
-    :options="available_aircraft_types"
+    :options="available_aircraft_categories"
     group-values="models"
     group-label="manufacturer"
     :group-select="false"
     :show-labels="false"
     label="model"
-    :placeholder="'Search ' + (aircraft_type || 'aircraft')"
+    :placeholder="'Search ' + (category || 'aircraft')"
     :max-height="500"
   >
     <template #noResult>
-      <span v-if="aircraft_type">
-        {{ aircraft_type.charAt(0).toUpperCase() + aircraft_type.slice(1) }} not found. Try different phrase or
-        category.
+      <span v-if="category">
+        {{ category.charAt(0).toUpperCase() + category.slice(1) }} not found. Try different phrase or category.
       </span>
       <span v-else>Aircraft model not found. Try different phrase.</span>
     </template>
@@ -37,9 +36,9 @@ export default {
   },
   data() {
     return {
-      aircraft_type: null,
-      all_aircraft_types: [],
-      available_aircraft_types: [],
+      category: null,
+      all_aircraft_categories: [],
+      available_aircraft_categories: [],
       selected: null
     }
   },
@@ -55,13 +54,13 @@ export default {
       }
       this.$router.push({
         name: 'model_details',
-        params: { aircraftType: val.aircraft_type, manufacturer: val.manufacturer, model: val.model }
+        params: { category: val.category, manufacturer: val.manufacturer, model: val.model }
       })
     }
   },
 
   created() {
-    this.loadAircraftTypes()
+    this.loadAircraftCategories()
   },
 
   methods: {
@@ -72,9 +71,9 @@ export default {
         case 'tmg':
         case 'ultralight':
         case 'airplane':
-          this.aircraft_type = pathSegments[1]
+          this.category = pathSegments[1]
           this.selected = null
-          this.updateAircraftTypes()
+          this.updateAircraftCategories()
 
           if (pathSegments.length == 4) {
             this.selected = {
@@ -87,52 +86,52 @@ export default {
           break
 
         default:
-          this.aircraft_type = null
+          this.category = null
           this.selected = null
-          this.updateAircraftTypes()
+          this.updateAircraftCategories()
       }
     },
-    loadAircraftTypes() {
+    loadAircraftCategories() {
       if (this.models) {
-        this.all_aircraft_types = this.models
+        this.all_aircraft_categories = this.models
 
         this.parseAndApplyRoute()
-        this.updateAircraftTypes()
+        this.updateAircraftCategories()
         return
       }
 
       axios.get(`/api/models`).then((response) => {
-        this.all_aircraft_types = response.data
+        this.all_aircraft_categories = response.data
         this.parseAndApplyRoute()
-        this.updateAircraftTypes()
+        this.updateAircraftCategories()
       })
     },
 
-    updateAircraftTypes() {
-      const new_available_aircraft_types = []
-      for (const manufacturer in this.all_aircraft_types) {
+    updateAircraftCategories() {
+      const new_available_aircraft_categories = []
+      for (const manufacturer in this.all_aircraft_categories) {
         const modelsToDisplay = []
 
-        const modelsByAircraftType = this.all_aircraft_types[manufacturer].models
-        for (const type in modelsByAircraftType) {
-          if (this.aircraft_type == type || this.aircraft_type == null) {
-            for (const model in modelsByAircraftType[type]) {
+        const modelsByAircraftCategory = this.all_aircraft_categories[manufacturer].models
+        for (const category in modelsByAircraftCategory) {
+          if (this.category == category || this.category == null) {
+            for (const model in modelsByAircraftCategory[category]) {
               modelsToDisplay.push({
-                aircraft_type: type,
+                category: category,
                 manufacturer: manufacturer,
-                model: modelsByAircraftType[type][model]
+                model: modelsByAircraftCategory[category][model]
               })
             }
           }
         }
 
-        new_available_aircraft_types.push({
+        new_available_aircraft_categories.push({
           manufacturer: manufacturer,
           models: modelsToDisplay
         })
       }
 
-      this.available_aircraft_types = new_available_aircraft_types
+      this.available_aircraft_categories = new_available_aircraft_categories
     }
   }
 }

@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request, abort
 from flask_headers import headers
 from flask_cors import CORS
 from classifier import classifier
-import db
+import offers_db
+from offer import AircraftCategory
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -14,7 +15,9 @@ def aircraft_models():
 
 @app.route('/api/offers')
 def offers():
-    return jsonify(db.get_offers(aircraft_type=request.args.get('aircraft_type'),
+    raw_category = request.args.get('category')
+    category = AircraftCategory[raw_category] if raw_category is not None else None
+    return jsonify(offers_db.get_offers(category=category,
                                       offset=int(request.args.get('offset') or '0'),
                                       limit=int(request.args.get('limit') or '30')))
 
@@ -28,8 +31,8 @@ def model_information(manufacturer, model):
         abort(404)
     manufacturer_info = manufacturers[manufacturer]
     del (manufacturer_info["models"])  # remove models info
-    manufacturer_info["offers"] = db.get_offers(manufacturer=manufacturer, model=model, limit=300)
+    manufacturer_info["offers"] = offers_db.get_offers(manufacturer=manufacturer, model=model, limit=300)
     return jsonify(manufacturer_info)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=False)
+    app.run(host='127.0.0.1', port=8082, debug=False)

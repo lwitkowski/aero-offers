@@ -1,1 +1,0 @@
-Use only major versions (V1, V4, V99 etc), don't use decimals (V1.1) as it will break integration tests using Postgres via TestContainers
