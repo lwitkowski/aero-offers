@@ -6,7 +6,7 @@ import pytest
 import test__testcontainers_setup
 from api.flask_app import app
 import offers_db
-from util import offer_with_url
+from util import sample_offer
 
 
 @pytest.fixture
@@ -30,10 +30,7 @@ def test_get_aircraft_models(api_client):
 
 def test_get_offers_for_all_categories(api_client):
     # given
-    sample_offer = offer_with_url("https://offers.com/1")
-    sample_offer.price = "29500"
-    sample_offer.currency = "EUR"
-    offers_db.store_offer(sample_offer)
+    offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
 
     # when
     response = api_client.get('/api/offers')
@@ -52,7 +49,7 @@ def test_get_offers_for_all_categories(api_client):
 
 def test_get_offers_for_given_category(api_client):
     # given
-    offers_db.store_offer(offer_with_url("https://offers.com/1"))
+    offers_db.store_offer(sample_offer())
 
     # when & then
     assert len(api_client.get('/api/offers?category=glider').json) == 1
@@ -62,10 +59,7 @@ def test_get_offers_for_given_category(api_client):
 
 def test_get_offers_for_given_manufacturer_and_model(api_client):
     # given
-    sample_offer = offer_with_url("https://offers.com/1")
-    sample_offer.price = "29500"
-    sample_offer.currency = "EUR"
-    offer_id = offers_db.store_offer(sample_offer)
+    offer_id = offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
     offers_db.classify_offer(offer_id, 'glider', 'PZL Bielsko', 'SZD-9 Bocian')
 
     # when
@@ -85,7 +79,7 @@ def test_get_offers_for_given_manufacturer_and_model(api_client):
 
 def test_get_offers_404_for_unknown_manufacturer_or_model(api_client):
     # given
-    offers_db.store_offer(offer_with_url("https://offers.com/1"))
+    offers_db.store_offer(sample_offer())
 
     # when & then
     assert api_client.get('/api/offers/Boeing/DoesNotMatter').status_code == 404

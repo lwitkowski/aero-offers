@@ -107,7 +107,7 @@ def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = No
     if len(where) > 0:
         query += 'WHERE ' + ' AND '.join(where) + ' '
 
-    query += 'ORDER BY o.date DESC '
+    query += 'ORDER BY o.published_at DESC '
 
     query += 'OFFSET @offset LIMIT @limit'
     params.append(dict(name='@offset', value=offset))

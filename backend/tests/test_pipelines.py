@@ -9,33 +9,31 @@ import test__testcontainers_setup
 import pipelines
 import offers_db
 from offer import OfferPageItem, AircraftCategory
-from util import offer_with_url, offer_with_raw_price, sample_offer
+from util import sample_offer
 
 
 class DuplicateDetectionTest(unittest.TestCase):
 
     def setUp(self):
         offers_db.truncate_all_tables()
-
-        self.sample_offer = offer_with_url("https://offers.com/1")
         self.detection = pipelines.DuplicateDetection()
 
     def test_new_offer_is_not_duplicate(self):
         # given offer in DB with different url
-        offers_db.store_offer(offer_with_url("https://offers.com/2"))
+        offers_db.store_offer(sample_offer(url="https://offers.com/2"))
 
         # when & then
         try:
-            self.detection.process_item(offer_with_url("https://offers.com/1"), None)
+            self.detection.process_item(sample_offer(url="https://offers.com/1"), None)
         except DropItem:
             self.fail("DuplicateDetection unexpectedly dropped new item!")
 
     def test_existing_offer_is_duplicate(self):
         # given offer in DB with same url
-        offers_db.store_offer(self.sample_offer)
+        offers_db.store_offer(sample_offer())
 
         # when & then
-        self.assertRaises(DropItem, self.detection.process_item, offer_with_url("https://offers.com/1"), None)
+        self.assertRaises(DropItem, self.detection.process_item, sample_offer(), None)
 
 @ddt
 class PriceParserTest(unittest.TestCase):
@@ -43,9 +41,9 @@ class PriceParserTest(unittest.TestCase):
         self.detection = pipelines.PriceParser()
 
     @data(
-        (offer_with_raw_price("2,01 Euro €"), "2.01"),
-        (offer_with_raw_price("1.234,00 Euro €"), "1234.00"),
-        (offer_with_raw_price("123.456,00 Euro €"), "123456.00"),
+        (sample_offer(raw_price="2,01 Euro €"), "2.01"),
+        (sample_offer(raw_price="1.234,00 Euro €"), "1234.00"),
+        (sample_offer(raw_price="123.456,00 Euro €"), "123456.00"),
     )
     def test_parse_valid_prices(self, test_input):
         offer_with_valid_price: OfferPageItem = test_input[0]
@@ -60,16 +58,16 @@ class PriceParserTest(unittest.TestCase):
         self.assertEqual("EUR", offer_with_valid_price.currency)
 
     @data(
-        offer_with_raw_price(""),
-        offer_with_raw_price("Ask for price")
+        sample_offer(raw_price=""),
+        sample_offer(raw_price="Ask for price")
     )
     def test_should_drop_if_price_is_missing(self, offer_with_invalid_price: OfferPageItem):
         self.assertRaises(DropItem, self.detection.process_item, offer_with_invalid_price, None)
 
     @data(
-        offer_with_raw_price("0 Euro €"),
-        offer_with_raw_price("0,89  Euro €"),  # smaller than 1
-        offer_with_raw_price("500.001,00 Euro €"),  # huge amount
+        sample_offer(raw_price="0 Euro €"),
+        sample_offer(raw_price="0,89  Euro €"),  # smaller than 1
+        sample_offer(raw_price="500.001,00 Euro €"),  # huge amount
     )
     def test_should_drop_if_price_is_unreasonable(self, offer_with_unreasonable_price):
         self.assertRaises(DropItem, self.detection.process_item, offer_with_unreasonable_price, None)

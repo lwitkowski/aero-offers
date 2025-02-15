@@ -1,4 +1,4 @@
-PYTHONPATH=src pytest tests
+PYTHONPATH=$PYTHONPATH src pytest tests
 
 set -e
 
