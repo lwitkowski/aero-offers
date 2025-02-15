@@ -75,13 +75,21 @@ def test_get_offers_for_given_manufacturer_and_model(api_client):
     assert offer['published_at'] == '2024-07-27'
 
 
+def test_get_offers_even_when_manufacturer_website_is_not_defined(api_client):
+    # when
+    response = api_client.get('/api/offers/Grob/Astir')
+
+    # then
+    assert response.status_code == 200
+    assert response.json['manufacturer_website'] is None
+
+
 def test_get_offers_404_for_unknown_manufacturer_or_model(api_client):
     # given
     offers_db.store_offer(sample_offer())
 
     # when & then
     assert api_client.get('/api/offers/Boeing/DoesNotMatter').status_code == 404
-    #assert api_client.get('/api/offers/PZL Bielsko/UnknownGlider').status_code == 404
 
 
 if __name__ == '__main__':

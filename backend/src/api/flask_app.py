@@ -8,8 +8,9 @@ from offer import AircraftCategory
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 @app.route("/api/models")
-@headers({'Cache-Control':'public, max-age=360'})
+@headers({'Cache-Control': 'public, max-age=360'})
 def aircraft_models():
     return jsonify(classifier.get_all_models())
 
@@ -34,7 +35,7 @@ def model_information(manufacturer, model):
         abort(404)
 
     return jsonify(dict(
-        manufacturer_website=manufacturers[manufacturer]['manufacturer_website'],
+        manufacturer_website=manufacturers[manufacturer].get('manufacturer_website', None),
         offers=offers_db.get_offers(manufacturer=manufacturer, model=model, limit=300)
     ))
 
