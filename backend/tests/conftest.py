@@ -1,8 +1,6 @@
 import os
 import platform
 
-from azure.cosmos import CosmosClient
-
 if platform.system() == 'Darwin':
     os.environ['AZURE_COSMOS_EMULATOR_IMAGE'] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview'
 
@@ -11,6 +9,7 @@ from testcontainers.core.waiting_utils import wait_for_logs
 
 from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
 from settings import COSMOSDB_DB_NAME
+from azure.cosmos import CosmosClient
 
 class OsxCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
@@ -19,32 +18,30 @@ class OsxCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
     # vnext-preview doesn't print `Started`
     def _wait_until_ready(self) -> Self:
-        if platform.system() == 'Darwin':
-            wait_for_logs(container=self, predicate="Emulator is accessible")
-            return self
-        else:
-            return super()._wait_until_ready()
+        wait_for_logs(container=self, predicate="Emulator is accessible")
+        return self
 
     # this fails on vnext-preview, thus needs to be overridden
     def _download_cert(self) -> bytes:
-        if platform.system() == 'Darwin':
-            return bytes()
-        else:
-            return super()._download_cert()
+        return bytes()
 
 
 def pytest_sessionstart(session):
     print("Starting CosmosDb TestContainers, db name=" + COSMOSDB_DB_NAME)
 
-    emulator = OsxCosmosDBNoSQLEndpointContainer()
+    if platform.system() == 'Darwin':
+        emulator = OsxCosmosDBNoSQLEndpointContainer()
+    else:
+        emulator = CosmosDBNoSQLEndpointContainer()
     emulator.start()
-    cosmosDbUrl = f"http://{emulator.host}:{emulator.port}"
-    print("CosmosDb started, url=" + cosmosDbUrl)
 
-    os.environ["COSMOSDB_URL"] = cosmosDbUrl
+    cosmos_db_url = f"http://{emulator.host}:{emulator.port}"
+    print("CosmosDb started, url=" + cosmos_db_url)
+
+    os.environ["COSMOSDB_URL"] = cosmos_db_url
     os.environ["COSMOSDB_CREDENTIAL"] = emulator.key
 
-    client = CosmosClient(url=cosmosDbUrl, credential=emulator.key, connection_verify=False)
+    client = CosmosClient(url=cosmos_db_url, credential=emulator.key, connection_verify=False)
     client.create_database_if_not_exists(COSMOSDB_DB_NAME)
 
     print("Test database initialized")

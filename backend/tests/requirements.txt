@@ -2,4 +2,3 @@ ddt==1.7.2
 pytest==8.3.4
 pytest-cov==6.0.0
 testcontainers[cosmosdb]==4.9.1
-unittest-xml-reporting==3.2.0

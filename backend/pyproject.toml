@@ -15,3 +15,8 @@ pythonpath = [
 addopts = [
     "--import-mode=importlib",
 ]
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+]
