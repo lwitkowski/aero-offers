@@ -16,4 +16,6 @@ COPY . .
 
 EXPOSE 80
 
+ENV PYTHONPATH=$PYTHONPATH':./src'
+
 CMD [ "python3", "-m" , "flask", "--app=./src/api/flask_app.py", "run", "--host=0.0.0.0", "--port=80"]
