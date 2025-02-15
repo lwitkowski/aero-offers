@@ -28,10 +28,7 @@ class OsxCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 def pytest_sessionstart(session):
     print("Starting CosmosDb TestContainers, db name=" + COSMOSDB_DB_NAME)
 
-    if platform.system() == 'Darwin':
-        emulator = OsxCosmosDBNoSQLEndpointContainer()
-    else:
-        emulator = CosmosDBNoSQLEndpointContainer()
+    emulator = OsxCosmosDBNoSQLEndpointContainer()
     emulator.start()
 
     cosmos_db_url = f"http://{emulator.host}:{emulator.port}"
