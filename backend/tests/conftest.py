@@ -1,8 +1,7 @@
 import os
 import platform
 
-if platform.system() == 'Darwin':
-    os.environ['AZURE_COSMOS_EMULATOR_IMAGE'] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview'
+os.environ['AZURE_COSMOS_EMULATOR_IMAGE'] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122'
 
 from typing_extensions import Self
 from testcontainers.core.waiting_utils import wait_for_logs
