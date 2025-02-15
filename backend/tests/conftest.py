@@ -1,5 +1,4 @@
 import os
-import platform
 
 os.environ['AZURE_COSMOS_EMULATOR_IMAGE'] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122'
 
@@ -10,17 +9,17 @@ from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
 from settings import COSMOSDB_DB_NAME
 from azure.cosmos import CosmosClient
 
-class OsxCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
+class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
     def __init__(self, **kwargs):
         super().__init__(bind_ports=True, **kwargs)
 
-    # vnext-preview doesn't print `Started`
+    # vnext image doesn't print `Started`
     def _wait_until_ready(self) -> Self:
         wait_for_logs(container=self, predicate="Emulator is accessible")
         return self
 
-    # this fails on vnext-preview, thus needs to be overridden
+    # this fails on vnext image, thus needs to be overridden
     def _download_cert(self) -> bytes:
         return bytes()
 
@@ -28,7 +27,7 @@ class OsxCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 def pytest_sessionstart(session):
     print("Starting CosmosDb TestContainers, db name=" + COSMOSDB_DB_NAME)
 
-    emulator = OsxCosmosDBNoSQLEndpointContainer()
+    emulator = VnextCosmosDBNoSQLEndpointContainer()
     emulator.start()
 
     cosmos_db_url = f"http://{emulator.host}:{emulator.port}"
