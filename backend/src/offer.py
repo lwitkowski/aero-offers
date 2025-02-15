@@ -8,6 +8,7 @@ class AircraftCategory(Enum):
     tmg = 3
     ultralight = 4
     helicopter = 5
+    unknown = 99
 
 
 @dataclass

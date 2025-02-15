@@ -1,11 +1,10 @@
-import os
 import unittest
 from price_parser import Price
 
-import tests.test__testcontainers_setup
+import test__testcontainers_setup
 import fx
 import fx_db
-from tests.util import read_file
+from util import read_file
 
 
 class ExchangeRatesTest(unittest.TestCase):

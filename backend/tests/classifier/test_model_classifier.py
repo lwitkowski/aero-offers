@@ -1,8 +1,8 @@
 import unittest
-import json
 
 from classifier import classifier
 from ddt import ddt, unpack, data
+
 
 @ddt
 class ModelClassifierTest(unittest.TestCase):
@@ -16,6 +16,7 @@ class ModelClassifierTest(unittest.TestCase):
     )
     def test_tokenize(self, tokens, input_str):
         self.assertEqual(tokens, self.model_classifier.tokenize(input_str))
+
 
     def test_is_schleicher_model_re(self):
         self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW 19"))
@@ -62,27 +63,6 @@ class ModelClassifierTest(unittest.TestCase):
         (manufacturer, model, _) = self.model_classifier.classify(input_str, expect_manufacturer=False)
         self.assertEqual(expected_manufacturer, manufacturer)
         self.assertEqual(expected_model, model)
-
-    @unittest.skip("Outdated assumption, Error rate should be below 18%")
-    def test_error_rate(self):
-        errors = 0
-        incorrectly_classified = {}
-        with open('tests/classifier_test_data.json') as json_file:
-            data = json.load(json_file)
-            overall_count = len(data)
-            for item in data:
-                expect_manufacturer = "expect_manufacturer" in item and item["expect_manufacturer"] is True
-                detail_text = "" if "detail_text" not in item else item["detail_text"]
-                (manufacturer, model, _) = self.model_classifier.classify(item["input"], expect_manufacturer,
-                                                                          detail_text)
-                if manufacturer != item["manufacturer"] or model != item["model"]:
-                    errors = errors + 1
-                    incorrectly_classified[item["input"]] = (manufacturer, model)
-        error_rate = errors / overall_count
-
-        self.assertTrue(error_rate < 0.18,
-                        "Error rate should be below 18%, is {0}. Incorrectly classified: {1}.".format(error_rate, str(
-                            incorrectly_classified)))
 
     def test_with_no_detail_text(self):
         self.model_classifier.classify("DG-100", expect_manufacturer=False, detail_text=None)

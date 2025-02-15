@@ -2,10 +2,10 @@
 
 import unittest
 
-import tests.test__testcontainers_setup
+import test__testcontainers_setup
 import offers_db
 from offer import AircraftCategory
-from tests.util import offer_with_url
+from util import offer_with_url
 
 
 class DbTest(unittest.TestCase):

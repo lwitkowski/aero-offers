@@ -2,7 +2,7 @@ import unittest
 import json
 
 from classifier.classifier import AircraftTypeClassifier
-from tests.util import read_file
+from util import read_file
 
 
 class AircraftTypeClassifierTest(unittest.TestCase):
@@ -10,7 +10,7 @@ class AircraftTypeClassifierTest(unittest.TestCase):
         self.classifier = AircraftTypeClassifier()
 
     def test_aircraft_type_is_classified_even_when_model_is_unknown(self):
-        json_file_content = read_file('classifier_test_data_aircraft_type.json')
+        json_file_content = read_file('classifier/classifier_test_data_aircraft_type.json')
         data = json.loads(json_file_content)
         for item in data:
             title = item["title"]

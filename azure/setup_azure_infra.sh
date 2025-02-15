@@ -40,13 +40,13 @@ az cosmosdb create \
 
 # create backend container app
 az containerapp create \
-    --name ca-aerooffers-api \
+    --name ca-aerooffers-api-cosmosdb \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
-    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
+    --secrets "db-credential=$COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --target-port 80 \
     --ingress external \
     --query properties.configuration.ingress.fqdn \
@@ -55,7 +55,7 @@ az containerapp create \
 
 # create scheduled jobs
 az containerapp job create \
-    --name aerooffers-update-fx-job \
+    --name aerooffers-update-fx-job-cosmosdb \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --trigger-type "Schedule" \
@@ -63,13 +63,13 @@ az containerapp job create \
     --replica-timeout 1800 \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
-    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
+    --secrets "db-credential=$COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_fx_rates.sh" \
     --cpu "0.25" --memory "0.5Gi"
 
 az containerapp job create \
-    --name aerooffers-update-offers-job \
+    --name aerooffers-update-offers-job-cosmosdb \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --trigger-type "Schedule" \
@@ -77,7 +77,7 @@ az containerapp job create \
     --replica-timeout 1800 \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --secrets "db-credential=COSMOSDB_CREDENTIAL" \
-    --env-vars "COSMOSDB_URL=COSMOSDB_URL" "COSMOSDB_DB_NAME=COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
+    --secrets "db-credential=$COSMOSDB_CREDENTIAL" \
+    --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_offers.sh" \
     --cpu "1" --memory "2Gi"

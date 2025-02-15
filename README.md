@@ -24,10 +24,10 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
 - [ ] Dev: end 2 end tests of crawlers
 - [ ] UI: consent banner for GA
-- [ ] Infra: db daily backups
+- [x] Infra: db daily backups
 - [ ] Infra: infra as code (biceps or terraform)
 - [ ] document infra and env topology
-- [ ] Backend: fix and enable other spiders/crawlers
+- [x] Backend: fix and enable other spiders/crawlers
 - [ ] UI: aero-offers.com
 - [ ] Improve aircraft types structure and introduce 2 levels: glider (e.g Discus 2c 18m) and model (Discus 2cFES 18m) as prices between models sometimes differ significantly
 - [ ] UI: fix & polish CSS in UI
@@ -40,7 +40,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 - [ ] crawler for https://plane-sale.com
 
 ### Running locally without Python nor NodeJS
-`docker compose up --build` - starts postgres, python backend and UI apps (http://localhost:8080/)
+`docker compose up --build` - starts CosmosDb, python backend and UI apps (http://localhost:8080/)
 
 ### Prerequisites for local development with hot reloads
 - python 3.12+, pip3, flask
@@ -49,7 +49,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 
 Start CosmosDb emulator in docker (available for debugging via `localhost:1234`):
 ```bash
-docker-compose up
+docker-compose up cosmosdb
 ```
 
 Init python environment

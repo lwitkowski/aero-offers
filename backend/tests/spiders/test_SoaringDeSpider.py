@@ -3,7 +3,7 @@ import unittest
 from offer import OfferPageItem
 from spiders import SoaringDeSpider
 from datetime import date
-from tests.util import fake_response_from_file
+from util import fake_response_from_file
 
 
 class SoaringDeSpiderTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class SoaringDeSpiderTest(unittest.TestCase):
 
     def test_parse_detail_page(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(
-            fake_response_from_file('samples/segelflug_de_offer.html')))
+            fake_response_from_file('spiders/samples/segelflug_de_offer.html')))
         self.assertIsNotNone(item)
         self.assertEqual(date(2023, 11, 11), item.published_at)
         self.assertIsNotNone(item.title)
@@ -26,13 +26,13 @@ class SoaringDeSpiderTest(unittest.TestCase):
 
     def test_parse_detail_page_with_html_tags(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(
-            fake_response_from_file('samples/segelflug_de_offer_different_details.html')))
+            fake_response_from_file('spiders/samples/segelflug_de_offer_different_details.html')))
         self.assertIsNotNone(item.page_content)
         self.assertTrue("Because of organisational changes at BBAero" in item.page_content)
 
     def test_parse_detail_page_for_tmg(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(
-            fake_response_from_file('samples/segelflug_de_offer_tmg.html')))
+            fake_response_from_file('spiders/samples/segelflug_de_offer_tmg.html')))
         self.assertEqual("Dimona H36", item.title)
         self.assertEqual(2880, item.hours)
         self.assertEqual(5672, item.starts)
@@ -40,5 +40,5 @@ class SoaringDeSpiderTest(unittest.TestCase):
 
     def test_parse_detail_page_for_ls3(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(
-            fake_response_from_file('samples/segelflug_de_offer_ls3.html')))
+            fake_response_from_file('spiders/samples/segelflug_de_offer_ls3.html')))
         self.assertTrue("LS 3" in item.title)

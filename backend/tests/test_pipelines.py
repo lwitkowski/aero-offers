@@ -5,11 +5,11 @@ import unittest
 from scrapy.exceptions import DropItem
 from ddt import ddt, data
 
-import tests.test__testcontainers_setup
+import test__testcontainers_setup
 import pipelines
 import offers_db
 from offer import OfferPageItem, AircraftCategory
-from tests.util import offer_with_url, offer_with_raw_price, sample_offer
+from util import offer_with_url, offer_with_raw_price, sample_offer
 
 
 class DuplicateDetectionTest(unittest.TestCase):

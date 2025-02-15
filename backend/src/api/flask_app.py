@@ -16,7 +16,10 @@ def aircraft_models():
 @app.route('/api/offers')
 def offers():
     raw_category = request.args.get('category')
-    category = AircraftCategory[raw_category] if raw_category is not None else None
+    try:
+        category = AircraftCategory[raw_category] if raw_category is not None else None
+    except Exception:
+        category = AircraftCategory.unknown
     return jsonify(offers_db.get_offers(category=category,
                                       offset=int(request.args.get('offset') or '0'),
                                       limit=int(request.args.get('limit') or '30')))
@@ -29,10 +32,12 @@ def model_information(manufacturer, model):
     manufacturers = classifier.get_all_models()
     if manufacturer not in manufacturers:
         abort(404)
-    manufacturer_info = manufacturers[manufacturer]
-    del (manufacturer_info["models"])  # remove models info
-    manufacturer_info["offers"] = offers_db.get_offers(manufacturer=manufacturer, model=model, limit=300)
-    return jsonify(manufacturer_info)
+
+    return jsonify(dict(
+        manufacturer_website=manufacturers[manufacturer]['manufacturer_website'],
+        offers=offers_db.get_offers(manufacturer=manufacturer, model=model, limit=300)
+    ))
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8082, debug=False)

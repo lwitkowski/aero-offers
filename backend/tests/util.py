@@ -1,8 +1,7 @@
+import os
 from datetime import date
 
 from scrapy.http import HtmlResponse, Request
-import os
-
 from offer import OfferPageItem, AircraftCategory
 
 
