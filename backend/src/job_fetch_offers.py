@@ -7,11 +7,19 @@ from my_logging import *
 from spiders import SoaringDeSpider, FlugzeugMarktDeSpider
 from mailer import send_mail
 
-logger = logging.getLogger("fetch_offers")
+logger = logging.getLogger("offers_crawler")
 
 if __name__ == '__main__':
     try:
+        settings_file_path = 'settings'
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
+
         settings = get_project_settings()
+        pipelines = settings.getlist("ITEM_PIPELINES")
+        if len(pipelines) == 0:
+            raise Exception("Pipelines missing/not loaded properly, most likely scrapy.cfg/settings.py was not loaded properly")
+
+        logger.info("Item pipelines settings: {0}".format(str(pipelines)))
         process = CrawlerProcess(settings)
 
         spiders = {

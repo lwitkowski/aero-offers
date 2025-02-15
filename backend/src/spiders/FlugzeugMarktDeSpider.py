@@ -24,15 +24,13 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
     }
 
     def parse(self, response, **kwargs):
-        self.logger.debug("parsing result page")
-        aircraft_type = "airplane"
+        self.logger.debug("Scraping %s", response.url)
         for detail_url in response.css('div.content-inner a::attr(href)').extract():
             full_url_to_crawl = BASE_URL + detail_url[2:]
-            self.logger.debug("yielding request %s", full_url_to_crawl)
+            self.logger.debug("Adding detail page for scraping %s", full_url_to_crawl)
             yield scrapy.Request(full_url_to_crawl,
                                  callback=self.parse_detail_page,
-                                 errback=self.errback,
-                                 meta={"aircraft_type": aircraft_type})
+                                 errback=self.errback)
 
     def errback(self, failure):
         self.logger.error(repr(failure))
@@ -46,6 +44,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
         return 0
 
     def parse_detail_page(self, response):
+        self.logger.debug("Parsing offer page %s", response.url)
         try:
             aircraft_type_german = response.xpath(
                 "//tr/td[contains(.,'Flugzeugtyp')]/../td[@class='value']/text()").extract_first()

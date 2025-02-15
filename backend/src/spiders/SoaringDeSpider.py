@@ -23,11 +23,8 @@ class SoaringDeSpider(scrapy.Spider):
 
     start_urls = [
         GLIDER_OFFERS_URL,
-        #GLIDER_OFFERS_URL + "&iPage=2",
-        #GLIDER_OFFERS_URL + "&iPage=3",
-        #GLIDER_OFFERS_URL + "&iPage=4",
-        #GLIDER_OFFERS_URL + "&iPage=5",
-        #GLIDER_OFFERS_URL + "&iPage=6",
+        GLIDER_OFFERS_URL + "&iPage=2",
+        GLIDER_OFFERS_URL + "&iPage=3",
         ENGINE_OFFERS_URL
     ]
 
@@ -40,8 +37,10 @@ class SoaringDeSpider(scrapy.Spider):
         return None
 
     def parse(self, response: Response, **kwargs):
+        self.logger.debug("Scraping %s", response.url)
         for detail_url in response.css('div.listing-attr a::attr(href)').extract():
             if detail_url == BROKEN_OFFER_URL:
+                self.logger.debug("Url seems to be broken, skipping: %s", detail_url)
                 continue
 
             if response.request.url == ENGINE_OFFERS_URL:
@@ -49,7 +48,7 @@ class SoaringDeSpider(scrapy.Spider):
             else:
                 aircraft_category = AircraftCategory.glider
 
-            self.logger.debug("Scraping offer detail url %s", detail_url)
+            self.logger.debug("Adding detail page for scraping %s", detail_url)
             yield scrapy.Request(detail_url,
                                  callback=self.parse_detail_page,
                                  errback=self.errback,
@@ -63,6 +62,7 @@ class SoaringDeSpider(scrapy.Spider):
             self.logger.error("Crawler generic exception: %s", repr(failure))
 
     def parse_detail_page(self, response):
+        self.logger.debug("Parsing offer page %s", response.url)
         try:
             date_str = response.css('#item-content .item-header li::text').extract()[3]
             date_str = date_str.replace('Veröffentlichungsdatum:', '').strip()
@@ -89,4 +89,4 @@ class SoaringDeSpider(scrapy.Spider):
             yield offer
 
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error("Could not parse detail page %s because %s".format(response.url, e))
