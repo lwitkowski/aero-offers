@@ -1,4 +1,3 @@
-source venv/bin/activate
 export PYTHONPATH=$PYTHONPATH':./src'
 
 set -e
