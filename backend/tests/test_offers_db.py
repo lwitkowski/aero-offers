@@ -3,7 +3,6 @@
 import unittest
 from datetime import date
 
-import test__testcontainers_setup
 import offers_db
 from offer import AircraftCategory
 from util import sample_offer
@@ -24,9 +23,9 @@ class DbTest(unittest.TestCase):
         # then
         self.assertEqual(1, len(all_offers))
         glider_offer = all_offers[0]
-        self.assertEqual("Glider A", glider_offer["title"])
-        self.assertEqual("29500", glider_offer["price"]["amount"])
-        self.assertEqual("EUR", glider_offer["price"]["currency"])
+        assert glider_offer.title == "Glider A"
+        assert glider_offer.price.amount == "29500"
+        assert glider_offer.price.currency == "EUR"
 
     def test_should_filter_offers_by_aircraft_type(self):
         # given
@@ -65,10 +64,10 @@ class DbTest(unittest.TestCase):
         orders = offers_db.get_offers()
 
         # then
-        assert orders[0]['published_at'] == "2024-02-01"
-        assert orders[1]['published_at'] == "2024-01-31"
-        assert orders[2]['published_at'] == "2024-01-02"
-        assert orders[3]['published_at'] == "2023-03-15"
+        assert orders[0].published_at == "2024-02-01"
+        assert orders[1].published_at == "2024-01-31"
+        assert orders[2].published_at == "2024-01-02"
+        assert orders[3].published_at == "2023-03-15"
 
 
     def test_should_check_url_exists(self):

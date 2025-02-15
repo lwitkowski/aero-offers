@@ -21,9 +21,25 @@ def reclassify(db_offer):
         offers_db.classify_offer(offer_id=db_offer['id'], category=category, manufacturer=None, model=None)
 
 
-if __name__ == '__main__':
-    offers = offers_db.get_unclassified_offers()
-    for offer in offers:
-        reclassify(offer)
+def reclassify_all():
+    offers_processed = 0
+    offset = 0
+    limit = 100
+    while True:
+        offers = offers_db.get_unclassified_offers(offset=offset, limit=limit)
+        for offer in offers:
+            reclassify(offer)
 
-    logger.info("Finished classifying {0} offers".format(len(offers)))
+        offers_processed += len(offers)
+
+        if len(offers) < limit:
+            break
+        else:
+            offset += limit
+
+    return offers_processed
+
+
+if __name__ == '__main__':
+    processed = reclassify_all()
+    logger.info("Finished classifying {0} offers".format(processed))

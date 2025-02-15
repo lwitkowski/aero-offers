@@ -1,7 +1,6 @@
 import unittest
 from price_parser import Price
 
-import test__testcontainers_setup
 import fx
 import fx_db
 from util import read_file
@@ -18,6 +17,7 @@ class ExchangeRatesTest(unittest.TestCase):
     def test_should_update_fx_rates_in_db(self):
         # when
         fx.update_exchange_rates(read_file("eurofxref-daily.xml"))
+        fx_db.reload_fx()
 
         # then
         fx_rates = fx_db.exchange_rates

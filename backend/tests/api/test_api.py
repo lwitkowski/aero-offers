@@ -1,9 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-import unittest
 import pytest
 
-import test__testcontainers_setup
 from api.flask_app import app
 import offers_db
 from util import sample_offer
@@ -87,4 +85,4 @@ def test_get_offers_404_for_unknown_manufacturer_or_model(api_client):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()

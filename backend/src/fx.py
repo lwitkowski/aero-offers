@@ -25,6 +25,7 @@ def fetch_exchange_rates_from_ecb():
     start_time = time.time()
     response = requests.get(ECB_FX_RATES_URL).text
     count = update_exchange_rates(response)
+    fx_db.reload_fx()
     logger.info("Updated %d exchange rates in %.2fs", count, (time.time() - start_time))
 
 

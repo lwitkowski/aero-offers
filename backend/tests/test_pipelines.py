@@ -5,7 +5,6 @@ import unittest
 from scrapy.exceptions import DropItem
 from ddt import ddt, data
 
-import test__testcontainers_setup
 import pipelines
 import offers_db
 from offer import OfferPageItem, AircraftCategory
@@ -118,22 +117,24 @@ class StoragePipelineTest(unittest.TestCase):
 
     def test_should_store_offer(self):
         # given
-        sample_raw_offer = sample_offer()
-        sample_raw_offer.price = "123456.00"
-        sample_raw_offer.currency = "EUR"
-        sample_raw_offer.location = "Moon"
-        sample_raw_offer.hours = 1000
-        sample_raw_offer.starts = 300
+        sample_raw_offer = sample_offer(
+            price="123456.00",
+            currency="EUR",
+            location="Moon",
+            hours=1000,
+            starts=300
+        )
 
         # when
         self.storage.process_item(sample_raw_offer, None)
 
         # then
         all_gliders_in_db = offers_db.get_offers(category=AircraftCategory.glider)
-        self.assertEqual(1, len(all_gliders_in_db))
-        self.assertEqual("Glider A", all_gliders_in_db[0]["title"])
-        self.assertEqual("glider", all_gliders_in_db[0]["category"])
-        self.assertTrue(offers_db.offer_url_exists("https://offers.com/1"))
+        assert len(all_gliders_in_db) == 1
+        assert all_gliders_in_db[0].title == "Glider A"
+        assert all_gliders_in_db[0].category == 'glider'
+        assert all_gliders_in_db[0].url == "https://offers.com/1"
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,10 @@ def sample_offer(
         published_at: date = date(2024, 7, 27),
         raw_price: str = None,
         price: str = "29500",
-        currency: str = "EUR"
+        currency: str = "EUR",
+        location: str = None,
+        hours: int = None,
+        starts: int = None
 ):
     return OfferPageItem(
         url=url,
@@ -20,8 +23,12 @@ def sample_offer(
         page_content="does not matter",
         raw_price=raw_price,
         price=price,
-        currency=currency
+        currency=currency,
+        location=location,
+        hours=hours,
+        starts=starts
     )
+
 
 def read_file(name: str, encoding='utf8'):
     if not name[0] == '/':

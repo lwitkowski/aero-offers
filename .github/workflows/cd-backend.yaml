@@ -37,21 +37,21 @@ jobs:
         run: |
           pip3 install --quiet -r requirements.txt -r tests/requirements.txt
 
-      #- name: 'Static analysis (Lint)'
-      #  working-directory: ./backend
-      #  run: ./run_lint.sh
+      - name: 'Static analysis (Lint)'
+        working-directory: ./backend
+        run: ./run_lint.sh
 
-      #- name: 'Run tests and check coverage'
-      #  working-directory: ./backend
-      #  run: |
-      #    ./run_tests.sh
+      - name: 'Run tests and check coverage'
+        working-directory: ./backend
+        run: |
+          ./run_tests.sh
 
-      #- name: 'Publish Test Results'
-      #  uses: EnricoMi/publish-unit-test-result-action@v2
-      #  if: always()
-      #  with:
-      #    files: |
-      #      ./backend/test-results/**/*.xml
+      - name: 'Publish Test Results'
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            ./backend/test-results.xml
 
       - name: 'Build docker image'
         working-directory: ./backend

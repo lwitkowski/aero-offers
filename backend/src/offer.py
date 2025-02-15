@@ -30,3 +30,24 @@ class OfferPageItem:
     price_in_euro: str = None
     exchange_rate: float = None  # e.g. 1.0
 
+
+@dataclass
+class OfferPrice:
+    amount: str
+    currency: str
+    amount_in_euro: str
+    exchange_rate: float
+
+
+@dataclass
+class Offer:
+    url: str
+    category: str
+    title: str
+    published_at: date
+    location: str
+    hours: int
+    starts: int
+    price: OfferPrice
+    manufacturer: str
+    model: str

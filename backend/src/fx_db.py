@@ -12,8 +12,14 @@ container = database.create_container_if_not_exists(
 )
 
 exchange_rates = dict()
-for rate in container.read_all_items():
-    exchange_rates[rate['currency']] = float(rate['rate'])
+
+
+def reload_fx():
+    for rate in container.read_all_items():
+        exchange_rates[rate['currency']] = float(rate['rate'])
+
+
+reload_fx()
 
 
 def update_exchange_rate(currency: str, rate: float):

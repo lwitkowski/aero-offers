@@ -2,10 +2,5 @@
 .idea
 *.iml
 *.log
-__pycache__
 node_modules
-backend/test-results
-backend/.coverage
-backend/htmlcov
-backend/venv
 db/backups

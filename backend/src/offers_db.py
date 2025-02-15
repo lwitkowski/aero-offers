@@ -5,7 +5,7 @@ from azure.cosmos import PartitionKey, ThroughputProperties
 
 from db import database
 from my_logging import *
-from offer import OfferPageItem, AircraftCategory
+from offer import OfferPageItem, AircraftCategory, Offer, OfferPrice
 
 logger = logging.getLogger('offers_db')
 
@@ -27,9 +27,9 @@ def store_offer(
         offer: OfferPageItem,
         spider: str = 'unknown',
 ):
-    id = str(uuid.uuid4())
+    offer_id = str(uuid.uuid4())
     container.upsert_item(dict(
-        id=id,
+        id=offer_id,
         spider=spider,
         category=offer.category.name,
         url=offer.url,
@@ -50,7 +50,7 @@ def store_offer(
         manufacturer=None,
         model=None,
     ))
-    return id
+    return offer_id
 
 
 def classify_offer(
@@ -85,7 +85,7 @@ def offer_url_exists(url):
         return False
 
 
-def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = None, manufacturer: str = None, model: str =None):
+def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = None, manufacturer: str = None, model: str = None):
     query = 'SELECT * FROM offers o '
     params = list()
 
@@ -114,32 +114,35 @@ def get_offers(offset: int = 0, limit: int = 30, category: AircraftCategory = No
     params.append(dict(name='@limit', value=limit))
 
     db_offers = container.query_items(query=query, parameters=params, enable_cross_partition_query=True)
-    ui_offers = list()
-    for db_offer in db_offers:
-        ui_offers.append({
-            "url": db_offer['url'],
-            "category": db_offer['category'],
-            "title": db_offer['title'],
-            "published_at": db_offer['published_at'],
-            "price": {
-                "amount": db_offer['price']['amount'],
-                "currency": db_offer['price']['currency'],
-                "amount_in_euro": db_offer['price']['amount_in_euro'],
-                "exchange_rate": db_offer['price']['exchange_rate'],
-            },
-            "hours": db_offer['hours'],
-            "starts": db_offer['starts'],
-            "location": db_offer['location'],
-            "manufacturer": db_offer['manufacturer'],
-            "model": db_offer['model']
-        })
+    return list(map(
+        lambda db_offer: Offer(
+            url=db_offer['url'],
+            category=db_offer['category'],
+            title=db_offer['title'],
+            published_at=db_offer['published_at'],
+            price=OfferPrice(
+                amount=db_offer['price']['amount'],
+                currency=db_offer['price']['currency'],
+                amount_in_euro=db_offer['price']['amount_in_euro'],
+                exchange_rate=db_offer['price']['exchange_rate'],
+            ),
+            hours=db_offer['hours'],
+            starts=db_offer['starts'],
+            location=db_offer['location'],
+            manufacturer=db_offer['manufacturer'],
+            model=db_offer['model']
+        ),
+        db_offers
+    ))
 
-    return ui_offers
 
-
-def get_unclassified_offers():
-    query = 'SELECT * FROM offers o WHERE o.classified = false OFFSET 0 LIMIT 100'
-    return list(container.query_items(query=query, enable_cross_partition_query=True))
+def get_unclassified_offers(offset:int = 0, limit: int = 100):
+    query = 'SELECT * FROM offers o WHERE o.classified = false OFFSET @offset LIMIT @limit'
+    params = [
+        dict(name='@offset', value=offset),
+        dict(name='@limit', value=limit)
+    ]
+    return list(container.query_items(query=query, parameters=params, enable_cross_partition_query=True))
 
 
 if __name__ == '__main__':
