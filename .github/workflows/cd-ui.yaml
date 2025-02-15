@@ -54,15 +54,15 @@ jobs:
 
       - name: 'Archive dist artifacts'
         uses: actions/upload-artifact@v4
-        if: github.ref == 'refs/heads/main'
+        #if: github.ref == 'refs/heads/main'
         with:
           name: ui-dist
           path: ui/dist
 
   deploy:
     runs-on: ubuntu-latest
-    environment: production
-    if: github.ref == 'refs/heads/main'
+    environment: staging-cosmodb
+    #if: github.ref == 'refs/heads/main'
     needs:
       - build
     permissions:

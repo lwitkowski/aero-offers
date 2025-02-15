@@ -73,8 +73,8 @@ jobs:
   # only for main builds
   deploy:
     runs-on: ubuntu-latest
-    environment: production
-    if: github.ref == 'refs/heads/main'
+    environment: staging-cosmodb
+    #if: github.ref == 'refs/heads/main'
     needs:
       - build-api
     permissions:
@@ -99,7 +99,7 @@ jobs:
         with:
           resourceGroup: rg-aerooffers
           containerAppEnvironment: cae-aerooffers-prod
-          containerAppName: ca-aerooffers-api-cosmosdb
+          containerAppName: aerooffers-api
           imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
           disableTelemetry: true
 
@@ -107,12 +107,12 @@ jobs:
         run: |
           az containerapp job update \
              -g rg-aerooffers \
-            --name aerooffers-update-fx-job-cosmos \
+            --name update-fx-job \
             --image ${{ env.API_DOCKER_IMAGE }}
 
       - name: 'Deploy Job - update offers'
         run: |
           az containerapp job update \
              -g rg-aerooffers \
-            --name aerooffers-update-offers-job-cos \
+            --name update-offers-job \
             --image ${{ env.API_DOCKER_IMAGE }}

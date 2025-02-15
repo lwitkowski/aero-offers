@@ -27,7 +27,7 @@ az identity create \
 # create federated credential for identity with subject identifier repo:lwitkowski/aero-offers:environment:production
 
 az staticwebapp create \
-    --name aerooffers-ui \
+    --name aerooffers-ui-cosmos \
     --resource-group $RESOURCE_GROUP
 
 # now setup custom domain for this app (TXT & A DNS records etc)
@@ -41,7 +41,7 @@ az cosmosdb create \
 
 # create backend container app
 az containerapp create \
-    --name ca-aerooffers-api-cosmosdb \
+    --name aerooffers-api \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --secrets "db-credential=$COSMOSDB_CREDENTIAL" "registry-password=$CONTAINER_REGISTRY_PASSWORD" \
@@ -58,7 +58,7 @@ az containerapp create \
 
 # create scheduled jobs
 az containerapp job create \
-    --name aerooffers-update-fx-job-cosmos \
+    --name update-fx-job \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --trigger-type "Schedule" \
@@ -74,7 +74,7 @@ az containerapp job create \
     --cpu "0.25" --memory "0.5Gi"
 
 az containerapp job create \
-    --name aerooffers-update-offers-job-cos \
+    --name update-offers-job \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
     --trigger-type "Schedule" \
