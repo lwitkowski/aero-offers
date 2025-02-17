@@ -12,9 +12,9 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 - `ui` - vue.js application. Deployed as Azure Static Web App.
 - `backend/api` - python flask app with few REST endpoints, reversed proxied by nginx serving frontend (not exposed directly to the internet). Deployed as Azure Container App (running 24/7) 
 - `backend/jobs` - python scripts triggered periodically. Much more resource-heavy than API, bundled in the same Docker image as `api`, deployed as Azure Container Job (with overridden command)
-    - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database (not yet classified), then assigns manufacturer and model to new (not yet classified) offers stored in the database
-    - `run_update_fx_rates` - updates currency exchange rates from ECP REST api
-- `db` - Azure CosmosDb NoSQL fully managed database.
+    - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database, then assigns manufacturer and model to new (not yet classified) offers stored in the database
+    - `run_update_fx_rates` - updates currency exchange rates from ECB REST api
+- `db` - Azure CosmosDb NoSQL fully managed database (check https://github.com/lwitkowski/aero-offers/pull/135 for decision record).
 
 #### Deployment
 

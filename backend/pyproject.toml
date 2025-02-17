@@ -20,3 +20,8 @@ addopts = [
 omit = [
     "tests/*",
 ]
+
+[tool.pylint]
+ignore-paths = [
+    "tools/*",
+]
