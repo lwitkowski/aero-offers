@@ -76,7 +76,7 @@ jobs:
           name: ui-dist
           path: ui/dist
 
-      - name: 'Build And Deploy'
+      - name: 'Deploy'
         uses: Azure/static-web-apps-deploy@v1
         with:
           action: "upload"

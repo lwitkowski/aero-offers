@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import uuid
+from datetime import datetime
 
 from azure.cosmos import PartitionKey, ThroughputProperties
 
@@ -35,6 +36,7 @@ def store_offer(
         url=offer.url,
         title=offer.title,
         published_at=str(offer.published_at),
+        indexed_at=str(datetime.utcnow()),
         price=dict(
             amount=offer.price,
             currency=offer.currency,

@@ -2,9 +2,8 @@ from scrapy.exceptions import DropItem
 from price_parser import Price
 
 import offers_db
-from fx_db import convert_price
 from my_logging import *
-from fx import get_currency_code
+from fx import get_currency_code, to_price_in_euro
 from offer import OfferPageItem
 
 
@@ -63,7 +62,9 @@ class PriceParser(object):
             item.price = str(price.amount)
             item.currency = get_currency_code(price)
 
-            convert_price(item)
+            (price_in_euro, exchange_rate) = to_price_in_euro(item.price, item.currency)
+            item.price_in_euro = price_in_euro
+            item.exchange_rate = exchange_rate
 
             return item
 

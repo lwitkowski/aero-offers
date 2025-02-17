@@ -3,7 +3,6 @@ from azure.cosmos import PartitionKey, ThroughputProperties
 
 from db import database
 from my_logging import *
-from offer import OfferPageItem
 
 container = database.create_container_if_not_exists(
     id="fx_rates",
@@ -28,15 +27,6 @@ def update_exchange_rate(currency: str, rate: float):
         "currency": currency,
         "rate": rate
     })
-
-
-def convert_price(offer: OfferPageItem):
-    if offer.currency and offer.currency != "EUR":
-        offer.price_in_euro = str(round(float(offer.price) / exchange_rates[offer.currency], 2))
-        offer.exchange_rate = exchange_rates[offer.currency]
-    else:
-        offer.price_in_euro = offer.price
-        offer.exchange_rate = 1.0
 
 
 if __name__ == '__main__':

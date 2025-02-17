@@ -42,6 +42,16 @@ def update_exchange_rates(xml_data):
     return count
 
 
+def to_price_in_euro(price: str, currency: str):
+    if currency and currency != "EUR":
+        price_in_euro = str(round(float(price) / fx_db.exchange_rates[currency], 2))
+        exchange_rate = fx_db.exchange_rates[currency]
+    else:
+        price_in_euro = price
+        exchange_rate = 1.0
+    return price_in_euro, exchange_rate
+
+
 def get_currency_code(symbol):
     currency_str = symbol
     if isinstance(symbol, Price):

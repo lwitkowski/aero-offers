@@ -55,6 +55,8 @@ class PriceParserTest(unittest.TestCase):
 
         self.assertEqual(expected_price, offer_with_valid_price.price)
         self.assertEqual("EUR", offer_with_valid_price.currency)
+        self.assertEqual(expected_price, offer_with_valid_price.price_in_euro)
+        self.assertEqual(1.0, offer_with_valid_price.exchange_rate)
 
     @data(
         sample_offer(raw_price=""),
