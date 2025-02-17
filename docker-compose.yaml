@@ -1,13 +1,4 @@
 services:
-  ca-aerooffers-ui:
-    build: ./ui
-    ports:
-      - '8080:80'
-    volumes:
-      - ./ui/dist:/usr/share/nginx/html/
-    depends_on:
-      - ca-aerooffers-api
-
   ca-aerooffers-api:
     build: ./backend
     ports:

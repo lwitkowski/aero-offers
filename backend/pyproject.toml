@@ -19,6 +19,7 @@ addopts = [
 [tool.coverage.run]
 omit = [
     "tests/*",
+    "**/__init__.py",
 ]
 
 [tool.pylint]
