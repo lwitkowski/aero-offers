@@ -27,7 +27,7 @@ az identity create \
 # create federated credential for identity with subject identifier repo:lwitkowski/aero-offers:environment:production
 
 az staticwebapp create \
-    --name aerooffers-ui-cosmos \
+    --name aerooffers-ui \
     --resource-group $RESOURCE_GROUP
 
 # now setup custom domain for this app (TXT & A DNS records etc)
@@ -48,7 +48,7 @@ az containerapp create \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --registry-username "lwitkowski" \
     --registry-password "secretref:registry-password" \
-    --image $CONTAINER_REGISTRY/aerooffers-api-cosmosdb:$DOCKER_IMAGE_TAG \
+    --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
     --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --target-port 80 \
     --ingress external \
@@ -68,7 +68,7 @@ az containerapp job create \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --registry-username "lwitkowski" \
     --registry-password "secretref:registry-password" \
-    --image $CONTAINER_REGISTRY/aerooffers-api-cosmosdb:$DOCKER_IMAGE_TAG \
+    --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
     --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_fx_rates.sh" \
     --cpu "0.25" --memory "0.5Gi"
@@ -84,7 +84,7 @@ az containerapp job create \
     --registry-server $CONTAINER_REGISTRY_SERVER \
     --registry-username "lwitkowski" \
     --registry-password "secretref:registry-password" \
-    --image $CONTAINER_REGISTRY/aerooffers-api-cosmosdb:$DOCKER_IMAGE_TAG \
+    --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
     --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
     --command "sh" "./run_update_offers.sh" \
     --cpu "1" --memory "2Gi"
