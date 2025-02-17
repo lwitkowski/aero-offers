@@ -61,7 +61,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    environment: staging-cosmodb
+    environment: production
     if: github.ref == 'refs/heads/main'
     needs:
       - build
