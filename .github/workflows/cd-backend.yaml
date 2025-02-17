@@ -41,31 +41,36 @@ jobs:
         working-directory: ./backend
         run: ./run_lint.sh
 
-      - name: 'Run tests and check coverage'
+      - name: 'Run tests'
         working-directory: ./backend
         run: |
           ./run_tests.sh
+
+      - name: 'Check test coverage'
+        working-directory: ./backend
+        run: |
+          coverage report --fail-under=80
 
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: |
-            ./backend/test-results/**/*.xml
+            ./backend/test-results.xml
 
       - name: 'Build docker image'
         working-directory: ./backend
         run: |
           docker build . -t ${DOCKER_IMAGE}
 
-      - name: 'Log in to the Container registry'
+      - name: 'Log in to the Container Registry'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Push image to Container Registry'
+      - name: 'Push image to Container Registry (ghcr)'
         if: github.ref == 'refs/heads/main'
         run: |
           docker push ${DOCKER_IMAGE}
@@ -73,7 +78,7 @@ jobs:
   # only for main builds
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: staging-cosmodb
     if: github.ref == 'refs/heads/main'
     needs:
       - build-api
@@ -99,7 +104,7 @@ jobs:
         with:
           resourceGroup: rg-aerooffers
           containerAppEnvironment: cae-aerooffers-prod
-          containerAppName: ca-aerooffers-api
+          containerAppName: aerooffers-api
           imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
           disableTelemetry: true
 
@@ -107,12 +112,12 @@ jobs:
         run: |
           az containerapp job update \
              -g rg-aerooffers \
-            --name aerooffers-update-fx-job \
+            --name update-fx-job \
             --image ${{ env.API_DOCKER_IMAGE }}
 
       - name: 'Deploy Job - update offers'
         run: |
           az containerapp job update \
              -g rg-aerooffers \
-            --name aerooffers-update-offers-job \
+            --name update-offers-job \
             --image ${{ env.API_DOCKER_IMAGE }}

@@ -1,10 +1,6 @@
 .DS_Store
 .idea
+*.iml
 *.log
-__pycache__
 node_modules
-db/prod_dump_2024_06_31.sql
-backend/test-results
-backend/.coverage
-backend/htmlcov
 db/backups

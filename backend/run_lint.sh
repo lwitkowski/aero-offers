@@ -1,5 +1,5 @@
-export PYTHONPATH=$PYTHONPATH':./'
+export PYTHONPATH=$PYTHONPATH':./src:./tests'
 
 set -e
 
-pylint --fail-on=E --errors-only ./
+pylint --fail-on=E --errors-only --ignore venv ./

@@ -1,0 +1,8 @@
+.DS_Store
+*.iml
+__pycache__
+test-results.xml
+.coverage
+coverage_report
+venv
+src/aero_offers.egg-info

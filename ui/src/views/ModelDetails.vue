@@ -27,14 +27,14 @@
           <th />
         </tr>
         <tr v-for="offer in offers.slice().reverse()" :key="offer.id">
-          <td>{{ offer.date }}</td>
+          <td>{{ offer.published_at }}</td>
           <td>{{ offer.title }}</td>
           <td>{{ offer.location }}</td>
           <td>
             <div v-if="offer.hours">{{ offer.hours }}h, {{ offer.starts }} starts</div>
             <div v-else>n/a</div>
           </td>
-          <td>{{ formatPrice(offer.price.amount, offer.price.currency_code) }}</td>
+          <td>{{ formatPrice(offer.price.amount, offer.price.currency) }}</td>
           <td>
             <div class="icon">
               <small>
@@ -115,7 +115,7 @@ export default {
       axios.get(`/api/offers/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
-        this.offers.sort((a, b) => new Date(a.date) - new Date(b.date))
+        this.offers.sort((a, b) => new Date(a.published_at) - new Date(b.published_at))
 
         if (this.offers.length === 0) {
           return
@@ -130,7 +130,7 @@ export default {
 
           const datapoint = {
             meta: offer.title,
-            x: new Date(offer.date),
+            x: new Date(offer.published_at),
             y: Number(offer.price.amount_in_euro)
           }
           if (this.dateAlreadyPresent(datapoint.x)) {
