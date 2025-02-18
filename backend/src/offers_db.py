@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 
 from azure.cosmos import PartitionKey, ThroughputProperties
 
@@ -36,7 +36,7 @@ def store_offer(
         url=offer.url,
         title=offer.title,
         published_at=str(offer.published_at),
-        indexed_at=str(datetime.utcnow()),
+        indexed_at=str(datetime.now(UTC)),
         price=dict(
             amount=offer.price,
             currency=offer.currency,
@@ -57,19 +57,23 @@ def store_offer(
 
 def classify_offer(
     offer_id: str,
-    category: str,
+    category: str = None,
     manufacturer: str = None,
     model: str = None,
 ):
+    operations = [
+        dict(op="replace", path="/classified", value=True),
+        dict(op="replace", path="/manufacturer", value=manufacturer),
+        dict(op="replace", path="/model", value=model)
+    ]
+
+    if category is not None:
+        operations.append(dict(op="replace", path="/category", value=category))
+
     container.patch_item(
         partition_key=offer_id,
         item=offer_id,
-        patch_operations=[
-            dict(op="replace", path="/classified", value=True),
-            dict(op="replace", path="/category", value=category),
-            dict(op="replace", path="/manufacturer", value=manufacturer),
-            dict(op="replace", path="/model", value=model)
-        ]
+        patch_operations=operations
     )
 
 

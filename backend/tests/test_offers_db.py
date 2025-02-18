@@ -5,6 +5,8 @@ from datetime import date
 
 import offers_db
 from offer import AircraftCategory
+
+from offer import Offer
 from util import sample_offer
 
 
@@ -52,6 +54,17 @@ class DbTest(unittest.TestCase):
         self.assertEqual(1, len(mini_nimbuses))
         self.assertEqual(0, len(asg29s))
 
+    def test_should_not_reset_category_if_none(self):
+        # given
+        stored_offer_id = offers_db.store_offer(sample_offer())
+        offers_db.classify_offer(offer_id=stored_offer_id, category='glider', manufacturer='Schempp-Hirth', model='Mini-Nimbus')
+
+        # when
+        offers_db.classify_offer(offer_id=stored_offer_id, category=None, manufacturer=None, model=None)
+
+        # then
+        offer_from_db: Offer = offers_db.get_offers()[0]
+        assert offer_from_db.category == 'glider'
 
     def test_should_order_offers_by_published_date_desc(self):
         # given
@@ -68,7 +81,6 @@ class DbTest(unittest.TestCase):
         assert orders[1].published_at == "2024-01-31"
         assert orders[2].published_at == "2024-01-02"
         assert orders[3].published_at == "2023-03-15"
-
 
     def test_should_check_url_exists(self):
         # given offer exists in db
