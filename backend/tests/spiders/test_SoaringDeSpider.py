@@ -1,6 +1,6 @@
 import unittest
 
-from offer import OfferPageItem
+from offer import OfferPageItem, AircraftCategory
 from spiders import SoaringDeSpider
 from datetime import date
 from util import fake_response_from_file
@@ -10,6 +10,23 @@ class SoaringDeSpiderTest(unittest.TestCase):
 
     def setUp(self):
         self.spider = SoaringDeSpider.SoaringDeSpider()
+
+    def test_collect_urls_of_all_offer_on_listing_page(self):
+        # given
+        listing_page_http_response = fake_response_from_file('spiders/samples/soaring_de_listing.html')
+
+        # when
+        listing_page_parse_result = self.spider.parse(listing_page_http_response)
+
+        # then
+        detail_pages = [i for i in listing_page_parse_result]
+        self.assertEqual(len(detail_pages), 107)
+
+        self.assertEqual(detail_pages[0].url, "https://soaring.de/osclass/index.php?page=item&id=86069")
+        self.assertEqual(detail_pages[0].meta['aircraft_category'], AircraftCategory.glider)
+
+        # no broken links collected
+        self.assertNotIn("https://soaring.de/osclass/index.php?page=item&id=", [page.url for page in detail_pages])
 
     def test_parse_detail_page(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(

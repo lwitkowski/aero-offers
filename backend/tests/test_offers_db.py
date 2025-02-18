@@ -25,9 +25,9 @@ class DbTest(unittest.TestCase):
         # then
         self.assertEqual(1, len(all_offers))
         glider_offer = all_offers[0]
-        assert glider_offer.title == "Glider A"
-        assert glider_offer.price.amount == "29500"
-        assert glider_offer.price.currency == "EUR"
+        self.assertEqual(glider_offer.title, "Glider A")
+        self.assertEqual(glider_offer.price.amount, "29500")
+        self.assertEqual(glider_offer.price.currency, "EUR")
 
     def test_should_filter_offers_by_aircraft_type(self):
         # given
@@ -64,7 +64,7 @@ class DbTest(unittest.TestCase):
 
         # then
         offer_from_db: Offer = offers_db.get_offers()[0]
-        assert offer_from_db.category == 'glider'
+        self.assertEqual(offer_from_db.category, 'glider')
 
     def test_should_order_offers_by_published_date_desc(self):
         # given
@@ -77,10 +77,10 @@ class DbTest(unittest.TestCase):
         orders = offers_db.get_offers()
 
         # then
-        assert orders[0].published_at == "2024-02-01"
-        assert orders[1].published_at == "2024-01-31"
-        assert orders[2].published_at == "2024-01-02"
-        assert orders[3].published_at == "2023-03-15"
+        self.assertEqual(orders[0].published_at, "2024-02-01")
+        self.assertEqual(orders[1].published_at, "2024-01-31")
+        self.assertEqual(orders[2].published_at, "2024-01-02")
+        self.assertEqual(orders[3].published_at, "2023-03-15")
 
     def test_should_check_url_exists(self):
         # given offer exists in db

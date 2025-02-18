@@ -132,10 +132,10 @@ class StoragePipelineTest(unittest.TestCase):
 
         # then
         all_gliders_in_db = offers_db.get_offers(category=AircraftCategory.glider)
-        assert len(all_gliders_in_db) == 1
-        assert all_gliders_in_db[0].title == "Glider A"
-        assert all_gliders_in_db[0].category == 'glider'
-        assert all_gliders_in_db[0].url == "https://offers.com/1"
+        self.assertEqual(len(all_gliders_in_db), 1)
+        self.assertEqual(all_gliders_in_db[0].title, "Glider A")
+        self.assertEqual(all_gliders_in_db[0].category, 'glider')
+        self.assertEqual(all_gliders_in_db[0].url, "https://offers.com/1")
 
 
 if __name__ == '__main__':
