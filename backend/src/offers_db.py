@@ -2,7 +2,7 @@
 import uuid
 from datetime import datetime, UTC
 
-from azure.cosmos import PartitionKey, ThroughputProperties
+from azure.cosmos import PartitionKey, ThroughputProperties, IndexingMode
 
 from db import database
 from my_logging import *
@@ -14,7 +14,30 @@ logger = logging.getLogger('offers_db')
 container = database.create_container_if_not_exists(
     id="offers",
     partition_key=PartitionKey(path="/id"),
-    offer_throughput=ThroughputProperties(offer_throughput="600")
+    offer_throughput=ThroughputProperties(offer_throughput="600"),
+    indexing_policy=dict(
+        automatic=True,
+        indexingMode=IndexingMode.Consistent,
+        includedPaths=[
+            dict(path="/published_at/?"),
+            dict(path="/url/?"),
+            dict(path="/classified/?"),
+        ],
+        excludedPaths=[
+            dict(path="/*")
+        ],
+        compositeIndexes=[
+            [
+                dict(path="/category", order="ascending"),
+                dict(path="/published_at", order="descending")
+            ],
+            [
+                dict(path="/manufacturer", order="ascending"),
+                dict(path="/model", order="ascending"),
+                dict(path="/published_at", order="descending")
+            ]
+        ]
+    )
 )
 
 
