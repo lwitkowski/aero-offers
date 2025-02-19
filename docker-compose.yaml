@@ -1,5 +1,5 @@
 services:
-  ca-aerooffers-api:
+  aerooffers-api:
     build: ./backend
     ports:
       - '8082:80' # exposed for debugging and local UI development without python

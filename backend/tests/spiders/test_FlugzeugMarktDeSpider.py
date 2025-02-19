@@ -11,6 +11,18 @@ class FlugzeugMarktDeSpiderTest(unittest.TestCase):
     def setUp(self):
         self.spider = FlugzeugMarktDeSpider.FlugzeugMarktDeSpider()
 
+    def test_collect_urls_of_all_offer_on_listing_page(self):
+        # given
+        listing_page_http_response = fake_response_from_file('spiders/samples/flugzeugmarkt_de_listing.html')
+
+        # when
+        listing_page_parse_result = self.spider.parse(listing_page_http_response)
+
+        # then
+        detail_pages = [i for i in listing_page_parse_result]
+        self.assertEqual(len(detail_pages), 20)
+        self.assertEqual(detail_pages[0].url, 'https://www.flugzeugmarkt.de/ultraleichtflugzeug-kaufen/comco-ikarus/c42b-competition-gebraucht-kaufen/3331.html')
+
     def test_parse_detail_page(self):
         item: OfferPageItem = next(self.spider.parse_detail_page(
             fake_response_from_file('spiders/samples/flugzeugmarkt_de_offer.html')))
