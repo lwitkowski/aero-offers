@@ -53,6 +53,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import regression from 'regression'
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 import { formatPrice, median } from '@/utils.js'
 
@@ -77,10 +78,9 @@ export default {
       avgPrice: 0,
       medianPrice: 0,
       chartData: {
-        series: [[]]
+        series: [[], []]
       },
       chartOptions: {
-        low: 0,
         width: 600,
         height: 600,
         showArea: false,
@@ -108,6 +108,20 @@ export default {
       return false
     },
 
+    drawLinearRegressionLine(dataPoints) {
+      const regressionResult = regression.linear(dataPoints)
+      if (regressionResult.points.length >= 2) {
+        const startPoint = regressionResult.points[0]
+        const endPoint = regressionResult.points[regressionResult.points.length - 1]
+        this.chartData.series[1] = [
+          { x: new Date(startPoint[0] * 100000), y: startPoint[1] },
+          { x: new Date(endPoint[0] * 100000), y: endPoint[1] }
+        ]
+      } else {
+        this.chartData.series[1] = []
+      }
+    },
+
     fetchData() {
       this.chartData.series = [[]]
       this.avgPrice = 0
@@ -122,6 +136,7 @@ export default {
         }
 
         let prices = []
+        const dataPointsForRegression = []
         for (let i = 0; i < this.offers.length; i += 1) {
           const offer = this.offers[i]
           if (!isNaN(offer.price.amount_in_euro)) {
@@ -138,8 +153,13 @@ export default {
             continue
           }
           this.chartData.series[0].push(datapoint)
+          dataPointsForRegression.push([
+            datapoint.x.getTime() / 100000, // this is needed for regression calculations to work correctly
+            datapoint.y
+          ])
         }
         this.chartOptions = {
+          showLine: true,
           axisX: {
             type: this.$chartist.FixedScaleAxis,
             divisor: 6,
@@ -158,6 +178,8 @@ export default {
             })
           ]
         }
+
+        this.drawLinearRegressionLine(dataPointsForRegression)
 
         let priceSum = 0
         prices.forEach((num) => {
@@ -179,6 +201,22 @@ export default {
   margin: auto;
   width: 600px;
   height: 600px;
+}
+
+.ct-series-a .ct-line {
+  stroke-width: 0px;
+}
+.ct-series-a .ct-point {
+  stroke: #df3a26;
+  stroke-width: 10px;
+}
+
+.ct-series-b .ct-line {
+  stroke: #4281ec66;
+  stroke-width: 5px;
+}
+.ct-series-b .ct-point {
+  stroke-width: 0px;
 }
 
 .chartist-tooltip::before {
