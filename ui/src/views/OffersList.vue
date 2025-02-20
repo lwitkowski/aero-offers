@@ -47,8 +47,8 @@ export default {
         })
         .then((response) => {
           this.offers = this.offers.concat(response.data)
+          this.offset += this.limit
         })
-      this.offset += this.limit
     }
   }
 }
