@@ -22,21 +22,13 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 
 ### TODO
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
-- [ ] Dev: end 2 end tests of crawlers
 - [ ] UI: consent banner for GA
-- [x] Infra: db daily backups
-- [ ] Infra: infra as code (biceps or terraform)
-- [ ] document infra and env topology
-- [x] Backend: fix and enable other spiders/crawlers
-- [ ] UI: aero-offers.com
+- [ ] aero-offers.com
 - [ ] Improve aircraft types structure and introduce 2 levels: glider (e.g Discus 2c 18m) and model (Discus 2cFES 18m) as prices between models sometimes differ significantly
-- [ ] UI: fix & polish CSS in UI
 - [ ] utilize https://github.com/weglide/GliderList as source of truth for glider types/models
 - [ ] UI: admin panel for manual (re) classification (or community-based)
-- [ ] crawler for Facebook Marketplace - do they have nice api?
+- [ ] crawler for Facebook Marketplace - do they have an api?
 - [ ] crawler for https://www.aircraft24.de
-- [ ] crawler for http://www.airplanemart.com
-- [ ] crawler for http://www.aeronave.de/1-luftfahrzeuge/listings.html
 - [ ] crawler for https://plane-sale.com
 
 ### Running backend locally without Python
