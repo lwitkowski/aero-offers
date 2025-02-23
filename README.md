@@ -22,7 +22,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 
 ### TODO
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
-- [ ] UI: consent banner for GA
+- [x] UI: consent banner for GA
 - [ ] aero-offers.com
 - [ ] Improve aircraft types structure and introduce 2 levels: glider (e.g Discus 2c 18m) and model (Discus 2cFES 18m) as prices between models sometimes differ significantly
 - [ ] utilize https://github.com/weglide/GliderList as source of truth for glider types/models
