@@ -7,7 +7,7 @@ price-parser==0.4.0
 Scrapy==2.12.0
 nltk==3.9.1
 Flask==3.1.0
-Flask-Cors==5.0.0
+Flask-Cors==5.0.1
 Flask-Headers==1.0
 defusedxml==0.7.1
 requests==2.32.3
