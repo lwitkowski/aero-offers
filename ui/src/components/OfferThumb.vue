@@ -22,7 +22,7 @@
               params: { category: offer.category, manufacturer: offer.manufacturer, model: offer.model }
             }"
           >
-            <a>all `{{ offer.model }}` offers</a>
+            all `{{ offer.model }}` offers
           </router-link>
         </p>
       </small>
