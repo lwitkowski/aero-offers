@@ -58,22 +58,6 @@ az containerapp create \
 
 # create scheduled jobs
 az containerapp job create \
-    --name update-fx-job \
-    --resource-group $RESOURCE_GROUP \
-    --environment $ENV_NAME \
-    --trigger-type "Schedule" \
-    --cron-expression "15 8,16 * * *" \
-    --replica-timeout 1800 \
-    --secrets "db-credential=$COSMOSDB_CREDENTIAL" "registry-password=$CONTAINER_REGISTRY_PASSWORD" \
-    --registry-server $CONTAINER_REGISTRY_SERVER \
-    --registry-username "lwitkowski" \
-    --registry-password "secretref:registry-password" \
-    --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
-    --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
-    --command "sh" "./run_update_fx_rates.sh" \
-    --cpu "0.25" --memory "0.5Gi"
-
-az containerapp job create \
     --name update-offers-job \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \

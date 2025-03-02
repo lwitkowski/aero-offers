@@ -13,7 +13,6 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 - `backend/api` - python flask app with few REST endpoints. Deployed as Azure Container App (running 24/7) 
 - `backend/jobs` - python scripts triggered periodically. Much more resource-heavy than API, bundled in the same Docker image as `api`, deployed as Azure Container Job.
     - `run_update_offers` - scans few portals (e.g. soaring.de) and stores new offers in the database, then assigns manufacturer and model to new (not yet classified) offers stored in the database
-    - `run_update_fx_rates` - updates currency exchange rates from ECB REST api
 - `db` - Azure CosmosDb NoSQL fully managed database (for free; check https://github.com/lwitkowski/aero-offers/pull/135 for decision record).
 
 #### Deployment
