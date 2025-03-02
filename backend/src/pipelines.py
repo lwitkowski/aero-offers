@@ -3,7 +3,7 @@ from price_parser import Price
 
 import offers_db
 from my_logging import *
-from fx import get_currency_code, to_price_in_euro
+from fx import to_price_in_euro
 from offer import OfferPageItem
 
 
@@ -59,10 +59,10 @@ class PriceParser(object):
                 self.logger.info(msg)
                 raise DropItem(msg)
 
-            item.price = str(price.amount)
-            item.currency = get_currency_code(price)
+            (original_price, original_currency, price_in_euro, exchange_rate) = to_price_in_euro(price)
 
-            (price_in_euro, exchange_rate) = to_price_in_euro(item.price, item.currency)
+            item.price = original_price
+            item.currency = original_currency
             item.price_in_euro = price_in_euro
             item.exchange_rate = exchange_rate
 
