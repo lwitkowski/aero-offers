@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 
+
 class AircraftCategory(Enum):
     glider = 1
     airplane = 2

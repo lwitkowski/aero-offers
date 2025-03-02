@@ -7,6 +7,7 @@ from offer import OfferPageItem, AircraftCategory
 
 def sample_offer(
         url: str = 'https://offers.com/1',
+        title: str = "Glider A",
         published_at: date = date(2024, 7, 27),
         raw_price: str = None,
         price: str = "29500",
@@ -18,7 +19,7 @@ def sample_offer(
     return OfferPageItem(
         url=url,
         category=AircraftCategory.glider,
-        title="Glider A",
+        title=title,
         published_at=published_at,
         page_content="does not matter",
         raw_price=raw_price,
