@@ -1,10 +1,10 @@
 azure-cosmos==4.9.0
 azure-identity==1.23.0
-coverage==7.9.1
+coverage==7.9.2
 Twisted==25.5.0
 pylint==3.3.7
 price-parser==0.4.0
-Scrapy==2.13.2
+Scrapy==2.13.3
 nltk==3.9.1
 Flask==3.1.1
 Flask-Cors==6.0.1
