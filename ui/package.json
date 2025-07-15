@@ -32,7 +32,7 @@
     "eslint-plugin-vue": "^10.3.0",
     "jsdom": "^26.1.0",
     "sass-embedded": "^1.89.2",
-    "vite": "^7.0.3",
+    "vite": "^7.0.4",
     "vitest": "^3.2.4"
   }
 }
