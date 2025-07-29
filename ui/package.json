@@ -19,7 +19,7 @@
     "env-cmd": "^10.0.1",
     "moment": "^2.29.1",
     "regression": "^2.0.1",
-    "vue": "^3.5.17",
+    "vue": "^3.5.18",
     "vue-chartist": "^3.0.0",
     "vue-multiselect": "^3.2.0",
     "vue-router": "^4.5.1"
