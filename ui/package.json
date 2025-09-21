@@ -31,7 +31,7 @@
     "eslint": "^9.33.0",
     "eslint-plugin-vue": "^10.4.0",
     "jsdom": "^26.1.0",
-    "sass-embedded": "^1.89.2",
+    "sass-embedded": "^1.92.1",
     "vite": "^7.1.2",
     "vitest": "^3.2.4"
   }
