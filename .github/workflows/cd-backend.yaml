@@ -27,7 +27,7 @@ jobs:
           echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: 'pip'
