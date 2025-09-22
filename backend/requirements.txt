@@ -1,6 +1,6 @@
 azure-cosmos==4.9.0
-azure-identity==1.24.0
-coverage==7.10.6
+azure-identity==1.25.0
+coverage==7.10.7
 Twisted==25.5.0
 pylint==3.3.8
 price-parser==0.4.0
