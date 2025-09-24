@@ -13,7 +13,7 @@
     "build:local": "env-cmd -f .env.local vite build"
   },
   "dependencies": {
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "chartist-plugin-tooltips-updated": "^0.1.4",
     "core-js": "^3.45.0",
     "env-cmd": "^11.0.0",
