@@ -12,11 +12,10 @@ class ModelClassifierTest(unittest.TestCase):
     @unpack
     @data(
         (["Hello", "world"], "Hello  world"),
-        (["Nimbus", "3", "255", "m"], "Nimbus 3 25.5 m")
+        (["Nimbus", "3", "255", "m"], "Nimbus 3 25.5 m"),
     )
     def test_tokenize(self, tokens, input_str):
         self.assertEqual(tokens, self.model_classifier.tokenize(input_str))
-
 
     def test_is_schleicher_model_re(self):
         self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW 19"))
@@ -36,13 +35,17 @@ class ModelClassifierTest(unittest.TestCase):
         (["EB28"], ["EB", "28"]),
         (["ASK 21", "D-1234"], ["ASK", "21", "D-1234"]),
         (["DG-100", "for", "sale"], ["DG-100", "for", "sale"]),
-        (["Nimbus", "3", "255m"], ["Nimbus", "3", "255", "m"])
+        (["Nimbus", "3", "255m"], ["Nimbus", "3", "255", "m"]),
     )
     def test_join_single_characters(self, output_list, input_list):
-        self.assertEqual(output_list, self.model_classifier.join_single_characters(input_list))
+        self.assertEqual(
+            output_list, self.model_classifier.join_single_characters(input_list)
+        )
 
     def test_preprocess_removes_punctuation(self):
-        self.assertEqual("Hello World", self.model_classifier.preprocess("Hello, World!"))
+        self.assertEqual(
+            "Hello World", self.model_classifier.preprocess("Hello, World!")
+        )
 
     @unpack
     @data(
@@ -55,14 +58,24 @@ class ModelClassifierTest(unittest.TestCase):
         ("TL Ultralight TL-3000 Sirius", "TL Ultralight", "TL-3000 Sirius"),
         ("Nimbus 3 25.5 m", "Schempp-Hirth", "Nimbus 3"),
         ("Nimbus 3 25,5m", "Schempp-Hirth", "Nimbus 3"),
-        ("Nimbus 4DM, W-Nr. 50, 1.600h, Motor grundüberholt, ARC neu", "Schempp-Hirth", "Nimbus 4DM"),
+        (
+            "Nimbus 4DM, W-Nr. 50, 1.600h, Motor grundüberholt, ARC neu",
+            "Schempp-Hirth",
+            "Nimbus 4DM",
+        ),
         ("Ventus 2B", "Schempp-Hirth", "Ventus 2b"),
-        ("JS1-C", "Jonker", "JS1 C")
+        ("JS1-C", "Jonker", "JS1 C"),
     )
-    def test_single_models_regression(self, input_str, expected_manufacturer, expected_model):
-        (manufacturer, model, _) = self.model_classifier.classify(input_str, expect_manufacturer=False)
+    def test_single_models_regression(
+        self, input_str, expected_manufacturer, expected_model
+    ):
+        (manufacturer, model, _) = self.model_classifier.classify(
+            input_str, expect_manufacturer=False
+        )
         self.assertEqual(expected_manufacturer, manufacturer)
         self.assertEqual(expected_model, model)
 
     def test_with_no_detail_text(self):
-        self.model_classifier.classify("DG-100", expect_manufacturer=False, detail_text=None)
+        self.model_classifier.classify(
+            "DG-100", expect_manufacturer=False, detail_text=None
+        )

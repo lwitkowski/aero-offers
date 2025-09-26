@@ -11,7 +11,6 @@ from util import sample_offer
 
 
 class DbTest(unittest.TestCase):
-
     def setUp(self):
         offers_db.truncate_all_tables()
 
@@ -44,11 +43,20 @@ class DbTest(unittest.TestCase):
     def test_should_filter_offers_by_manufacturer_and_model(self):
         # given
         stored_offer_id = offers_db.store_offer(sample_offer())
-        offers_db.classify_offer(offer_id=stored_offer_id, category='glider', manufacturer='Schempp-Hirth', model='Mini-Nimbus')
+        offers_db.classify_offer(
+            offer_id=stored_offer_id,
+            category="glider",
+            manufacturer="Schempp-Hirth",
+            model="Mini-Nimbus",
+        )
 
         # when
-        mini_nimbuses = offers_db.get_offers(manufacturer='Schempp-Hirth', model='Mini-Nimbus')
-        asg29s = offers_db.get_offers(manufacturer='Alexander Schleicher', model='ASG 29 E')
+        mini_nimbuses = offers_db.get_offers(
+            manufacturer="Schempp-Hirth", model="Mini-Nimbus"
+        )
+        asg29s = offers_db.get_offers(
+            manufacturer="Alexander Schleicher", model="ASG 29 E"
+        )
 
         # then
         self.assertEqual(1, len(mini_nimbuses))
@@ -57,14 +65,21 @@ class DbTest(unittest.TestCase):
     def test_should_not_reset_category_if_none(self):
         # given
         stored_offer_id = offers_db.store_offer(sample_offer())
-        offers_db.classify_offer(offer_id=stored_offer_id, category='glider', manufacturer='Schempp-Hirth', model='Mini-Nimbus')
+        offers_db.classify_offer(
+            offer_id=stored_offer_id,
+            category="glider",
+            manufacturer="Schempp-Hirth",
+            model="Mini-Nimbus",
+        )
 
         # when
-        offers_db.classify_offer(offer_id=stored_offer_id, category=None, manufacturer=None, model=None)
+        offers_db.classify_offer(
+            offer_id=stored_offer_id, category=None, manufacturer=None, model=None
+        )
 
         # then
         offer_from_db: Offer = offers_db.get_offers()[0]
-        self.assertEqual(offer_from_db.category, 'glider')
+        self.assertEqual(offer_from_db.category, "glider")
 
     def test_should_order_offers_by_published_date_desc(self):
         # given
@@ -94,5 +109,5 @@ class DbTest(unittest.TestCase):
         self.assertFalse(offers_db.offer_url_exists("https://offers.com/2"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

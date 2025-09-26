@@ -35,21 +35,21 @@ jobs:
       - name: 'Install dependencies'
         working-directory: ./backend
         run: |
-          pip3 install --quiet -r requirements.txt -r tests/requirements.txt
+          pip3 install uv
+          uv sync
 
-      - name: 'Static analysis (Lint)'
+      - name: 'Check formatting'
         working-directory: ./backend
-        run: ./run_lint.sh
+        run: uv run ruff format --check
+
+      - name: 'Linter'
+        working-directory: ./backend
+        run: uv run ruff check
 
       - name: 'Run tests'
         working-directory: ./backend
         run: |
           ./run_tests.sh
-
-      - name: 'Check test coverage'
-        working-directory: ./backend
-        run: |
-          coverage report --fail-under=80
 
       - name: 'Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action@v2

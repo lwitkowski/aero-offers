@@ -1,6 +1,8 @@
 import os
 
-os.environ['AZURE_COSMOS_EMULATOR_IMAGE'] = 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122'
+os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
+    "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122"
+)
 
 from typing_extensions import Self
 from testcontainers.core.waiting_utils import wait_for_logs
@@ -9,8 +11,8 @@ from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
 from settings import COSMOSDB_DB_NAME
 from azure.cosmos import CosmosClient
 
-class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
+class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
     def __init__(self, **kwargs):
         super().__init__(bind_ports=True, **kwargs)
 
@@ -36,7 +38,9 @@ def pytest_sessionstart(session):
     os.environ["COSMOSDB_URL"] = cosmos_db_url
     os.environ["COSMOSDB_CREDENTIAL"] = emulator.key
 
-    client = CosmosClient(url=cosmos_db_url, credential=emulator.key, connection_verify=False)
+    client = CosmosClient(
+        url=cosmos_db_url, credential=emulator.key, connection_verify=False
+    )
     client.create_database_if_not_exists(COSMOSDB_DB_NAME)
 
     print("Test database initialized")
