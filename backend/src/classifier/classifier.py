@@ -1,22 +1,27 @@
 import json
-import string
+import os
 import re
-from nltk.util import ngrams
-from nltk.corpus import stopwords
-from my_logging import *
-from nltk.metrics import distance
+import string
 
 import nltk
-nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.metrics import distance
+from nltk.util import ngrams
 
-logger = logging.getLogger('classifier')
+from my_logging import logging
+
+nltk.download("stopwords")
+
+logger = logging.getLogger("classifier")
 
 aircraft_types = ["glider", "tmg", "ultralight", "airplane", "helicopter"]
 
 
 def get_all_models():
     models_file = "models.json"
-    with open(os.path.dirname(os.path.realpath(__file__)) + os.sep + models_file) as json_file:
+    with open(
+        os.path.dirname(os.path.realpath(__file__)) + os.sep + models_file
+    ) as json_file:
         manufacturers = json.load(json_file)
     return manufacturers
 
@@ -24,9 +29,9 @@ def get_all_models():
 class ModelClassifier:
     manufacturers = {}
 
-    is_dg_model_re = re.compile(r'^DG[0-9]{3,4}$')
-    is_binder_model_re = re.compile(r'^(EB28|EB29)$')
-    is_schleicher_model_re = re.compile(r'AS[H|W|K|G]\s?[0-9]{2}(\sMi)?$')
+    is_dg_model_re = re.compile(r"^DG[0-9]{3,4}$")
+    is_binder_model_re = re.compile(r"^(EB28|EB29)$")
+    is_schleicher_model_re = re.compile(r"AS[H|W|K|G]\s?[0-9]{2}(\sMi)?$")
 
     def __init__(self):
         self.manufacturers = get_all_models()
@@ -35,7 +40,7 @@ class ModelClassifier:
         # char - is used in model names (DG-100, ...)
         punctuation_regex = string.punctuation.replace("-", "").replace("/", "")
         logger.debug("removing punctuation using regex {0}".format(punctuation_regex))
-        translator = str.maketrans('', '', punctuation_regex)
+        translator = str.maketrans("", "", punctuation_regex)
         return input_text.translate(translator)
 
     def tokenize(self, text):
@@ -43,27 +48,31 @@ class ModelClassifier:
         tokens = text.split(" ")
         return [token for token in tokens if token.strip() != ""]
 
-    def join_single_characters(self, l):
-        if len(l) < 2:
-            return l
+    def join_single_characters(self, input):
+        if len(input) < 2:
+            return input
         joined_list = [""]
         i = 0
-        while len(l) > 0:
-            el = l.pop(0)
+        while len(input) > 0:
+            el = input.pop(0)
             current = joined_list[i]
             # push to left element if we are
             # a) at the end or
             # b) left is shorter than 2 chars or
             # c) the predecessor is a model name (dg 800 s, ash 25)
-            if self.is_dg_model_re.match(current) or \
-                    self.is_binder_model_re.match(current + el):
-                joined_list[i] = current + el
-            elif (not current.isnumeric() and not el.isnumeric()) \
-                    and len(current) < 2 or (len(l) == 0 and len(el) < 2):
+            if (
+                self.is_dg_model_re.match(current)
+                or self.is_binder_model_re.match(current + el)
+                or (
+                    (not current.isnumeric() and not el.isnumeric())
+                    and len(current) < 2
+                    or (len(input) == 0 and len(el) < 2)
+                )
+            ):
                 joined_list[i] = current + el
             elif self.is_schleicher_model_re.match(current + el):
-                if len(l) > 0 and l[0] == "Mi":
-                    joined_list[i] = current + " " + el + " " + l.pop(0)
+                if len(input) > 0 and input[0] == "Mi":
+                    joined_list[i] = current + " " + el + " " + input.pop(0)
                 else:
                     joined_list[i] = current + " " + el
             else:
@@ -73,16 +82,18 @@ class ModelClassifier:
 
     def _starts_with_manufacturer(self, input_text):
         # TODO refactor this
-        for manufacturer in self.manufacturers.keys():
+        for manufacturer in self.manufacturers:
             if input_text.lower().startswith(manufacturer.lower()):
                 return manufacturer
         return None
 
     def _build_tokens(self, input_text):
         tokens = self.join_single_characters(self.tokenize(input_text))
-        logger.debug("after joining single characters tokens are: {0}".format(str(tokens)))
-        stop_words_en = stopwords.words('english')
-        stop_words_de = stopwords.words('german')
+        logger.debug(
+            "after joining single characters tokens are: {0}".format(str(tokens))
+        )
+        stop_words_en = stopwords.words("english")
+        stop_words_de = stopwords.words("german")
 
         tokens = [word for word in tokens if word not in stop_words_de]
         return [word for word in tokens if word not in stop_words_en]
@@ -97,7 +108,9 @@ class ModelClassifier:
             grams = grams + trigrams
         return grams
 
-    def _classify_against_models(self, grams, models, cutoff_score, expect_manufacturer=False, manufacturer=None):
+    def _classify_against_models(
+        self, grams, models, cutoff_score, expect_manufacturer=False, manufacturer=None
+    ):
         best_score = 0.0
         best_score_length = 0
         best_solution = None, None, None
@@ -108,22 +121,36 @@ class ModelClassifier:
             for model in models[aircraft_type]:
                 for gram in grams:
                     joined_gram = " ".join(gram)
-                    if expect_manufacturer:
-                        test_str = manufacturer + model
-                    else:
-                        test_str = model
+                    test_str = manufacturer + model if expect_manufacturer else model
 
                     if len(test_str) < 4 or len(joined_gram) < 4:
                         this_cutoff_score = 0.9
                     else:
                         this_cutoff_score = cutoff_score
 
-                    ratio = distance.jaro_similarity(joined_gram.lower(), test_str.lower())
-                    logger.debug("Score: %s for gram: %s against %s %s", ratio, joined_gram, manufacturer, model)
+                    ratio = distance.jaro_similarity(
+                        joined_gram.lower(), test_str.lower()
+                    )
+                    logger.debug(
+                        "Score: %s for gram: %s against %s %s",
+                        ratio,
+                        joined_gram,
+                        manufacturer,
+                        model,
+                    )
                     # if the existing solution is a n-gram with n smaller than this n and same score
                     # this one will be the winner (longer match => more precise)
-                    if ratio > this_cutoff_score and ratio >= best_score and len(joined_gram) >= best_score_length:
-                        logger.debug("Found new best score %s with: %s %s", ratio, manufacturer, model)
+                    if (
+                        ratio > this_cutoff_score
+                        and ratio >= best_score
+                        and len(joined_gram) >= best_score_length
+                    ):
+                        logger.debug(
+                            "Found new best score %s with: %s %s",
+                            ratio,
+                            manufacturer,
+                            model,
+                        )
                         best_solution = (manufacturer, model, aircraft_type)
                         best_score = ratio
                         best_score_length = len(joined_gram)
@@ -152,19 +179,23 @@ class ModelClassifier:
         if manufacturer is not None:
             logger.info("Found Manufacturer: {0}".format(manufacturer))
             # reduce cutoff as we already have the manufacturer, classify rest against models of this manufacturer
-            tokens = self._build_tokens(input_text[len(manufacturer):])
+            tokens = self._build_tokens(input_text[len(manufacturer) :])
             grams = self._build_grams(tokens)
 
             cutoff_score = 0.75
             models = self.manufacturers[manufacturer]["models"]
 
-            (manufacturer, model, aircraft_type) = self._classify_against_models(grams, models, cutoff_score,
-                                                                                 expect_manufacturer=False,
-                                                                                 manufacturer=manufacturer)
+            (manufacturer, model, aircraft_type) = self._classify_against_models(
+                grams,
+                models,
+                cutoff_score,
+                expect_manufacturer=False,
+                manufacturer=manufacturer,
+            )
             return manufacturer, model, aircraft_type
 
         search_aircraft_types = aircraft_types
-        if not expect_manufacturer:
+        if not expect_manufacturer:  # noqa SIM102
             # try to reduce the possibilities here
             if detail_text is not None and " glider " in detail_text.lower():
                 logger.debug("Reducing search to only glider/tmg models")
@@ -172,10 +203,18 @@ class ModelClassifier:
 
         for manufacturer, details in self.manufacturers.items():
             models = details["models"]
-            models = {key: value for (key, value) in models.items() if key in search_aircraft_types}
-            (manufacturer, model, aircraft_type) = self._classify_against_models(grams, models, cutoff_score,
-                                                                                 expect_manufacturer=expect_manufacturer,
-                                                                                 manufacturer=manufacturer)
+            models = {
+                key: value
+                for (key, value) in models.items()
+                if key in search_aircraft_types
+            }
+            (manufacturer, model, aircraft_type) = self._classify_against_models(
+                grams,
+                models,
+                cutoff_score,
+                expect_manufacturer=expect_manufacturer,
+                manufacturer=manufacturer,
+            )
             if manufacturer is not None:
                 return manufacturer, model, aircraft_type
         return manufacturer, model, aircraft_type
@@ -187,11 +226,14 @@ class AircraftTypeClassifier:
         "ultralight": ["Comco Ikarus", "Pipistrel"],
         "airplane": ["Cessna", "Beechcraft", "Piper", "Mooney", "Pitts"],
         "helicopter": ["Eurocopter", "Airbus Helicopters"],
-        "tmg": ["Stemme"]
+        "tmg": ["Stemme"],
     }
 
     def classify(self, title, spider):
-        for aircraft_type, manufacturers in self.manufacturers_with_only_one_type.items():
+        for (
+            aircraft_type,
+            manufacturers,
+        ) in self.manufacturers_with_only_one_type.items():
             for manufacturer in manufacturers:
                 if manufacturer in title:
                     return aircraft_type

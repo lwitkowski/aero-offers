@@ -1,4 +1,3 @@
 set -e
 
-coverage run -m pytest --junit-xml=./test-results.xml
-coverage html
+uv run pytest --cov --cov-fail-under=80 --junit-xml=./test-results.xml

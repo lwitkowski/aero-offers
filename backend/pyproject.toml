@@ -1,28 +1,40 @@
 [project]
 name = "aero-offers"
-version = "2.0"
-requires-python = ">=3.13"
+version = "3.0"
+requires-python = ">=3.12"
+dependencies = [
+    "azure-cosmos==4.9.0",
+    "azure-identity==1.25.0",
+    "coverage==7.10.7",
+    "defusedxml==0.7.1",
+    "flask==3.1.2",
+    "flask-cors==6.0.1",
+    "flask-headers==1.0",
+    "gunicorn==23.0.0",
+    "jinja2==3.1.6",
+    "nltk==3.9.1",
+    "price-parser==0.4.0",
+    "requests==2.32.5",
+    "scrapy==2.13.3",
+    "twisted==25.5.0",
+]
 
-[project.urls]
-Homepage = "https://aero-offers.pl"
-Issues = "https://github.com/lwitkowski/aero-offers/issues"
+[dependency-groups]
+dev = [
+    "ruff==0.13.2",
+    "ddt==1.7.2",
+    "pytest==8.4.2",
+    "pytest-cov==7.0.0",
+    "pylint==3.3.8",
+    "testcontainers[cosmosdb]==4.13.0",
+]
 
 [tool.pytest.ini_options]
-pythonpath = [
-    "src",
-    "tests"
-]
-addopts = [
-    "--import-mode=importlib",
-]
+pythonpath = ["src", "tests"]
+addopts = ["--import-mode=importlib", ]
 
 [tool.coverage.run]
-omit = [
-    "tests/*",
-    "**/__init__.py",
-]
+omit = ["tests/*", "**/__init__.py", ]
 
-[tool.pylint]
-ignore-paths = [
-    "tools/*",
-]
+[tool.ruff.lint]
+extend-select = ["I", "SIM"]

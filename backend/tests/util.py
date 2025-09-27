@@ -2,19 +2,20 @@ import os
 from datetime import date
 
 from scrapy.http import HtmlResponse, Request
-from offer import OfferPageItem, AircraftCategory
+
+from offer import AircraftCategory, OfferPageItem
 
 
 def sample_offer(
-        url: str = 'https://offers.com/1',
-        title: str = "Glider A",
-        published_at: date = date(2024, 7, 27),
-        raw_price: str = None,
-        price: str = "29500",
-        currency: str = "EUR",
-        location: str = None,
-        hours: int = None,
-        starts: int = None
+    url: str = "https://offers.com/1",
+    title: str = "Glider A",
+    published_at: date = date(2024, 7, 27),
+    raw_price: str = None,
+    price: str = "29500",
+    currency: str = "EUR",
+    location: str = None,
+    hours: int = None,
+    starts: int = None,
 ):
     return OfferPageItem(
         url=url,
@@ -27,24 +28,25 @@ def sample_offer(
         currency=currency,
         location=location,
         hours=hours,
-        starts=starts
+        starts=starts,
     )
 
 
-def read_file(name: str, encoding='utf8'):
-    if not name[0] == '/':
+def read_file(name: str, encoding: str = "utf8"):
+    if name[0] != "/":
         responses_dir = os.path.dirname(os.path.realpath(__file__))
         file_path = os.path.join(responses_dir, name)
     else:
         file_path = os.path.join(os.path.dirname(__file__), name)
 
-    file_handle = open(file_path, 'r', encoding=encoding)
-    file_content = file_handle.read()
-    file_handle.close()
-    return file_content
+    with open(file_path, "r", encoding=encoding) as file_handle:
+        file_content = file_handle.read()
+        return file_content
 
 
-def fake_response_from_file(file_name, url=None, encoding='utf8'):
+def fake_response_from_file(
+    file_name: str, url: str = "http://www.example.com", encoding: str = "utf8"
+):
     """
     Create a Scrapy fake HTTP response from a HTML file
     @param file_name: The relative filename from the responses directory,
@@ -54,15 +56,12 @@ def fake_response_from_file(file_name, url=None, encoding='utf8'):
     :param encoding:
     :param encoding:
     """
-    if not url:
-        url = 'http://www.example.com'
 
     request = Request(url=url, encoding=encoding)
     file_content = read_file(name=file_name, encoding=encoding)
 
-    response = HtmlResponse(url=url,
-                            request=request,
-                            encoding=encoding,
-                            body=file_content)
+    response = HtmlResponse(
+        url=url, request=request, encoding=encoding, body=file_content
+    )
     response.meta["aircraft_category"] = AircraftCategory.glider
     return response

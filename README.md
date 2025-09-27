@@ -35,6 +35,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 
 ### Prerequisites for local development with hot reloads
 - python 3.13+
+- uv (`pip install uv`)
 - docker (compose)
 - nodejs
 
@@ -46,7 +47,12 @@ docker-compose up cosmosdb
 Init python environment
 ```bash
 cd backend
-./init_dev_env.sh
+uv sync
+```
+
+Set up auto-formatting and lint fix before commit (recommended:
+```bash
+git config core.hooksPath hooks
 ```
 
 Start backend api (python app):

@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request, abort
-from flask_headers import headers
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from classifier import classifier
+from flask_headers import headers
+
 import offers_db
+from classifier import classifier
 from offer import AircraftCategory
 
 app = Flask(__name__)
@@ -10,20 +11,26 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route("/api/models")
-@headers({'Cache-Control': 'public, max-age=360'})
+@headers({"Cache-Control": "public, max-age=360"})
 def aircraft_models():
     return jsonify(classifier.get_all_models())
 
-@app.route('/api/offers')
+
+@app.route("/api/offers")
 def offers():
-    raw_category = request.args.get('category')
+    raw_category = request.args.get("category")
     try:
         category = AircraftCategory[raw_category] if raw_category is not None else None
     except Exception:
         category = AircraftCategory.unknown
-    return jsonify(offers_db.get_offers(category=category,
-                                      offset=int(request.args.get('offset') or '0'),
-                                      limit=int(request.args.get('limit') or '30')))
+    return jsonify(
+        offers_db.get_offers(
+            category=category,
+            offset=int(request.args.get("offset") or "0"),
+            limit=int(request.args.get("limit") or "30"),
+        )
+    )
+
 
 @app.route("/api/offers/<manufacturer>/<model>")
 def model_information(manufacturer, model):
@@ -34,11 +41,17 @@ def model_information(manufacturer, model):
     if manufacturer not in manufacturers:
         abort(404)
 
-    return jsonify(dict(
-        manufacturer_website=manufacturers[manufacturer].get('manufacturer_website', None),
-        offers=offers_db.get_offers(manufacturer=manufacturer, model=model, limit=300)
-    ))
+    return jsonify(
+        dict(
+            manufacturer_website=manufacturers[manufacturer].get(
+                "manufacturer_website", None
+            ),
+            offers=offers_db.get_offers(
+                manufacturer=manufacturer, model=model, limit=300
+            ),
+        )
+    )
 
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8082, debug=False)
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8082, debug=False)

@@ -1,12 +1,11 @@
 import unittest
-from price_parser import Price
+
+from util import read_file
 
 import fx
-from util import read_file
 
 
 class ExchangeRatesTest(unittest.TestCase):
-
     def test_get_currency_code(self):
         self.assertEqual("EUR", fx.get_currency_code("€"))
         self.assertEqual("GBP", fx.get_currency_code("£"))
