@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Formatting and fixing linter issues for backend"
+cd backend
+uvx ruff format
+uvx ruff check --fix
+git add src tests

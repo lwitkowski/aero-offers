@@ -1,9 +1,9 @@
-from scrapy.exceptions import DropItem
 from price_parser import Price
+from scrapy.exceptions import DropItem
 
 import offers_db
-from my_logging import logging
 from fx import to_price_in_euro
+from my_logging import logging
 from offer import OfferPageItem
 
 

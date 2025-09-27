@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request, abort
-from flask_headers import headers
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from classifier import classifier
+from flask_headers import headers
+
 import offers_db
+from classifier import classifier
 from offer import AircraftCategory
 
 app = Flask(__name__)

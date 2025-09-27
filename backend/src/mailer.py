@@ -2,7 +2,7 @@ import email.header
 import email.mime.text
 import smtplib
 
-from settings import SEND_RESULT_MAIL, SMTP_USER, SMTP_PASSWORD, SMTP_HOST
+from settings import SEND_RESULT_MAIL, SMTP_HOST, SMTP_PASSWORD, SMTP_USER
 
 
 def send_mail(text=""):

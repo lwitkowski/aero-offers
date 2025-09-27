@@ -1,10 +1,12 @@
+import datetime
+import re
+
 import scrapy
 from scrapy.http import Response
 from scrapy.spidermiddlewares.httperror import HttpError
-import datetime
-import re
+
 from my_logging import logging
-from offer import OfferPageItem, AircraftCategory
+from offer import AircraftCategory, OfferPageItem
 
 GLIDER_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=118"
 ENGINE_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=119"

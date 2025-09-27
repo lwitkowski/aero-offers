@@ -1,5 +1,5 @@
-from classifier import classifier
 import offers_db
+from classifier import classifier
 from my_logging import logging
 from spiders.SoaringDeSpider import SoaringDeSpider
 
@@ -9,7 +9,7 @@ model_classifier = classifier.ModelClassifier()
 
 
 def reclassify(db_offer):
-    expect_manufacturer = not db_offer["spider"] == SoaringDeSpider.name
+    expect_manufacturer = db_offer["spider"] != SoaringDeSpider.name
     (manufacturer, model, category) = model_classifier.classify(
         db_offer["title"], expect_manufacturer, db_offer["page_content"]
     )

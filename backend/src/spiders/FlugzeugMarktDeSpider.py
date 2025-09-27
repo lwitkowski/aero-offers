@@ -1,8 +1,10 @@
-import scrapy
 import datetime
 import re
+
+import scrapy
+
 from my_logging import logging
-from offer import OfferPageItem, AircraftCategory
+from offer import AircraftCategory, OfferPageItem
 
 BASE_URL = "https://www.flugzeugmarkt.de/"
 AIRCRAFT_OFFERS_URL = "https://www.flugzeugmarkt.de/flugzeug-kaufen"

@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from azure.cosmos import CosmosClient
-from settings import COSMOSDB_URL, COSMOSDB_CREDENTIAL, COSMOSDB_DB_NAME
+
 from my_logging import logging
+from settings import COSMOSDB_CREDENTIAL, COSMOSDB_DB_NAME, COSMOSDB_URL
 
 logger = logging.getLogger("db")
 logger.info(

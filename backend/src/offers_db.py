@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 import uuid
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
-from azure.cosmos import PartitionKey, ThroughputProperties, IndexingMode
+from azure.cosmos import IndexingMode, PartitionKey, ThroughputProperties
 
 from db import database
 from my_logging import logging
-from offer import OfferPageItem, AircraftCategory, Offer, OfferPrice
+from offer import AircraftCategory, Offer, OfferPageItem, OfferPrice
 
 logger = logging.getLogger("offers_db")
 

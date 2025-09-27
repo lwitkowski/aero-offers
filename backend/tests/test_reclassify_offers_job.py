@@ -1,11 +1,12 @@
 # -*- coding: UTF-8 -*-
 
 import unittest
+
 import pytest
+from util import sample_offer
 
 import offers_db
 from job_reclassify_offers import reclassify_all
-from util import sample_offer
 
 
 class ReclassifyOffersJobTest(unittest.TestCase):

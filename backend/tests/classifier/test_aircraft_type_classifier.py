@@ -1,8 +1,9 @@
-import unittest
 import json
+import unittest
+
+from util import read_file
 
 from classifier.classifier import AircraftTypeClassifier
-from util import read_file
 
 
 class AircraftTypeClassifierTest(unittest.TestCase):

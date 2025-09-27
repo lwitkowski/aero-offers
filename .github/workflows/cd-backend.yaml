@@ -35,16 +35,16 @@ jobs:
       - name: 'Install dependencies'
         working-directory: ./backend
         run: |
-          pip3 install uv
+          pip install uv
           uv sync
 
       - name: 'Check formatting'
         working-directory: ./backend
-        run: uv run ruff format --check
+        run: uvx ruff format --check
 
       - name: 'Linter'
         working-directory: ./backend
-        run: uv run ruff check
+        run: uvx ruff check
 
       - name: 'Run tests'
         working-directory: ./backend

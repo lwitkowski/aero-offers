@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import pytest
-
-from api.flask_app import app
-import offers_db
 from util import sample_offer
+
+import offers_db
+from api.flask_app import app
 
 
 @pytest.fixture

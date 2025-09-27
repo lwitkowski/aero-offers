@@ -14,6 +14,7 @@ dependencies = [
     { name = "flask" },
     { name = "flask-cors" },
     { name = "flask-headers" },
+    { name = "gunicorn" },
     { name = "jinja2" },
     { name = "nltk" },
     { name = "price-parser" },
@@ -41,6 +42,7 @@ requires-dist = [
     { name = "flask", specifier = "==3.1.2" },
     { name = "flask-cors", specifier = "==6.0.1" },
     { name = "flask-headers", specifier = "==1.0" },
+    { name = "gunicorn", specifier = "==23.0.0" },
     { name = "jinja2", specifier = "==3.1.6" },
     { name = "nltk", specifier = "==3.9.1" },
     { name = "price-parser", specifier = "==0.4.0" },
@@ -55,7 +57,7 @@ dev = [
     { name = "pylint", specifier = "==3.3.8" },
     { name = "pytest", specifier = "==8.4.2" },
     { name = "pytest-cov", specifier = "==7.0.0" },
-    { name = "ruff", specifier = ">=0.13.2" },
+    { name = "ruff", specifier = "==0.13.2" },
     { name = "testcontainers", extras = ["cosmosdb"], specifier = "==4.13.0" },
 ]
 
@@ -503,6 +505,18 @@ dependencies = [
     { name = "flask" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/88/ca/f1198a3b2d3803e2fceb6ae899932a75ef79082911dbeafaba15aee35b2e/Flask-Headers-1.0.tar.gz", hash = "sha256:195d2acf0caf595ade2c38fe613d4d8c30521074888f83c9580dfff6bbef8fc9", size = 1390, upload-time = "2013-08-16T13:12:44.754Z" }
+
+[[package]]
+name = "gunicorn"
+version = "23.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031, upload-time = "2024-08-10T20:25:27.378Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029, upload-time = "2024-08-10T20:25:24.996Z" },
+]
 
 [[package]]
 name = "hyperlink"

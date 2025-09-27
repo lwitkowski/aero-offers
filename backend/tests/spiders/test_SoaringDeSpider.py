@@ -1,9 +1,10 @@
 import unittest
-
-from offer import OfferPageItem, AircraftCategory
-from spiders import SoaringDeSpider
 from datetime import date
+
 from util import fake_response_from_file
+
+from offer import AircraftCategory, OfferPageItem
+from spiders import SoaringDeSpider
 
 
 class SoaringDeSpiderTest(unittest.TestCase):

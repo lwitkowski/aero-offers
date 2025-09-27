@@ -1,7 +1,8 @@
 import unittest
 
+from ddt import data, ddt, unpack
+
 from classifier import classifier
-from ddt import ddt, unpack, data
 
 
 @ddt

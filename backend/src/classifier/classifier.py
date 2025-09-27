@@ -1,13 +1,14 @@
 import json
 import os
-import string
 import re
-from nltk.util import ngrams
-from nltk.corpus import stopwords
-from my_logging import logging
-from nltk.metrics import distance
+import string
 
 import nltk
+from nltk.corpus import stopwords
+from nltk.metrics import distance
+from nltk.util import ngrams
+
+from my_logging import logging
 
 nltk.download("stopwords")
 
@@ -59,14 +60,14 @@ class ModelClassifier:
             # a) at the end or
             # b) left is shorter than 2 chars or
             # c) the predecessor is a model name (dg 800 s, ash 25)
-            if self.is_dg_model_re.match(current) or self.is_binder_model_re.match(
-                current + el
-            ):
-                joined_list[i] = current + el
-            elif (
-                (not current.isnumeric() and not el.isnumeric())
-                and len(current) < 2
-                or (len(input) == 0 and len(el) < 2)
+            if (
+                self.is_dg_model_re.match(current)
+                or self.is_binder_model_re.match(current + el)
+                or (
+                    (not current.isnumeric() and not el.isnumeric())
+                    and len(current) < 2
+                    or (len(input) == 0 and len(el) < 2)
+                )
             ):
                 joined_list[i] = current + el
             elif self.is_schleicher_model_re.match(current + el):
@@ -81,7 +82,7 @@ class ModelClassifier:
 
     def _starts_with_manufacturer(self, input_text):
         # TODO refactor this
-        for manufacturer in self.manufacturers.keys():
+        for manufacturer in self.manufacturers:
             if input_text.lower().startswith(manufacturer.lower()):
                 return manufacturer
         return None
@@ -120,10 +121,7 @@ class ModelClassifier:
             for model in models[aircraft_type]:
                 for gram in grams:
                     joined_gram = " ".join(gram)
-                    if expect_manufacturer:
-                        test_str = manufacturer + model
-                    else:
-                        test_str = model
+                    test_str = manufacturer + model if expect_manufacturer else model
 
                     if len(test_str) < 4 or len(joined_gram) < 4:
                         this_cutoff_score = 0.9
@@ -197,7 +195,7 @@ class ModelClassifier:
             return manufacturer, model, aircraft_type
 
         search_aircraft_types = aircraft_types
-        if not expect_manufacturer:
+        if not expect_manufacturer:  # noqa SIM102
             # try to reduce the possibilities here
             if detail_text is not None and " glider " in detail_text.lower():
                 logger.debug("Reducing search to only glider/tmg models")

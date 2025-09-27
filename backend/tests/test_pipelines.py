@@ -2,13 +2,13 @@
 
 import unittest
 
+from ddt import data, ddt
 from scrapy.exceptions import DropItem
-from ddt import ddt, data
-
-import pipelines
-import offers_db
-from offer import OfferPageItem, AircraftCategory
 from util import sample_offer
+
+import offers_db
+import pipelines
+from offer import AircraftCategory, OfferPageItem
 
 
 class DuplicateDetectionTest(unittest.TestCase):

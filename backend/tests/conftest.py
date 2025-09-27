@@ -4,12 +4,12 @@ os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
     "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122"
 )
 
-from typing_extensions import Self
-from testcontainers.core.waiting_utils import wait_for_logs
-
-from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
-from settings import COSMOSDB_DB_NAME
 from azure.cosmos import CosmosClient
+from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
+from typing_extensions import Self
+
+from settings import COSMOSDB_DB_NAME
 
 
 class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):

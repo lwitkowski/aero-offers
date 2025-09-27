@@ -3,11 +3,10 @@
 import unittest
 from datetime import date
 
-import offers_db
-from offer import AircraftCategory
-
-from offer import Offer
 from util import sample_offer
+
+import offers_db
+from offer import AircraftCategory, Offer
 
 
 class DbTest(unittest.TestCase):

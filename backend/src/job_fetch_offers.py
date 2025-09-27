@@ -1,12 +1,13 @@
 import os
-from datetime import datetime
-from scrapy.utils.project import get_project_settings
-from scrapy.crawler import CrawlerProcess
-
 import pprint
-from my_logging import logging
-from spiders import SoaringDeSpider, FlugzeugMarktDeSpider
+from datetime import datetime
+
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+
 from mailer import send_mail
+from my_logging import logging
+from spiders import FlugzeugMarktDeSpider, SoaringDeSpider
 
 logger = logging.getLogger("offers_crawler")
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
             SoaringDeSpider.SoaringDeSpider: None,
             FlugzeugMarktDeSpider.FlugzeugMarktDeSpider: None,
         }
-        for spider_cls in spiders.keys():
+        for spider_cls in spiders:
             crawler = process.create_crawler(spider_cls)
             spiders[spider_cls] = crawler
             process.crawl(crawler)

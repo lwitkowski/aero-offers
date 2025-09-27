@@ -1,8 +1,9 @@
-import unittest
 import datetime
+import unittest
 
-from offer import OfferPageItem, AircraftCategory
 from util import fake_response_from_file
+
+from offer import AircraftCategory, OfferPageItem
 from spiders import FlugzeugMarktDeSpider
 
 

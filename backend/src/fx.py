@@ -3,10 +3,12 @@
 # This module is used only when offers are updated, so fx rates are no longer stored in database - they are loaded from
 # ECB when needed
 
-import requests
 import time
+
+import requests
 from defusedxml import ElementTree
 from price_parser import Price
+
 from my_logging import logging
 
 logger = logging.getLogger("fx")

@@ -1,7 +1,8 @@
 import unittest
 
-import fx
 from util import read_file
+
+import fx
 
 
 class ExchangeRatesTest(unittest.TestCase):
