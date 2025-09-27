@@ -50,7 +50,7 @@ az containerapp create \
     --registry-password "secretref:registry-password" \
     --image $CONTAINER_REGISTRY/aerooffers-api:$DOCKER_IMAGE_TAG \
     --env-vars "COSMOSDB_URL=$COSMOSDB_URL" "COSMOSDB_DB_NAME=$COSMOSDB_DB_NAME" "COSMOSDB_CREDENTIAL=secretref:db-credential" \
-    --target-port 80 \
+    --target-port 8080 \
     --ingress external \
     --query properties.configuration.ingress.fqdn \
     --cpu 0.25 --memory 0.5Gi \
