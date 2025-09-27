@@ -63,6 +63,6 @@ COPY --chown=python:python --from=app-build /home/python/.local /home/python/.lo
 COPY --from=app-build /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
 COPY --chown=python:python . .
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "api.flask_app:app"]
+CMD ["gunicorn", "-c", "python:config.gunicorn", "api.flask_app:app"]
