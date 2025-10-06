@@ -45,7 +45,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "==23.0.0" },
     { name = "jinja2", specifier = "==3.1.6" },
     { name = "nltk", specifier = "==3.9.1" },
-    { name = "price-parser", specifier = "==0.4.0" },
+    { name = "price-parser", specifier = "==0.5.0" },
     { name = "requests", specifier = "==2.32.5" },
     { name = "scrapy", specifier = "==2.13.3" },
     { name = "twisted", specifier = "==25.5.0" },
@@ -844,14 +844,14 @@ wheels = [
 
 [[package]]
 name = "price-parser"
-version = "0.4.0"
+version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/77/2a/4dd6dd16cfbbcb8ebafeccf247dd4151b20ef5ab10fd607bdf70199d933d/price_parser-0.4.0.tar.gz", hash = "sha256:c11a88b64cc0a42b3f8f384adb4cadd1106df214c3a47c3fa314899cf3a609f7", size = 36055, upload-time = "2025-02-13T22:29:47.375Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/71/ad/1dbbe2f5baf98f272f2b557124d95e4c68481ba4e1593b90cb39c5836542/price_parser-0.5.0.tar.gz", hash = "sha256:5053af8726de8d412d066f69f721ed5e3e0d61a29f27f6fc3a348d60917ece30", size = 34312, upload-time = "2025-10-06T09:52:40.664Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1c/c1/5f763d923dd0615783f3f06b51eee68c2fb70f0ca76f650605cc7443a357/price_parser-0.4.0-py3-none-any.whl", hash = "sha256:940b5844dc96ce6aeccb29d0607bee30759f1a04e45d7886dd3c93f32b7cac70", size = 15551, upload-time = "2025-02-13T22:29:45.567Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/73/09ebcc1650df02390a45ee252af3fbcdd7cb1fd14bd41941b42c273b046a/price_parser-0.5.0-py3-none-any.whl", hash = "sha256:7851375f92e1237ed909110d5a7394e880acb4971b1459dd773ce903ba83b6f0", size = 14771, upload-time = "2025-10-06T09:52:39.642Z" },
 ]
 
 [[package]]
