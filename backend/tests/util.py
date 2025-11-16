@@ -3,20 +3,20 @@ from datetime import date
 
 from scrapy.http import HtmlResponse, Request
 
-from offer import AircraftCategory, OfferPageItem
+from aerooffers.offer import AircraftCategory, OfferPageItem
 
 
 def sample_offer(
     url: str = "https://offers.com/1",
     title: str = "Glider A",
     published_at: date = date(2024, 7, 27),
-    raw_price: str = None,
+    raw_price: str | None = None,
     price: str = "29500",
     currency: str = "EUR",
-    location: str = None,
-    hours: int = None,
-    starts: int = None,
-):
+    location: str | None = None,
+    hours: int | None = None,
+    starts: int | None = None,
+) -> OfferPageItem:
     return OfferPageItem(
         url=url,
         category=AircraftCategory.glider,
@@ -32,7 +32,7 @@ def sample_offer(
     )
 
 
-def read_file(name: str, encoding: str = "utf8"):
+def read_file(name: str, encoding: str = "utf8") -> str:
     if name[0] != "/":
         responses_dir = os.path.dirname(os.path.realpath(__file__))
         file_path = os.path.join(responses_dir, name)
@@ -46,7 +46,7 @@ def read_file(name: str, encoding: str = "utf8"):
 
 def fake_response_from_file(
     file_name: str, url: str = "http://www.example.com", encoding: str = "utf8"
-):
+) -> HtmlResponse:
     """
     Create a Scrapy fake HTTP response from a HTML file
     @param file_name: The relative filename from the responses directory,

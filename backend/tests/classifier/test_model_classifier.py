@@ -2,12 +2,12 @@ import unittest
 
 from ddt import data, ddt, unpack
 
-from classifier import classifier
+from aerooffers.classifier import classifier
 
 
 @ddt
 class ModelClassifierTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.model_classifier = classifier.ModelClassifier()
 
     @unpack
@@ -15,10 +15,10 @@ class ModelClassifierTest(unittest.TestCase):
         (["Hello", "world"], "Hello  world"),
         (["Nimbus", "3", "255", "m"], "Nimbus 3 25.5 m"),
     )
-    def test_tokenize(self, tokens, input_str):
+    def test_tokenize(self, tokens: list[str], input_str: str) -> None:
         self.assertEqual(tokens, self.model_classifier.tokenize(input_str))
 
-    def test_is_schleicher_model_re(self):
+    def test_is_schleicher_model_re(self) -> None:
         self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW 19"))
         self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW19"))
         self.assertIsNone(self.model_classifier.is_schleicher_model_re.match("HSK15"))
@@ -38,12 +38,14 @@ class ModelClassifierTest(unittest.TestCase):
         (["DG-100", "for", "sale"], ["DG-100", "for", "sale"]),
         (["Nimbus", "3", "255m"], ["Nimbus", "3", "255", "m"]),
     )
-    def test_join_single_characters(self, output_list, input_list):
+    def test_join_single_characters(
+        self, output_list: list[str], input_list: list[str]
+    ) -> None:
         self.assertEqual(
             output_list, self.model_classifier.join_single_characters(input_list)
         )
 
-    def test_preprocess_removes_punctuation(self):
+    def test_preprocess_removes_punctuation(self) -> None:
         self.assertEqual(
             "Hello World", self.model_classifier.preprocess("Hello, World!")
         )
@@ -68,15 +70,15 @@ class ModelClassifierTest(unittest.TestCase):
         ("JS1-C", "Jonker", "JS1 C"),
     )
     def test_single_models_regression(
-        self, input_str, expected_manufacturer, expected_model
-    ):
+        self, input_str: str, expected_manufacturer: str, expected_model: str
+    ) -> None:
         (manufacturer, model, _) = self.model_classifier.classify(
             input_str, expect_manufacturer=False
         )
         self.assertEqual(expected_manufacturer, manufacturer)
         self.assertEqual(expected_model, model)
 
-    def test_with_no_detail_text(self):
+    def test_with_no_detail_text(self) -> None:
         self.model_classifier.classify(
             "DG-100", expect_manufacturer=False, detail_text=None
         )

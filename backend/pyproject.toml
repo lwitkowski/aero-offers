@@ -1,5 +1,5 @@
 [project]
-name = "aero-offers"
+name = "aerooffers"
 version = "3.0"
 requires-python = ">=3.12"
 dependencies = [
@@ -20,16 +20,25 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ruff==0.14.6",
-    "ddt==1.7.2",
+    {include-group = "lint"},
     "pytest==9.0.1",
     "pytest-cov==7.0.0",
+    "assertpy==1.1",
     "testcontainers[cosmosdb]==4.13.3",
+    "ddt==1.7.2",
+]
+lint = [
+    "ruff==0.14.6",
+    "mypy==1.18.2",
+    "types-requests==2.32.4.20250913",
+    "types-defusedxml==0.7.0.20250822",
+    "types-flask-cors==6.0.0.20250809",
+    "types-assertpy==1.1.0.20250502",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src", "tests"]
-addopts = ["--import-mode=importlib", ]
+pythonpath = "src"
+testpaths = ["tests"]
 
 [tool.coverage.run]
 omit = ["tests/*", "**/__init__.py", ]
@@ -40,8 +49,6 @@ select = [
     "A", # flake8-builtins
     "B", # flake8-bugbear
     "C90", # mccabe (complexity)
-    #"D", # pydocstyle
-    #"E", # pycodestyle errors
     "F", # pyflakes
     "I", # imports
     "N", # pep8-naming
@@ -62,9 +69,15 @@ ignore = [
 order-by-type = false
 
 [tool.mypy]
-files = ["src", "tests"]
+files = ["src/aerooffers", "tests"]
 exclude = ".cache"
 strict_equality = true
 check_untyped_defs = true
 disallow_untyped_defs = true
 show_error_codes = true
+
+
+[[tool.mypy.overrides]]
+module = ["nltk.*", "distutils.util", "flask_headers", "ddt", "testcontainers.*"]
+follow_untyped_imports = false
+ignore_missing_imports = true

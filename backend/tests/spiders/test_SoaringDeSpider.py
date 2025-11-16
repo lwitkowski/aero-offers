@@ -5,15 +5,15 @@ from datetime import date
 
 from util import fake_response_from_file
 
-from offer import AircraftCategory, OfferPageItem
-from spiders import SoaringDeSpider
+from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.spiders import SoaringDeSpider
 
 
 class SoaringDeSpiderTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.spider = SoaringDeSpider.SoaringDeSpider()
 
-    def test_collect_urls_of_all_offer_on_listing_page(self):
+    def test_collect_urls_of_all_offer_on_listing_page(self) -> None:
         # given
         listing_page_http_response = fake_response_from_file(
             "spiders/samples/soaring_de_listing.html"
@@ -40,9 +40,9 @@ class SoaringDeSpiderTest(unittest.TestCase):
             [page.url for page in detail_pages],
         )
 
-    def test_parse_detail_page(self):
+    def test_parse_detail_page(self) -> None:
         item: OfferPageItem = next(
-            self.spider.parse_detail_page(
+            self.spider._parse_detail_page(
                 fake_response_from_file("spiders/samples/segelflug_de_offer.html")
             )
         )
@@ -56,9 +56,9 @@ class SoaringDeSpiderTest(unittest.TestCase):
         self.assertEqual(662, item.starts)
         self.assertIsNotNone(item.page_content)
 
-    def test_parse_detail_page_with_html_tags(self):
+    def test_parse_detail_page_with_html_tags(self) -> None:
         item: OfferPageItem = next(
-            self.spider.parse_detail_page(
+            self.spider._parse_detail_page(
                 fake_response_from_file(
                     "spiders/samples/segelflug_de_offer_different_details.html"
                 )
@@ -69,9 +69,9 @@ class SoaringDeSpiderTest(unittest.TestCase):
             "Because of organisational changes at BBAero" in item.page_content
         )
 
-    def test_parse_detail_page_for_tmg(self):
+    def test_parse_detail_page_for_tmg(self) -> None:
         item: OfferPageItem = next(
-            self.spider.parse_detail_page(
+            self.spider._parse_detail_page(
                 fake_response_from_file("spiders/samples/segelflug_de_offer_tmg.html")
             )
         )
@@ -82,9 +82,9 @@ class SoaringDeSpiderTest(unittest.TestCase):
             "22.000,00 Euro €\n                            ", item.raw_price
         )
 
-    def test_parse_detail_page_for_ls3(self):
+    def test_parse_detail_page_for_ls3(self) -> None:
         item: OfferPageItem = next(
-            self.spider.parse_detail_page(
+            self.spider._parse_detail_page(
                 fake_response_from_file("spiders/samples/segelflug_de_offer_ls3.html")
             )
         )

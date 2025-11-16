@@ -1,60 +1,20 @@
-# -*- coding: UTF-8 -*-
 import uuid
 from datetime import datetime, UTC
+from typing import Any
 
-from azure.cosmos import IndexingMode, PartitionKey, ThroughputProperties
-
-from db import database
-from my_logging import logging
-from offer import AircraftCategory, Offer, OfferPageItem, OfferPrice
+from aerooffers.db import offers_container
+from aerooffers.my_logging import logging
+from aerooffers.offer import AircraftCategory, Offer, OfferPageItem, OfferPrice
 
 logger = logging.getLogger("offers_db")
-
-
-container = database.create_container_if_not_exists(
-    id="offers",
-    partition_key=PartitionKey(path="/id"),
-    offer_throughput=ThroughputProperties(offer_throughput="600"),
-    indexing_policy=dict(
-        automatic=True,
-        indexingMode=IndexingMode.Consistent,
-        includedPaths=[
-            dict(path="/published_at/?"),
-            dict(path="/url/?"),
-            dict(path="/classified/?"),
-        ],
-        excludedPaths=[dict(path="/*")],
-        compositeIndexes=[
-            [
-                dict(path="/category", order="ascending"),
-                dict(path="/published_at", order="descending"),
-            ],
-            [
-                dict(path="/manufacturer", order="ascending"),
-                dict(path="/model", order="ascending"),
-                dict(path="/published_at", order="descending"),
-            ],
-        ],
-    ),
-)
-
-
-def truncate_all_tables():
-    database.create_container_if_not_exists(
-        id="offers", partition_key=PartitionKey(path="/id")
-    )
-    database.delete_container(container="offers")
-    database.create_container_if_not_exists(
-        id="offers", partition_key=PartitionKey(path="/id")
-    )
 
 
 def store_offer(
     offer: OfferPageItem,
     spider: str = "unknown",
-):
+) -> str:
     offer_id = str(uuid.uuid4())
-    container.upsert_item(
+    offers_container().upsert_item(
         dict(
             id=offer_id,
             spider=spider,
@@ -83,11 +43,11 @@ def store_offer(
 
 def classify_offer(
     offer_id: str,
-    category: str = None,
-    manufacturer: str = None,
-    model: str = None,
-):
-    operations = [
+    category: str | None = None,
+    manufacturer: str | None = None,
+    model: str | None = None,
+) -> None:
+    operations: list[dict[str, Any]] = [
         dict(op="replace", path="/classified", value=True),
         dict(op="replace", path="/manufacturer", value=manufacturer),
         dict(op="replace", path="/model", value=model),
@@ -96,14 +56,14 @@ def classify_offer(
     if category is not None:
         operations.append(dict(op="replace", path="/category", value=category))
 
-    container.patch_item(
+    offers_container().patch_item(
         partition_key=offer_id, item=offer_id, patch_operations=operations
     )
 
 
-def offer_url_exists(url):
+def offer_url_exists(url: str) -> bool:
     try:
-        offer = container.query_items(
+        offer = offers_container().query_items(
             query="SELECT o.id FROM offers o WHERE o.url = @url OFFSET 0 LIMIT 1",
             parameters=[dict(name="@url", value=url)],
             enable_cross_partition_query=True,
@@ -118,12 +78,12 @@ def offer_url_exists(url):
 def get_offers(
     offset: int = 0,
     limit: int = 30,
-    category: AircraftCategory = None,
-    manufacturer: str = None,
-    model: str = None,
-):
+    category: AircraftCategory | None = None,
+    manufacturer: str | None = None,
+    model: str | None = None,
+) -> list[Offer]:
     query = "SELECT * FROM offers o "
-    params = list()
+    params: list[dict[str, object]] = []
 
     where = list()
     if category is not None:
@@ -149,7 +109,7 @@ def get_offers(
     params.append(dict(name="@offset", value=offset))
     params.append(dict(name="@limit", value=limit))
 
-    db_offers = container.query_items(
+    db_offers = offers_container().query_items(
         query=query, parameters=params, enable_cross_partition_query=True
     )
     return list(
@@ -176,13 +136,13 @@ def get_offers(
     )
 
 
-def get_unclassified_offers(offset: int = 0, limit: int = 100):
+def get_unclassified_offers(offset: int = 0, limit: int = 100) -> list[Any]:
     query = (
         "SELECT * FROM offers o WHERE o.classified = false OFFSET @offset LIMIT @limit"
     )
     params = [dict(name="@offset", value=offset), dict(name="@limit", value=limit)]
     return list(
-        container.query_items(
+        offers_container().query_items(
             query=query, parameters=params, enable_cross_partition_query=True
         )
     )

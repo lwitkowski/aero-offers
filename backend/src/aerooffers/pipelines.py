@@ -1,10 +1,11 @@
 from price_parser import Price
+from scrapy import Spider
 from scrapy.exceptions import DropItem
 
-import offers_db
-from fx import to_price_in_euro
-from my_logging import logging
-from offer import OfferPageItem
+from aerooffers.fx import to_price_in_euro
+from aerooffers.my_logging import logging
+from aerooffers.offer import OfferPageItem
+from aerooffers.offers_db import offer_url_exists, store_offer
 
 
 class FilterSearchAndCharterOffers:
@@ -13,7 +14,7 @@ class FilterSearchAndCharterOffers:
     search_offer_terms = ["suche", "gesucht", "looking for", "searching"]
     charter_offer_terms = ["charter", "for rent"]
 
-    def process_item(self, item: OfferPageItem, _):
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         self.logger.info("Checking if offer page is sell offer: " + item.url)
         for search_offer_term in self.search_offer_terms:
             if search_offer_term in item.title.lower():
@@ -33,9 +34,9 @@ class FilterSearchAndCharterOffers:
 class DuplicateDetection:
     logger = logging.getLogger("DuplicateDetection")
 
-    def process_item(self, item: OfferPageItem, _):
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         self.logger.info("Checking if offer is already stored in DB: " + item.url)
-        if offers_db.offer_url_exists(item.url):
+        if offer_url_exists(item.url):
             self.logger.debug(f"Offer already exists in DB, url={item.url}")
             raise DropItem(f"Offer already exists in DB, url={item.url}")
         return item
@@ -44,12 +45,12 @@ class DuplicateDetection:
 class PriceParser:
     logger = logging.getLogger("PriceParser")
 
-    def process_item(self, item: OfferPageItem, _):
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         self.logger.info("Parsing price: " + item.url)
         try:
             price = Price.fromstring(item.raw_price)
             if price is None or price.amount is None:
-                msg = f"Offer has no valid price, raw_price='{item.raw_price.strip()}' url={item.url}"
+                msg = f"Offer has no valid price, raw_price='{item.raw_price}' url={item.url}"
                 self.logger.info(msg)
                 raise DropItem(msg)
 
@@ -83,7 +84,9 @@ class PriceParser:
 class StoragePipeline:
     logger = logging.getLogger("StoragePipeline")
 
-    def process_item(self, item: OfferPageItem, spider=None):
+    def process_item(
+        self, item: OfferPageItem, spider: Spider | None = None
+    ) -> OfferPageItem:
         self.logger.debug(
             "Storing offer title='%s', url=%s, currency=%s",
             item.title,
@@ -92,9 +95,8 @@ class StoragePipeline:
         )
 
         if spider is not None:
+            assert spider.crawler.stats is not None
             spider.crawler.stats.inc_value("items_stored")
 
-        offers_db.store_offer(
-            offer=item, spider=spider.name if spider is not None else "unknown"
-        )
+        store_offer(offer=item, spider=spider.name if spider is not None else "unknown")
         return item

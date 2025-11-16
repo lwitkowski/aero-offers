@@ -8,7 +8,7 @@ from nltk.corpus import stopwords
 from nltk.metrics import distance
 from nltk.util import ngrams
 
-from my_logging import logging
+from aerooffers.my_logging import logging
 
 nltk.download("stopwords")
 
@@ -17,7 +17,7 @@ logger = logging.getLogger("classifier")
 aircraft_types = ["glider", "tmg", "ultralight", "airplane", "helicopter"]
 
 
-def get_all_models():
+def get_all_models() -> dict[str, dict]:
     models_file = "models.json"
     with open(
         os.path.dirname(os.path.realpath(__file__)) + os.sep + models_file
@@ -27,34 +27,34 @@ def get_all_models():
 
 
 class ModelClassifier:
-    manufacturers = {}
+    manufacturers: dict[str, dict] = {}
 
     is_dg_model_re = re.compile(r"^DG[0-9]{3,4}$")
     is_binder_model_re = re.compile(r"^(EB28|EB29)$")
     is_schleicher_model_re = re.compile(r"AS[H|W|K|G]\s?[0-9]{2}(\sMi)?$")
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.manufacturers = get_all_models()
 
-    def preprocess(self, input_text):
+    def preprocess(self, input_text: str) -> str:
         # char - is used in model names (DG-100, ...)
         punctuation_regex = string.punctuation.replace("-", "").replace("/", "")
         logger.debug(f"removing punctuation using regex {punctuation_regex}")
         translator = str.maketrans("", "", punctuation_regex)
         return input_text.translate(translator)
 
-    def tokenize(self, text):
+    def tokenize(self, text: str) -> list[str]:
         text = self.preprocess(text)
         tokens = text.split(" ")
         return [token for token in tokens if token.strip() != ""]
 
-    def join_single_characters(self, input):  # noqa: A002
-        if len(input) < 2:
-            return input
+    def join_single_characters(self, tokens: list[str]) -> list[str]:
+        if len(tokens) < 2:
+            return tokens
         joined_list = [""]
         i = 0
-        while len(input) > 0:
-            el = input.pop(0)
+        while len(tokens) > 0:
+            el = tokens.pop(0)
             current = joined_list[i]
             # push to left element if we are
             # a) at the end or
@@ -66,13 +66,13 @@ class ModelClassifier:
                 or (
                     (not current.isnumeric() and not el.isnumeric())
                     and len(current) < 2
-                    or (len(input) == 0 and len(el) < 2)
+                    or (len(tokens) == 0 and len(el) < 2)
                 )
             ):
                 joined_list[i] = current + el
             elif self.is_schleicher_model_re.match(current + el):
-                if len(input) > 0 and input[0] == "Mi":
-                    joined_list[i] = current + " " + el + " " + input.pop(0)
+                if len(tokens) > 0 and tokens[0] == "Mi":
+                    joined_list[i] = current + " " + el + " " + tokens.pop(0)
                 else:
                     joined_list[i] = current + " " + el
             else:
@@ -80,14 +80,14 @@ class ModelClassifier:
                 joined_list.append(el)
         return joined_list
 
-    def _starts_with_manufacturer(self, input_text):
+    def _starts_with_manufacturer(self, input_text: str) -> str | None:
         # TODO refactor this
         for manufacturer in self.manufacturers:
             if input_text.lower().startswith(manufacturer.lower()):
                 return manufacturer
         return None
 
-    def _build_tokens(self, input_text):
+    def _build_tokens(self, input_text: str) -> list[str]:
         tokens = self.join_single_characters(self.tokenize(input_text))
         logger.debug(f"after joining single characters tokens are: {str(tokens)}")
         stop_words_en = stopwords.words("english")
@@ -96,7 +96,7 @@ class ModelClassifier:
         tokens = [word for word in tokens if word not in stop_words_de]
         return [word for word in tokens if word not in stop_words_en]
 
-    def _build_grams(self, tokens):
+    def _build_grams(self, tokens: list[str]) -> list[str]:
         grams = list(ngrams(tokens, 1))
         bigrams = list(ngrams(tokens, 2))
         trigrams = list(ngrams(tokens, 3))
@@ -107,11 +107,16 @@ class ModelClassifier:
         return grams
 
     def _classify_against_models(
-        self, grams, models, cutoff_score, expect_manufacturer=False, manufacturer=None
-    ):
+        self,
+        grams: list[str],
+        models: dict[str, list[str]],
+        cutoff_score: float,
+        expect_manufacturer: bool = False,
+        manufacturer: str | None = None,
+    ) -> tuple[str | None, str | None, str | None]:
         best_score = 0.0
         best_score_length = 0
-        best_solution = None, None, None
+        best_solution: tuple[str | None, str | None, str | None] = (None, None, None)
 
         for aircraft_type in aircraft_types:
             if aircraft_type not in models:
@@ -119,7 +124,10 @@ class ModelClassifier:
             for model in models[aircraft_type]:
                 for gram in grams:
                     joined_gram = " ".join(gram)
-                    test_str = manufacturer + model if expect_manufacturer else model
+                    if expect_manufacturer and manufacturer is not None:
+                        test_str = manufacturer + model
+                    else:
+                        test_str = model
 
                     if len(test_str) < 4 or len(joined_gram) < 4:
                         this_cutoff_score = 0.9
@@ -155,7 +163,12 @@ class ModelClassifier:
 
         return best_solution
 
-    def classify(self, input_text, expect_manufacturer=True, detail_text=""):
+    def classify(
+        self,
+        input_text: str,
+        expect_manufacturer: bool = True,
+        detail_text: str | None = None,
+    ) -> tuple[str | None, str | None, str | None]:
         """Try to get the correct manufacturer and model for an airplane offer
 
         :param detail_text: the details of the airplane offer
@@ -218,7 +231,7 @@ class ModelClassifier:
 
 
 class AircraftTypeClassifier:
-    manufacturers_with_only_one_type = {
+    manufacturers_with_only_one_type: dict[str, list[str]] = {
         "glider": ["Schleicher"],
         "ultralight": ["Comco Ikarus", "Pipistrel"],
         "airplane": ["Cessna", "Beechcraft", "Piper", "Mooney", "Pitts"],
@@ -226,7 +239,7 @@ class AircraftTypeClassifier:
         "tmg": ["Stemme"],
     }
 
-    def classify(self, title, spider):
+    def classify(self, title: str, spider: str) -> str:
         for (
             aircraft_type,
             manufacturers,

@@ -1,10 +1,10 @@
 import email.mime.text
 import smtplib
 
-from settings import SEND_RESULT_MAIL, SMTP_HOST, SMTP_PASSWORD, SMTP_USER
+from aerooffers.settings import SEND_RESULT_MAIL, SMTP_HOST, SMTP_PASSWORD, SMTP_USER
 
 
-def send_mail(text=""):
+def send_mail(text: str) -> None:
     if not SEND_RESULT_MAIL:
         return
     msg = email.mime.text.MIMEText(text)
@@ -17,7 +17,3 @@ def send_mail(text=""):
     server.login(SMTP_USER, SMTP_PASSWORD)
     server.sendmail(me, [me], msg.as_string())
     server.quit()
-
-
-if __name__ == "__main__":
-    send_mail("testmail")

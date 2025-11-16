@@ -21,15 +21,15 @@ class OfferPageItem:
     page_content: str
 
     # parsed content
-    location: str = None  # address, like Hamburg, Germany
-    hours: int = None
-    starts: int = None
+    location: str | None = None  # address, like Hamburg, Germany
+    hours: int | None = None
+    starts: int | None = None
 
-    raw_price: str = None  # e.g "123.00 $"
-    price: str = None  # e.g "123.00"
-    currency: str = None  # e.g USD
-    price_in_euro: str = None
-    exchange_rate: float = None  # e.g. 1.0
+    raw_price: str | None = None  # e.g "123.00 $"
+    price: str | None = None  # e.g "123.00"
+    currency: str | None = None  # e.g USD
+    price_in_euro: str | None = None
+    exchange_rate: float | None = None  # e.g. 1.0
 
 
 @dataclass

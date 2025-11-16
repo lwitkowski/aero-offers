@@ -1,10 +1,10 @@
-from flask import abort, Flask, jsonify, request
+from flask import abort, Flask, jsonify, request, Response
 from flask_cors import CORS
 from flask_headers import headers
 
-import offers_db
-from classifier import classifier
-from offer import AircraftCategory
+from aerooffers.classifier import classifier
+from aerooffers.offer import AircraftCategory
+from aerooffers.offers_db import get_offers
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -12,19 +12,19 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/api/models")
 @headers({"Cache-Control": "public, max-age=360"})
-def aircraft_models():
+def aircraft_models() -> Response:
     return jsonify(classifier.get_all_models())
 
 
 @app.route("/api/offers")
-def offers():
+def offers() -> Response:
     raw_category = request.args.get("category")
     try:
         category = AircraftCategory[raw_category] if raw_category is not None else None
     except Exception:
         category = AircraftCategory.unknown
     return jsonify(
-        offers_db.get_offers(
+        get_offers(
             category=category,
             offset=int(request.args.get("offset") or "0"),
             limit=int(request.args.get("limit") or "30"),
@@ -33,7 +33,7 @@ def offers():
 
 
 @app.route("/api/offers/<manufacturer>/<model>")
-def model_information(manufacturer, model):
+def model_information(manufacturer: str, model: str) -> Response:
     """Returns statistics for a specific manufacturer and model"""
     manufacturers = classifier.get_all_models()
     if manufacturer not in manufacturers:
@@ -44,9 +44,7 @@ def model_information(manufacturer, model):
             manufacturer_website=manufacturers[manufacturer].get(
                 "manufacturer_website", None
             ),
-            offers=offers_db.get_offers(
-                manufacturer=manufacturer, model=model, limit=300
-            ),
+            offers=get_offers(manufacturer=manufacturer, model=model, limit=300),
         )
     )
 

@@ -5,15 +5,15 @@ import unittest
 
 from util import fake_response_from_file
 
-from offer import AircraftCategory, OfferPageItem
-from spiders import FlugzeugMarktDeSpider
+from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.spiders.FlugzeugMarktDeSpider import FlugzeugMarktDeSpider
 
 
 class FlugzeugMarktDeSpiderTest(unittest.TestCase):
-    def setUp(self):
-        self.spider = FlugzeugMarktDeSpider.FlugzeugMarktDeSpider()
+    def setUp(self) -> None:
+        self.spider = FlugzeugMarktDeSpider()
 
-    def test_collect_urls_of_all_offer_on_listing_page(self):
+    def test_collect_urls_of_all_offer_on_listing_page(self) -> None:
         # given
         listing_page_http_response = fake_response_from_file(
             "spiders/samples/flugzeugmarkt_de_listing.html"
@@ -30,9 +30,9 @@ class FlugzeugMarktDeSpiderTest(unittest.TestCase):
             "https://www.flugzeugmarkt.de/ultraleichtflugzeug-kaufen/comco-ikarus/c42b-competition-gebraucht-kaufen/3331.html",
         )
 
-    def test_parse_detail_page(self):
+    def test_parse_detail_page(self) -> None:
         item: OfferPageItem = next(
-            self.spider.parse_detail_page(
+            self.spider._parse_detail_page(
                 fake_response_from_file("spiders/samples/flugzeugmarkt_de_offer.html")
             )
         )

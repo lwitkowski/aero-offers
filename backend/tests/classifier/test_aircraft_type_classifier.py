@@ -3,14 +3,14 @@ import unittest
 
 from util import read_file
 
-from classifier.classifier import AircraftTypeClassifier
+from aerooffers.classifier.classifier import AircraftTypeClassifier
 
 
 class AircraftTypeClassifierTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.classifier = AircraftTypeClassifier()
 
-    def test_aircraft_type_is_classified_even_when_model_is_unknown(self):
+    def test_aircraft_type_is_classified_even_when_model_is_unknown(self) -> None:
         json_file_content = read_file(
             "classifier/classifier_test_data_aircraft_type.json"
         )
