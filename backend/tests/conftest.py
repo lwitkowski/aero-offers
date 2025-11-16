@@ -4,10 +4,11 @@ os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
     "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122"
 )
 
+from typing import Self
+
 from azure.cosmos import CosmosClient
 from testcontainers.core.waiting_utils import wait_for_logs
 from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
-from typing_extensions import Self
 
 from settings import COSMOSDB_DB_NAME
 
@@ -23,7 +24,7 @@ class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
     # this fails on vnext image, thus needs to be overridden
     def _download_cert(self) -> bytes:
-        return bytes()
+        return b""
 
 
 def pytest_sessionstart(session):

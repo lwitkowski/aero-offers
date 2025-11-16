@@ -1,4 +1,4 @@
-from flask import Flask, abort, jsonify, request
+from flask import abort, Flask, jsonify, request
 from flask_cors import CORS
 from flask_headers import headers
 
@@ -34,9 +34,7 @@ def offers():
 
 @app.route("/api/offers/<manufacturer>/<model>")
 def model_information(manufacturer, model):
-    """
-    Returns statistics for a specific manufacturer and model
-    """
+    """Returns statistics for a specific manufacturer and model"""
     manufacturers = classifier.get_all_models()
     if manufacturer not in manufacturers:
         abort(404)

@@ -1,3 +1,4 @@
+# noqa: N999
 import datetime
 import re
 
@@ -38,7 +39,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
     def _extract_number_from_cell(self, name, response):
         number = (
             response.xpath(
-                "//tr/td[contains(.,'{0}')]/../td[@class='value']/text()".format(name)
+                f"//tr/td[contains(.,'{name}')]/../td[@class='value']/text()"
             )
             .extract_first()
             .strip()
@@ -62,9 +63,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
             else:
                 category = None
                 self.logger.info(
-                    "Couldn't determine aircraft type for offer with url: {0}".format(
-                        response.url
-                    )
+                    f"Couldn't determine aircraft type for offer with url: {response.url}"
                 )
 
             date = response.xpath(
@@ -96,7 +95,5 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
 
         except Exception as e:
             self.logger.error(
-                "Could not parse details of url: {0}, error: {1}".format(
-                    response.url, e
-                )
+                f"Could not parse details of url: {response.url}, error: {e}"
             )

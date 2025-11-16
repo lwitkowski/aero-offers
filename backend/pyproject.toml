@@ -12,6 +12,7 @@ dependencies = [
     "flask-headers==1.0",
     "gunicorn==23.0.0",
     "jinja2==3.1.6",
+    "mypy>=1.18.2",
     "nltk==3.9.2",
     "price-parser==0.5.0",
     "requests==2.32.5",
@@ -36,4 +37,36 @@ addopts = ["--import-mode=importlib", ]
 omit = ["tests/*", "**/__init__.py", ]
 
 [tool.ruff.lint]
-extend-select = ["I", "SIM"]
+preview = true
+select = [
+    "A", # flake8-builtins
+    "B", # flake8-bugbear
+    "C90", # mccabe (complexity)
+    #"D", # pydocstyle
+    #"E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # imports
+    "N", # pep8-naming
+    "PERF", # perflint
+    #"PT", # flake8-pytest-style
+    #"S", # flake-8 bandit (forbid plain asserts, secrets detection, etc)
+    "UP", # pyupgrade (better compatibility with newer python versions)
+]
+ignore = [
+    "E501", # `ruff format --check` takes care of this, as this rule enforcing max line length is not compatible with formatter
+    "D10" # disable requirement for everything needing a description
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "S105"] # no need for docstrings and secrets checks in tests
+
+[tool.ruff.lint.isort]
+order-by-type = false
+
+[tool.mypy]
+files = ["src", "tests"]
+exclude = ".cache"
+strict_equality = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+show_error_codes = true

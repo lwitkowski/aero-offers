@@ -39,7 +39,7 @@ class ModelClassifier:
     def preprocess(self, input_text):
         # char - is used in model names (DG-100, ...)
         punctuation_regex = string.punctuation.replace("-", "").replace("/", "")
-        logger.debug("removing punctuation using regex {0}".format(punctuation_regex))
+        logger.debug(f"removing punctuation using regex {punctuation_regex}")
         translator = str.maketrans("", "", punctuation_regex)
         return input_text.translate(translator)
 
@@ -48,7 +48,7 @@ class ModelClassifier:
         tokens = text.split(" ")
         return [token for token in tokens if token.strip() != ""]
 
-    def join_single_characters(self, input):
+    def join_single_characters(self, input):  # noqa: A002
         if len(input) < 2:
             return input
         joined_list = [""]
@@ -89,9 +89,7 @@ class ModelClassifier:
 
     def _build_tokens(self, input_text):
         tokens = self.join_single_characters(self.tokenize(input_text))
-        logger.debug(
-            "after joining single characters tokens are: {0}".format(str(tokens))
-        )
+        logger.debug(f"after joining single characters tokens are: {str(tokens)}")
         stop_words_en = stopwords.words("english")
         stop_words_de = stopwords.words("german")
 
@@ -158,8 +156,7 @@ class ModelClassifier:
         return best_solution
 
     def classify(self, input_text, expect_manufacturer=True, detail_text=""):
-        """
-        Try to get the correct manufacturer and model for an airplane offer
+        """Try to get the correct manufacturer and model for an airplane offer
 
         :param detail_text: the details of the airplane offer
         :param input_text: Strings like "Stemme S12-SW"
@@ -177,7 +174,7 @@ class ModelClassifier:
 
         manufacturer = self._starts_with_manufacturer(input_text)
         if manufacturer is not None:
-            logger.info("Found Manufacturer: {0}".format(manufacturer))
+            logger.info(f"Found Manufacturer: {manufacturer}")
             # reduce cutoff as we already have the manufacturer, classify rest against models of this manufacturer
             tokens = self._build_tokens(input_text[len(manufacturer) :])
             grams = self._build_grams(tokens)

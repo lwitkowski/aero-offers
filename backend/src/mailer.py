@@ -1,4 +1,3 @@
-import email.header
 import email.mime.text
 import smtplib
 

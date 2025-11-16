@@ -39,7 +39,7 @@ def read_file(name: str, encoding: str = "utf8"):
     else:
         file_path = os.path.join(os.path.dirname(__file__), name)
 
-    with open(file_path, "r", encoding=encoding) as file_handle:
+    with open(file_path, encoding=encoding) as file_handle:
         file_content = file_handle.read()
         return file_content
 

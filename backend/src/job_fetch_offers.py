@@ -23,7 +23,7 @@ if __name__ == "__main__":
                 "Pipelines missing/not loaded properly, most likely scrapy.cfg/settings.py was not loaded properly"
             )
 
-        logger.info("Item pipelines settings: {0}".format(str(pipelines)))
+        logger.info(f"Item pipelines settings: {str(pipelines)}")
         process = CrawlerProcess(settings)
 
         spiders = {
@@ -43,13 +43,11 @@ if __name__ == "__main__":
             logger.debug("Fetching stats for spider: %s", spider_cls)
             stats_per_spider[spider_cls.name] = crawler.stats.get_stats()
 
-        msg = "Crawling offers completed at {0} \n\n {1} \n".format(
-            str(datetime.now()), pprint.pformat(stats_per_spider)
-        )
+        msg = f"Crawling offers completed at {str(datetime.now())} \n\n {pprint.pformat(stats_per_spider)} \n"
 
         logger.info(msg)
         send_mail(msg)
     except Exception as e:
-        msg = "Error connecting to the database: {0}".format(repr(e))
+        msg = f"Error connecting to the database: {repr(e)}"
         logger.error(msg)
         send_mail(msg)

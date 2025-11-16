@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime, UTC
 
 from azure.cosmos import IndexingMode, PartitionKey, ThroughputProperties
 

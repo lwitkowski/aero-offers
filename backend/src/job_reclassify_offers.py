@@ -57,4 +57,4 @@ def reclassify_all():
 
 if __name__ == "__main__":
     processed = reclassify_all()
-    logger.info("Finished classifying {0} offers".format(processed))
+    logger.info(f"Finished classifying {processed} offers")

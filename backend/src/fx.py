@@ -70,10 +70,10 @@ def get_currency_code(currency_str):
         return iso_code_mapping[currency_str]
     else:
         logging.error(
-            "Couldn't find currency code for currency symbol: {0}".format(currency_str)
+            f"Couldn't find currency code for currency symbol: {currency_str}"
         )
         return currency_str
 
 
 if __name__ == "__main__":
-    logging.info("All rates from DB: {0}".format(exchange_rates))
+    logging.info(f"All rates from DB: {exchange_rates}")

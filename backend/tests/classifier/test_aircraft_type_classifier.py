@@ -24,7 +24,5 @@ class AircraftTypeClassifierTest(unittest.TestCase):
                 self.assertEqual(
                     expected_type,
                     aircraft_type,
-                    "Title: {0} Spider: {1} should have been classified as {2}, but was {3}".format(
-                        title, spider, expected_type, aircraft_type
-                    ),
+                    f"Title: {title} Spider: {spider} should have been classified as {expected_type}, but was {aircraft_type}",
                 )

@@ -1,3 +1,5 @@
+# noqa: N999
+
 import unittest
 from datetime import date
 

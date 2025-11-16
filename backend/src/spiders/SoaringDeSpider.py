@@ -1,3 +1,4 @@
+# noqa: N999
 import datetime
 import re
 
@@ -13,7 +14,7 @@ ENGINE_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=
 BROKEN_OFFER_URL = "https://soaring.de/osclass/index.php?page=item&id="
 
 
-def parseIntOrNone(param):
+def _parse_int_or_none(param):
     return int(param) if param is not None else None
 
 
@@ -94,11 +95,11 @@ class SoaringDeSpider(scrapy.Spider):
                 "#item-content .meta_list .meta"
             ).extract():
                 if "Gesamtstunden" in aircraft_details:
-                    offer.hours = parseIntOrNone(
+                    offer.hours = _parse_int_or_none(
                         self._extract_first_number(aircraft_details)
                     )
                 if "Gesamtstarts" in aircraft_details:
-                    offer.starts = parseIntOrNone(
+                    offer.starts = _parse_int_or_none(
                         self._extract_first_number(aircraft_details)
                     )
 
