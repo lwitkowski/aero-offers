@@ -16,7 +16,7 @@ dependencies = [
     "nltk==3.9.2",
     "price-parser==0.5.0",
     "requests==2.32.5",
-    "scrapy==2.13.3",
+    "scrapy==2.13.4",
     "twisted==25.5.0",
 ]
 
