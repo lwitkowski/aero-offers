@@ -1,0 +1,56 @@
+{
+  "manufacturer_website": "https://en.wikipedia.org/wiki/Rolladen-Schneider_Flugzeugbau",
+  "offers": [
+    {
+      "category": "glider",
+      "hours": 6200,
+      "location": "Bosschenhoofd, Noord-Brabant, Netherlands",
+      "manufacturer": "Rolladen Schneider",
+      "model": "LS4",
+      "price": {
+        "amount": "74500.00",
+        "amount_in_euro": "74500.00",
+        "currency": "EUR",
+        "exchange_rate": 1
+      },
+      "published_at": "2025-11-14",
+      "starts": 1500,
+      "title": "LS4b NEO club class monster 'S4'",
+      "url": "https://soaring.de/osclass/index.php?page=item&id=92526"
+    },
+    {
+      "category": "glider",
+      "hours": 5000,
+      "location": "Mitteldeutschland, Germany",
+      "manufacturer": "Rolladen Schneider",
+      "model": "LS4",
+      "price": {
+        "amount": "11000.00",
+        "amount_in_euro": "11000.00",
+        "currency": "EUR",
+        "exchange_rate": 1
+      },
+      "published_at": "2025-10-15",
+      "starts": 10000,
+      "title": "Bruch LS4a - vollst\u00e4ndig - Winterbauprojekt",
+      "url": "https://soaring.de/osclass/index.php?page=item&id=91832"
+    },
+    {
+      "category": "glider",
+      "hours": 1993,
+      "location": "Aschaffenburg, Bayern, Germany",
+      "manufacturer": "Rolladen Schneider",
+      "model": "LS4",
+      "price": {
+        "amount": "45000.00",
+        "amount_in_euro": "45000.00",
+        "currency": "EUR",
+        "exchange_rate": 1
+      },
+      "published_at": "2025-10-14",
+      "starts": 1843,
+      "title": "LS4b - Eine der letzten",
+      "url": "https://soaring.de/osclass/index.php?page=item&id=91808"
+    }
+  ]
+}
