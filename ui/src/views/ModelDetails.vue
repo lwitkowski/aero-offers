@@ -26,25 +26,27 @@
           <th>Price</th>
           <th />
         </tr>
-        <tr v-for="offer in offers.slice().reverse()" :key="offer.id">
-          <td>{{ offer.published_at }}</td>
-          <td>{{ offer.title }}</td>
-          <td>{{ offer.location }}</td>
-          <td>
-            <div v-if="offer.hours">{{ offer.hours }}h, {{ offer.starts }} starts</div>
-            <div v-else>n/a</div>
-          </td>
-          <td>{{ formatPrice(offer.price.amount, offer.price.currency) }}</td>
-          <td>
-            <div class="icon">
-              <small>
-                <a :href="offer.url" target="_blank">
-                  <img :src="'../../url_icon.png'" alt="Link to Offer" height="30" width="30" />
-                </a>
-              </small>
-            </div>
-          </td>
-        </tr>
+        <tbody>
+          <tr v-for="offer in offers.slice().reverse()" :key="offer.id">
+            <td>{{ offer.published_at }}</td>
+            <td>{{ offer.title }}</td>
+            <td>{{ offer.location }}</td>
+            <td>
+              <div v-if="offer.hours">{{ offer.hours }}h, {{ offer.starts }} starts</div>
+              <div v-else>n/a</div>
+            </td>
+            <td>{{ formatPrice(offer.price.amount, offer.price.currency) }}</td>
+            <td>
+              <div class="icon">
+                <small>
+                  <a :href="offer.url" target="_blank">
+                    <img :src="'../../url_icon.png'" alt="Link to Offer" height="30" width="30" />
+                  </a>
+                </small>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -136,11 +138,14 @@ export default {
         }
 
         let prices = []
+        let priceSum = 0
         const dataPointsForRegression = []
         for (let i = 0; i < this.offers.length; i += 1) {
           const offer = this.offers[i]
           if (!isNaN(offer.price.amount_in_euro)) {
-            prices.push(Number(offer.price.amount_in_euro))
+            let price = Number(offer.price.amount_in_euro)
+            prices.push(price)
+            priceSum += price
           }
 
           const datapoint = {
@@ -158,6 +163,7 @@ export default {
             datapoint.y
           ])
         }
+
         this.chartOptions = {
           showLine: true,
           axisX: {
@@ -178,13 +184,8 @@ export default {
             })
           ]
         }
-
         this.drawLinearRegressionLine(dataPointsForRegression)
 
-        let priceSum = 0
-        prices.forEach((num) => {
-          priceSum += num
-        })
         this.avgPrice = Math.round((priceSum / this.offers.length) * 100) / 100
         this.medianPrice = median(prices)
       })

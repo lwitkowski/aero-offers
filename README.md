@@ -58,7 +58,7 @@ git config core.hooksPath hooks
 Start backend api (python app):
 ```
 cd backend
-./start_api.sh
+./run_api_in_docker.sh
 ```
 
 Start UI (vue app):

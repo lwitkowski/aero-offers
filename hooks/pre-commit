@@ -5,3 +5,7 @@ cd backend
 uvx ruff format
 uvx ruff check --fix
 git add src tests
+
+cd ../ui
+npm run lint-fix
+git add src
