@@ -7,6 +7,7 @@ os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
 from typing import Self
 
 from azure.cosmos import CosmosClient
+from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 from testcontainers.core.waiting_utils import wait_for_logs
 from testcontainers.cosmosdb import CosmosDBNoSQLEndpointContainer
 
@@ -19,7 +20,9 @@ class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
     # vnext image doesn't print `Started`
     def _wait_until_ready(self) -> Self:
-        wait_for_logs(container=self, predicate="Emulator is accessible")
+        wait_for_logs(
+            container=self, predicate=LogMessageWaitStrategy("Emulator is accessible")
+        )
         return self
 
     # this fails on vnext image, thus needs to be overridden
