@@ -1,14 +1,11 @@
-import unittest
-
 import pytest
 from assertpy import assert_that
 from azure.cosmos import CosmosClient
-from ddt import data, ddt
 from scrapy.exceptions import DropItem
 from util import sample_offer
 
 from aerooffers import offers_db, pipelines
-from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.offer import AircraftCategory
 
 
 def test_new_offer_is_not_duplicate(cosmos_db: CosmosClient) -> None:
@@ -35,78 +32,99 @@ def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
     )
 
 
-@ddt
-class PriceParserTest(unittest.TestCase):
-    def setUp(self) -> None:
-        self.detection = pipelines.PriceParser()
+@pytest.mark.parametrize(
+    "raw_valid_price,expected_price",
+    [
+        ("2,01 Euro €", "2.01"),
+        ("1.234,00 Euro €", "1234.00"),
+        ("123.456,00 Euro €", "123456.00"),
+    ],
+)
+def test_parse_valid_prices(raw_valid_price: str, expected_price: str) -> None:
+    # given
+    offer_with_valid_price = sample_offer(raw_price=raw_valid_price)
 
-    @data(
-        (sample_offer(raw_price="2,01 Euro €"), "2.01"),
-        (sample_offer(raw_price="1.234,00 Euro €"), "1234.00"),
-        (sample_offer(raw_price="123.456,00 Euro €"), "123456.00"),
-    )
-    def test_parse_valid_prices(self, test_input: tuple[OfferPageItem, str]) -> None:
-        offer_with_valid_price: OfferPageItem = test_input[0]
-        expected_price: str = test_input[1]
+    # when
+    pipelines.PriceParser().process_item(offer_with_valid_price)
 
-        try:
-            self.detection.process_item(offer_with_valid_price)
-        except DropItem:
-            self.fail("PriceParser unexpectedly dropped offer with valid price!")
-
-        self.assertEqual(expected_price, offer_with_valid_price.price)
-        self.assertEqual("EUR", offer_with_valid_price.currency)
-        self.assertEqual(expected_price, offer_with_valid_price.price_in_euro)
-        self.assertEqual(1.0, offer_with_valid_price.exchange_rate)
-
-    @data(sample_offer(raw_price=""), sample_offer(raw_price="Ask for price"))
-    def test_should_drop_if_price_is_missing(
-        self, offer_with_invalid_price: OfferPageItem
-    ) -> None:
-        self.assertRaises(
-            DropItem, self.detection.process_item, offer_with_invalid_price
-        )
-
-    @data(
-        sample_offer(raw_price="0 Euro €"),
-        sample_offer(raw_price="0,89  Euro €"),  # smaller than 1
-        sample_offer(raw_price="500.001,00 Euro €"),  # huge amount
-    )
-    def test_should_drop_if_price_is_unreasonable(
-        self, offer_with_unreasonable_price: OfferPageItem
-    ) -> None:
-        self.assertRaises(
-            DropItem, self.detection.process_item, offer_with_unreasonable_price
-        )
+    # then
+    assert_that(offer_with_valid_price.price).is_equal_to(expected_price)
+    assert_that(offer_with_valid_price.currency).is_equal_to("EUR")
+    assert_that(offer_with_valid_price.price_in_euro).is_equal_to(expected_price)
+    assert_that(offer_with_valid_price.exchange_rate).is_equal_to(1.0)
 
 
-@ddt
-class FilterSearchAndCharterOffersTest(unittest.TestCase):
-    @data("Suche Stemme S12", "Looking for Stemme S12", "Discus CS - SUCHE")
-    def test_search_offers_are_dropped(self, offer_title: str) -> None:
-        offer = sample_offer()
-        offer.title = offer_title
-        offer_filter = pipelines.FilterSearchAndCharterOffers()
-        self.assertRaises(DropItem, offer_filter.process_item, offer)
+def test_should_drop_if_price_is_missing() -> None:
+    offer_with_invalid_price = sample_offer(raw_price="Ask for price")
+    with pytest.raises(DropItem):
+        pipelines.PriceParser().process_item(offer_with_invalid_price)
 
-    @data(
+
+@pytest.mark.parametrize(
+    "unreasonable_price,error_msg",
+    [
+        ("0 Euro €", "Offer has unreasonable price smaller than 1"),
+        ("0,89  Euro €", "Offer has unreasonable price smaller than 1"),
+        ("500.001,00 Euro €", "Offer has unreasonable price higher than 500_000"),
+    ],
+)
+def test_should_drop_if_price_is_unreasonable(
+    unreasonable_price: str, error_msg: str
+) -> None:
+    offer_with_unreasonable_price = sample_offer(raw_price=unreasonable_price)
+
+    with pytest.raises(DropItem) as e:
+        pipelines.PriceParser().process_item(offer_with_unreasonable_price)
+
+    assert_that(str(e.value)).contains(error_msg)
+
+
+@pytest.mark.parametrize(
+    "offer_title",
+    [
+        "Suche Stemme S12",
+        "suche Stemme S12",
+        "searching for Stemme S12",
+        "Looking for Stemme S12",
+        "Discus CS - SUCHE",
+    ],
+)
+def test_search_offers_are_dropped(offer_title: str) -> None:
+    offer = sample_offer(title=offer_title)
+
+    with pytest.raises(DropItem) as e:
+        pipelines.FilterSearchAndCharterOffers().process_item(offer)
+
+    assert_that(str(e.value)).is_equal_to("Dropping Search offer")
+
+
+@pytest.mark.parametrize(
+    "offer_title",
+    [
         "Arcus M Charter in Bitterwasser ab dem 11.01.20",
         "Ventus cM Charter",
         "DuoDiscus-Turbo in Top Zustand zu verchartern mit Vorsaisonpreis !",
         "ASG29E with 15m and 18m wingtips for rent",
-    )
-    def test_charter_offers_are_dropped(self, offer_title: str) -> None:
-        offer = sample_offer()
-        offer.title = offer_title
-        offer_filter = pipelines.FilterSearchAndCharterOffers()
-        self.assertRaises(DropItem, offer_filter.process_item, offer)
+    ],
+)
+def test_charter_offers_are_dropped(offer_title: str) -> None:
+    offer = sample_offer(title=offer_title)
 
-    @data("DG101 G - Competition ready", "Biete tolles Flugzeug")
-    def test_regular_offers_are_not_dropped(self, offer_title: str) -> None:
-        offer = sample_offer()
-        offer.title = offer_title
-        offer_filter = pipelines.FilterSearchAndCharterOffers()
-        offer_filter.process_item(offer)
+    with pytest.raises(DropItem) as e:
+        pipelines.FilterSearchAndCharterOffers().process_item(offer)
+
+    assert_that(str(e.value)).is_equal_to("Dropping Charter Offer")
+
+
+@pytest.mark.parametrize(
+    "offer_title", ["DG101 G - Competition ready", "Biete tolles Flugzeug"]
+)
+def test_regular_offers_are_not_dropped(offer_title: str) -> None:
+    offer = sample_offer(title=offer_title)
+
+    filtered_item = pipelines.FilterSearchAndCharterOffers().process_item(offer)
+
+    assert_that(filtered_item).is_equal_to(offer)
 
 
 def test_should_store_offer(cosmos_db: CosmosClient) -> None:

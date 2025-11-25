@@ -1,28 +1,20 @@
 import json
-import unittest
 
+from assertpy import assert_that
 from util import read_file
 
 from aerooffers.classifier.classifier import AircraftTypeClassifier
 
 
-class AircraftTypeClassifierTest(unittest.TestCase):
-    def setUp(self) -> None:
-        self.classifier = AircraftTypeClassifier()
+def test_aircraft_type_is_classified_even_when_model_is_unknown() -> None:
+    json_file_content = read_file("classifier/classifier_test_data_aircraft_type.json")
+    data = json.loads(json_file_content)
+    classifier = AircraftTypeClassifier()
 
-    def test_aircraft_type_is_classified_even_when_model_is_unknown(self) -> None:
-        json_file_content = read_file(
-            "classifier/classifier_test_data_aircraft_type.json"
-        )
-        data = json.loads(json_file_content)
-        for item in data:
-            title = item["title"]
-            spider = item["spider"]
-            if "aircraft_type" in item:
-                expected_type = item["aircraft_type"]
-                aircraft_type = self.classifier.classify(title, spider)
-                self.assertEqual(
-                    expected_type,
-                    aircraft_type,
-                    f"Title: {title} Spider: {spider} should have been classified as {expected_type}, but was {aircraft_type}",
-                )
+    for item in data:
+        title = item["title"]
+        spider = item["spider"]
+        if "aircraft_type" in item:
+            expected_type = item["aircraft_type"]
+            aircraft_type = classifier.classify(title, spider)
+            assert_that(aircraft_type).is_equal_to(expected_type)

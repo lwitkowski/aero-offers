@@ -25,7 +25,6 @@ dev = [
     "pytest-cov==7.0.0",
     "assertpy==1.1",
     "testcontainers[cosmosdb]==4.13.3",
-    "ddt==1.7.2",
 ]
 lint = [
     "ruff==0.14.6",
@@ -53,8 +52,8 @@ select = [
     "I", # imports
     "N", # pep8-naming
     "PERF", # perflint
-    #"PT", # flake8-pytest-style
-    #"S", # flake-8 bandit (forbid plain asserts, secrets detection, etc)
+    "PT", # flake8-pytest-style
+    "S", # flake-8 bandit (forbid plain asserts, secrets detection, etc)
     "UP", # pyupgrade (better compatibility with newer python versions)
 ]
 ignore = [
@@ -78,6 +77,6 @@ show_error_codes = true
 
 
 [[tool.mypy.overrides]]
-module = ["nltk.*", "distutils.util", "flask_headers", "ddt", "testcontainers.*"]
+module = ["nltk.*", "flask_headers", "testcontainers.*"]
 follow_untyped_imports = false
 ignore_missing_imports = true
