@@ -33,12 +33,11 @@ def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
 
 
 @pytest.mark.parametrize(
-    "raw_valid_price,expected_price",
     [
         ("2,01 Euro €", "2.01"),
         ("1.234,00 Euro €", "1234.00"),
         ("123.456,00 Euro €", "123456.00"),
-    ],
+    ]
 )
 def test_parse_valid_prices(raw_valid_price: str, expected_price: str) -> None:
     # given
@@ -61,12 +60,11 @@ def test_should_drop_if_price_is_missing() -> None:
 
 
 @pytest.mark.parametrize(
-    "unreasonable_price,error_msg",
     [
         ("0 Euro €", "Offer has unreasonable price smaller than 1"),
         ("0,89  Euro €", "Offer has unreasonable price smaller than 1"),
         ("500.001,00 Euro €", "Offer has unreasonable price higher than 500_000"),
-    ],
+    ]
 )
 def test_should_drop_if_price_is_unreasonable(
     unreasonable_price: str, error_msg: str
@@ -80,14 +78,13 @@ def test_should_drop_if_price_is_unreasonable(
 
 
 @pytest.mark.parametrize(
-    "offer_title",
     [
         "Suche Stemme S12",
         "suche Stemme S12",
         "searching for Stemme S12",
         "Looking for Stemme S12",
         "Discus CS - SUCHE",
-    ],
+    ]
 )
 def test_search_offers_are_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
@@ -99,13 +96,12 @@ def test_search_offers_are_dropped(offer_title: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "offer_title",
     [
         "Arcus M Charter in Bitterwasser ab dem 11.01.20",
         "Ventus cM Charter",
         "DuoDiscus-Turbo in Top Zustand zu verchartern mit Vorsaisonpreis !",
         "ASG29E with 15m and 18m wingtips for rent",
-    ],
+    ]
 )
 def test_charter_offers_are_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
@@ -116,9 +112,7 @@ def test_charter_offers_are_dropped(offer_title: str) -> None:
     assert_that(str(e.value)).is_equal_to("Dropping Charter Offer")
 
 
-@pytest.mark.parametrize(
-    "offer_title", ["DG101 G - Competition ready", "Biete tolles Flugzeug"]
-)
+@pytest.mark.parametrize(["DG101 G - Competition ready", "Biete tolles Flugzeug"])
 def test_regular_offers_are_not_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
 
