@@ -78,6 +78,6 @@ show_error_codes = true
 
 
 [[tool.mypy.overrides]]
-module = ["nltk.*", "flask_headers", "testcontainers.*"]
+module = ["nltk.*", "flask_headers", "distutils.util", "testcontainers.*"]
 follow_untyped_imports = false
 ignore_missing_imports = true
