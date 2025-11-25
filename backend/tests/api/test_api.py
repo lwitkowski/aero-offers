@@ -1,33 +1,31 @@
-# -*- coding: UTF-8 -*-
-
 import pytest
+from assertpy import assert_that
+from azure.cosmos import CosmosClient
+from flask.testing import FlaskClient
 from util import sample_offer
 
-import offers_db
-from api.flask_app import app
+from aerooffers import offers_db
+from aerooffers.api.flask_app import app
 
 
 @pytest.fixture
-def api_client():
-    with app.test_client() as client:
-        yield client
+def api_client(cosmos_db: CosmosClient) -> FlaskClient:
+    return app.test_client()
 
 
-@pytest.fixture(autouse=True)
-def setUp():
-    offers_db.truncate_all_tables()
-
-
-def test_get_aircraft_models(api_client):
+def test_get_aircraft_models(api_client: FlaskClient) -> None:
     # when
     response = api_client.get("/api/models")
 
     # then
-    assert response.status_code == 200
-    assert response.json["PZL Bielsko"]["models"]["glider"][0] == "SZD-9 Bocian"
+    assert_that(response.status_code).is_equal_to(200)
+    assert response.json is not None
+    assert_that(response.json["PZL Bielsko"]["models"]["glider"][0]).is_equal_to(
+        "SZD-9 Bocian"
+    )
 
 
-def test_get_offers_for_all_categories(api_client):
+def test_get_offers_for_all_categories(api_client: FlaskClient) -> None:
     # given
     offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
 
@@ -35,28 +33,29 @@ def test_get_offers_for_all_categories(api_client):
     response = api_client.get("/api/offers")
 
     # then
-    assert response.status_code == 200
-    assert len(response.json) == 1
+    assert_that(response.status_code).is_equal_to(200)
+    assert response.json is not None
+    assert_that(response.json).is_length(1)
     offer = response.json[0]
-    assert offer["category"] == "glider"
-    assert offer["title"] == "Glider A"
-    assert offer["published_at"] == "2024-07-27"
-    assert offer["url"] == "https://offers.com/1"
-    assert offer["price"]["amount"] == "29500"
-    assert offer["price"]["currency"] == "EUR"
+    assert_that(offer["category"]).is_equal_to("glider")
+    assert_that(offer["title"]).is_equal_to("Glider A")
+    assert_that(offer["published_at"]).is_equal_to("2024-07-27")
+    assert_that(offer["url"]).is_equal_to("https://offers.com/1")
+    assert_that(offer["price"]["amount"]).is_equal_to("29500")
+    assert_that(offer["price"]["currency"]).is_equal_to("EUR")
 
 
-def test_get_offers_for_given_category(api_client):
+def test_get_offers_for_given_category(api_client: FlaskClient) -> None:
     # given
     offers_db.store_offer(sample_offer())
 
     # when & then
-    assert len(api_client.get("/api/offers?category=glider").json) == 1
-    assert len(api_client.get("/api/offers?category=tmg").json) == 0
-    assert len(api_client.get("/api/offers?category=what").json) == 0
+    assert_that(api_client.get("/api/offers?category=glider").json).is_length(1)
+    assert_that(api_client.get("/api/offers?category=tmg").json).is_length(0)
+    assert_that(api_client.get("/api/offers?category=what").json).is_length(0)
 
 
-def test_get_offers_for_given_manufacturer_and_model(api_client):
+def test_get_offers_for_given_manufacturer_and_model(api_client: FlaskClient) -> None:
     # given
     offer_id = offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
     offers_db.classify_offer(offer_id, "glider", "PZL Bielsko", "SZD-9 Bocian")
@@ -65,36 +64,39 @@ def test_get_offers_for_given_manufacturer_and_model(api_client):
     response = api_client.get("/api/offers/PZL Bielsko/SZD-9 Bocian")
 
     # then
-    assert response.status_code == 200
-    assert (
-        response.json["manufacturer_website"]
-        == "https://en.wikipedia.org/wiki/Szybowcowy_Zak%C5%82ad_Do%C5%9Bwiadczalny"
+    assert response.json is not None
+    assert_that(response.status_code).is_equal_to(200)
+    assert_that(response.json["manufacturer_website"]).is_equal_to(
+        "https://en.wikipedia.org/wiki/Szybowcowy_Zak%C5%82ad_Do%C5%9Bwiadczalny"
     )
-    assert len(response.json["offers"]) == 1
+    assert_that(response.json["offers"]).is_length(1)
     offer = response.json["offers"][0]
-    assert offer["category"] == "glider"
-    assert offer["title"] == "Glider A"
-    assert offer["manufacturer"] == "PZL Bielsko"
-    assert offer["model"] == "SZD-9 Bocian"
-    assert offer["published_at"] == "2024-07-27"
+    assert_that(offer["category"]).is_equal_to("glider")
+    assert_that(offer["title"]).is_equal_to("Glider A")
+    assert_that(offer["manufacturer"]).is_equal_to("PZL Bielsko")
+    assert_that(offer["model"]).is_equal_to("SZD-9 Bocian")
+    assert_that(offer["published_at"]).is_equal_to("2024-07-27")
 
 
-def test_get_offers_even_when_manufacturer_website_is_not_defined(api_client):
+def test_get_offers_even_when_manufacturer_website_is_not_defined(
+    api_client: FlaskClient,
+) -> None:
     # when
     response = api_client.get("/api/offers/Grob/Astir")
 
     # then
-    assert response.status_code == 200
-    assert response.json["manufacturer_website"] is None
+    assert_that(response.status_code).is_equal_to(200)
+    assert response.json is not None
+    assert_that(response.json["manufacturer_website"]).is_none()
 
 
-def test_get_offers_404_for_unknown_manufacturer_or_model(api_client):
+def test_get_offers_404_for_unknown_manufacturer_or_model(
+    api_client: FlaskClient,
+) -> None:
     # given
     offers_db.store_offer(sample_offer())
 
     # when & then
-    assert api_client.get("/api/offers/Boeing/DoesNotMatter").status_code == 404
-
-
-if __name__ == "__main__":
-    pytest.main()
+    assert_that(
+        api_client.get("/api/offers/Boeing/DoesNotMatter").status_code
+    ).is_equal_to(404)

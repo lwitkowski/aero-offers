@@ -65,4 +65,4 @@ COPY --chown=python:python . .
 
 EXPOSE 8080
 
-CMD ["gunicorn", "-c", "python:config.gunicorn", "api.flask_app:app"]
+CMD ["gunicorn", "-c", "python:aerooffers.config.gunicorn", "aerooffers.api.flask_app:app"]

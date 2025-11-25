@@ -1,30 +1,31 @@
-import unittest
+import pytest
+from assertpy import assert_that
 
-from ddt import data, ddt, unpack
+from aerooffers.classifier import classifier
 
-from classifier import classifier
+model_classifier = classifier.ModelClassifier()
 
 
-@ddt
-class ModelClassifierTest(unittest.TestCase):
-    def setUp(self):
-        self.model_classifier = classifier.ModelClassifier()
+@pytest.mark.parametrize(
+    ("input_str", "tokens"),
+    [
+        ("Hello  world", ["Hello", "world"]),
+        ("Nimbus 3 25.5 m", ["Nimbus", "3", "255", "m"]),
+    ],
+)
+def test_tokenize(input_str: str, tokens: list[str]) -> None:
+    assert_that(model_classifier.tokenize(input_str)).is_equal_to(tokens)
 
-    @unpack
-    @data(
-        (["Hello", "world"], "Hello  world"),
-        (["Nimbus", "3", "255", "m"], "Nimbus 3 25.5 m"),
-    )
-    def test_tokenize(self, tokens, input_str):
-        self.assertEqual(tokens, self.model_classifier.tokenize(input_str))
 
-    def test_is_schleicher_model_re(self):
-        self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW 19"))
-        self.assertTrue(self.model_classifier.is_schleicher_model_re.match("ASW19"))
-        self.assertIsNone(self.model_classifier.is_schleicher_model_re.match("HSK15"))
+def test_is_schleicher_model_re() -> None:
+    assert_that(model_classifier.is_schleicher_model_re.match("ASW 19")).is_true()
+    assert_that(model_classifier.is_schleicher_model_re.match("ASW19")).is_true()
+    assert_that(model_classifier.is_schleicher_model_re.match("HSK15")).is_none()
 
-    @unpack
-    @data(
+
+@pytest.mark.parametrize(
+    ("output_list", "input_list"),
+    [
         (["ab", "cd"], ["a", "b", "cd"]),
         (["DG", "800B"], ["DG", "800", "B"]),
         # (["ka", "2b", "gut"], ["ka", "2", "b", "gut"]),
@@ -37,19 +38,21 @@ class ModelClassifierTest(unittest.TestCase):
         (["ASK 21", "D-1234"], ["ASK", "21", "D-1234"]),
         (["DG-100", "for", "sale"], ["DG-100", "for", "sale"]),
         (["Nimbus", "3", "255m"], ["Nimbus", "3", "255", "m"]),
+    ],
+)
+def test_join_single_characters(output_list: list[str], input_list: list[str]) -> None:
+    assert_that(model_classifier.join_single_characters(input_list)).is_equal_to(
+        output_list
     )
-    def test_join_single_characters(self, output_list, input_list):
-        self.assertEqual(
-            output_list, self.model_classifier.join_single_characters(input_list)
-        )
 
-    def test_preprocess_removes_punctuation(self):
-        self.assertEqual(
-            "Hello World", self.model_classifier.preprocess("Hello, World!")
-        )
 
-    @unpack
-    @data(
+def test_preprocess_removes_punctuation() -> None:
+    assert_that(model_classifier.preprocess("Hello, World!")).is_equal_to("Hello World")
+
+
+@pytest.mark.parametrize(
+    ("input_str", "expected_manufacturer", "expected_model"),
+    [
         ("Stemme S6-RT", "Stemme", "S6-RT"),
         ("DG 800 B", "DG Flugzeugbau", "DG-800B"),
         ("Vans Aircraft RV-6A", "Vans", "RV-6"),
@@ -66,17 +69,22 @@ class ModelClassifierTest(unittest.TestCase):
         ),
         ("Ventus 2B", "Schempp-Hirth", "Ventus 2b"),
         ("JS1-C", "Jonker", "JS1 C"),
+    ],
+)
+def test_single_models_regression(
+    input_str: str, expected_manufacturer: str, expected_model: str
+) -> None:
+    (manufacturer, model, _) = model_classifier.classify(
+        input_str, expect_manufacturer=False
     )
-    def test_single_models_regression(
-        self, input_str, expected_manufacturer, expected_model
-    ):
-        (manufacturer, model, _) = self.model_classifier.classify(
-            input_str, expect_manufacturer=False
-        )
-        self.assertEqual(expected_manufacturer, manufacturer)
-        self.assertEqual(expected_model, model)
 
-    def test_with_no_detail_text(self):
-        self.model_classifier.classify(
-            "DG-100", expect_manufacturer=False, detail_text=None
-        )
+    assert_that(manufacturer).is_equal_to(expected_manufacturer)
+    assert_that(model).is_equal_to(expected_model)
+
+
+def test_with_no_detail_text() -> None:
+    (manufacturer, model, _) = model_classifier.classify(
+        "DG-100", expect_manufacturer=False, detail_text=None
+    )
+    assert_that(manufacturer).is_equal_to("DG Flugzeugbau")
+    assert_that(model).is_equal_to("DG-100")

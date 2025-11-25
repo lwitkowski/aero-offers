@@ -1,26 +1,29 @@
 # noqa: N999
 import datetime
 import re
+from collections.abc import Generator
+from typing import Any
 
 import scrapy
 from scrapy.http import Response
 from scrapy.spidermiddlewares.httperror import HttpError
+from twisted.python.failure import Failure
 
-from my_logging import logging
-from offer import AircraftCategory, OfferPageItem
+from aerooffers.my_logging import logging
+from aerooffers.offer import AircraftCategory, OfferPageItem
 
 GLIDER_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=118"
 ENGINE_OFFERS_URL = "https://soaring.de/osclass/index.php?page=search&sCategory=119"
 BROKEN_OFFER_URL = "https://soaring.de/osclass/index.php?page=item&id="
 
 
-def _parse_int_or_none(param):
+def _parse_int_or_none(param: str) -> int:
     return int(param) if param is not None else None
 
 
 class SoaringDeSpider(scrapy.Spider):
     name = "segelflug_de_kleinanzeigen"
-    logger = logging.getLogger(name)
+    _logger = logging.getLogger(name)
 
     start_urls = [
         GLIDER_OFFERS_URL,
@@ -31,45 +34,46 @@ class SoaringDeSpider(scrapy.Spider):
 
     AD_SELECTOR = ".listing-thumb"
 
-    def _extract_first_number(self, text):
+    def _extract_first_number(self, text: str) -> int | None:
         match = re.search(r"\d+", text)
         if (
             match is not None
         ):  # avoid having text like: "2345 (aber eigentlich nur 45 stunden)"
-            return match.group(0)
+            return _parse_int_or_none(match.group(0))
         return None
 
-    def parse(self, response: Response, **kwargs):
-        self.logger.debug("Scraping %s", response.url)
+    def parse(self, response: Response) -> Generator[scrapy.Request, None]:
+        self._logger.debug("Scraping %s", response.url)
         for detail_url in response.css("div.listing-attr a::attr(href)").extract():
             if detail_url == BROKEN_OFFER_URL:
-                self.logger.debug("Url seems to be broken, skipping: %s", detail_url)
+                self._logger.debug("Url seems to be broken, skipping: %s", detail_url)
                 continue
 
+            assert response.request is not None
             if response.request.url == ENGINE_OFFERS_URL:
                 aircraft_category = AircraftCategory.airplane
             else:
                 aircraft_category = AircraftCategory.glider
 
-            self.logger.debug("Adding detail page for scraping %s", detail_url)
+            self._logger.debug("Adding detail page for scraping %s", detail_url)
             yield scrapy.Request(
                 detail_url,
-                callback=self.parse_detail_page,
-                errback=self.errback,
+                callback=self._parse_detail_page,
+                errback=self._errback,
                 meta={"aircraft_category": aircraft_category},
             )
 
-    def errback(self, failure):
+    def _errback(self, failure: Failure) -> Any:
         if failure.check(HttpError):
-            response = failure.value.response
-            self.logger.error(
+            response = failure.value.response  # type: ignore
+            self._logger.error(
                 "Crawler HttpError status=%s url=%s", response.status, response.url
             )
         else:
-            self.logger.error("Crawler generic exception: %s", repr(failure))
+            self._logger.error("Crawler generic exception: %s", repr(failure))
 
-    def parse_detail_page(self, response):
-        self.logger.debug("Parsing offer page %s", response.url)
+    def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem, None]:
+        self._logger.debug("Parsing offer page %s", response.url)
         try:
             date_str = response.css("#item-content .item-header li::text").extract()[3]
             date_str = date_str.replace("Veröffentlichungsdatum:", "").strip()
@@ -77,7 +81,8 @@ class SoaringDeSpider(scrapy.Spider):
             offer = OfferPageItem(
                 url=response.url,
                 category=response.meta["aircraft_category"],
-                title=response.css("#item-content .title strong::text").extract_first(),
+                title=response.css("#item-content .title strong::text").extract_first()
+                or "",
                 published_at=datetime.datetime.strptime(date_str, "%d/%m/%Y").date(),
                 page_content="".join(response.css("div#description").extract()).strip(),
             )
@@ -95,15 +100,11 @@ class SoaringDeSpider(scrapy.Spider):
                 "#item-content .meta_list .meta"
             ).extract():
                 if "Gesamtstunden" in aircraft_details:
-                    offer.hours = _parse_int_or_none(
-                        self._extract_first_number(aircraft_details)
-                    )
+                    offer.hours = self._extract_first_number(aircraft_details)
                 if "Gesamtstarts" in aircraft_details:
-                    offer.starts = _parse_int_or_none(
-                        self._extract_first_number(aircraft_details)
-                    )
+                    offer.starts = self._extract_first_number(aircraft_details)
 
             yield offer
 
         except Exception:
-            self.logger.error("Could not parse detail page %s because %s")
+            self._logger.error("Could not parse detail page %s because %s")

@@ -1,14 +1,14 @@
-import offers_db
-from classifier import classifier
-from my_logging import logging
-from spiders.SoaringDeSpider import SoaringDeSpider
+from aerooffers.classifier import classifier
+from aerooffers.my_logging import logging
+from aerooffers.offers_db import classify_offer, get_unclassified_offers
+from aerooffers.spiders.SoaringDeSpider import SoaringDeSpider
 
 logger = logging.getLogger("reclassify_job")
 aircraft_type_classifier = classifier.AircraftTypeClassifier()
 model_classifier = classifier.ModelClassifier()
 
 
-def reclassify(db_offer):
+def reclassify(db_offer: dict) -> None:
     expect_manufacturer = db_offer["spider"] != SoaringDeSpider.name
     (manufacturer, model, category) = model_classifier.classify(
         db_offer["title"], expect_manufacturer, db_offer["page_content"]
@@ -17,7 +17,7 @@ def reclassify(db_offer):
         logger.debug(
             "Classified '%s' as '%s' '%s'", db_offer["title"], manufacturer, model
         )
-        offers_db.classify_offer(
+        classify_offer(
             offer_id=db_offer["id"],
             category=category,
             manufacturer=manufacturer,
@@ -28,7 +28,7 @@ def reclassify(db_offer):
             db_offer["title"], db_offer["spider"]
         )
         logger.debug("Classified '%s' as '%s'", db_offer["title"], aircraft_type)
-        offers_db.classify_offer(
+        classify_offer(
             offer_id=db_offer["id"],
             category=aircraft_type,
             manufacturer=None,
@@ -36,12 +36,12 @@ def reclassify(db_offer):
         )
 
 
-def reclassify_all():
+def reclassify_all() -> int:
     offers_processed = 0
     offset = 0
     limit = 100
     while True:
-        offers = offers_db.get_unclassified_offers(offset=offset, limit=limit)
+        offers = get_unclassified_offers(offset=offset, limit=limit)
         for offer in offers:
             reclassify(offer)
 

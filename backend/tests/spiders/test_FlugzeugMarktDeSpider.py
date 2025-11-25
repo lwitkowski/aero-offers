@@ -1,47 +1,40 @@
-# noqa: N999
-
 import datetime
-import unittest
 
+from assertpy import assert_that
 from util import fake_response_from_file
 
-from offer import AircraftCategory, OfferPageItem
-from spiders import FlugzeugMarktDeSpider
+from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.spiders.FlugzeugMarktDeSpider import FlugzeugMarktDeSpider
+
+spider = FlugzeugMarktDeSpider()
 
 
-class FlugzeugMarktDeSpiderTest(unittest.TestCase):
-    def setUp(self):
-        self.spider = FlugzeugMarktDeSpider.FlugzeugMarktDeSpider()
+def test_collect_urls_of_all_offer_on_listing_page() -> None:
+    # given
+    listing_page_http_response = fake_response_from_file(
+        "spiders/samples/flugzeugmarkt_de_listing.html"
+    )
 
-    def test_collect_urls_of_all_offer_on_listing_page(self):
-        # given
-        listing_page_http_response = fake_response_from_file(
-            "spiders/samples/flugzeugmarkt_de_listing.html"
+    # when
+    listing_page_parse_result = spider.parse(listing_page_http_response)
+
+    # then
+    detail_pages = [i for i in listing_page_parse_result]
+    assert_that(detail_pages).is_length(20)
+    assert_that(detail_pages[0].url).is_equal_to(
+        "https://www.flugzeugmarkt.de/ultraleichtflugzeug-kaufen/comco-ikarus/c42b-competition-gebraucht-kaufen/3331.html",
+    )
+
+
+def test_parse_detail_page() -> None:
+    item: OfferPageItem = next(
+        spider._parse_detail_page(
+            fake_response_from_file("spiders/samples/flugzeugmarkt_de_offer.html")
         )
-
-        # when
-        listing_page_parse_result = self.spider.parse(listing_page_http_response)
-
-        # then
-        detail_pages = [i for i in listing_page_parse_result]
-        self.assertEqual(len(detail_pages), 20)
-        self.assertEqual(
-            detail_pages[0].url,
-            "https://www.flugzeugmarkt.de/ultraleichtflugzeug-kaufen/comco-ikarus/c42b-competition-gebraucht-kaufen/3331.html",
-        )
-
-    def test_parse_detail_page(self):
-        item: OfferPageItem = next(
-            self.spider.parse_detail_page(
-                fake_response_from_file("spiders/samples/flugzeugmarkt_de_offer.html")
-            )
-        )
-        self.assertIsNotNone(item.title)
-        self.assertEqual(
-            item.published_at,
-            datetime.datetime.strptime("08.10.2019", "%d.%m.%Y").date(),
-        )
-        self.assertEqual("250.000 $", item.raw_price)
-        self.assertEqual(1492, item.hours)
-        self.assertTrue("IFR Approved" in item.page_content)
-        self.assertEqual(AircraftCategory.airplane, item.category)
+    )
+    assert_that(item.title).is_equal_to("Cessna TU206G")
+    assert_that(item.published_at).is_equal_to(datetime.date(2019, 10, 8))
+    assert_that(item.raw_price).is_equal_to("250.000 $")
+    assert_that(item.hours).is_equal_to(1492)
+    assert_that(item.page_content).contains("IFR Approved")
+    assert_that(item.category).is_equal_to(AircraftCategory.airplane)

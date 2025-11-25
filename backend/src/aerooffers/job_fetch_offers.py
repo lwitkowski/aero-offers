@@ -1,13 +1,14 @@
 import os
 import pprint
+from collections.abc import Mapping
 from datetime import datetime
 
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import Crawler, CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from mailer import send_mail
-from my_logging import logging
-from spiders import FlugzeugMarktDeSpider, SoaringDeSpider
+from aerooffers.mailer import send_mail
+from aerooffers.my_logging import logging
+from aerooffers.spiders import FlugzeugMarktDeSpider, SoaringDeSpider
 
 logger = logging.getLogger("offers_crawler")
 
@@ -26,22 +27,24 @@ if __name__ == "__main__":
         logger.info(f"Item pipelines settings: {str(pipelines)}")
         process = CrawlerProcess(settings)
 
-        spiders = {
-            SoaringDeSpider.SoaringDeSpider: None,
-            FlugzeugMarktDeSpider.FlugzeugMarktDeSpider: None,
-        }
-        for spider_cls in spiders:
-            crawler = process.create_crawler(spider_cls)
-            spiders[spider_cls] = crawler
+        def create_crawler(spider_cls: type) -> tuple[str, Crawler]:
+            crawler: Crawler = process.create_crawler(crawler_or_spidercls=spider_cls)
             process.crawl(crawler)
+            return spider_cls.__name__, crawler
+
+        spiders: list[tuple[str, Crawler]] = [
+            create_crawler(SoaringDeSpider.SoaringDeSpider),
+            create_crawler(FlugzeugMarktDeSpider.FlugzeugMarktDeSpider),
+        ]
 
         process.start()  # the script will block here until all crawling jobs are finished
 
-        stats_per_spider = {}
+        stats_per_spider: dict[str, Mapping[str, float]] = {}
 
-        for spider_cls, crawler in spiders.items():
-            logger.debug("Fetching stats for spider: %s", spider_cls)
-            stats_per_spider[spider_cls.name] = crawler.stats.get_stats()
+        for spider_name, crawler in spiders:
+            logger.debug("Fetching stats for spider: %s", spider_name)
+            assert crawler.stats is not None
+            stats_per_spider[spider_name] = crawler.stats.get_stats()
 
         msg = f"Crawling offers completed at {str(datetime.now())} \n\n {pprint.pformat(stats_per_spider)} \n"
 

@@ -1,5 +1,5 @@
 [project]
-name = "aero-offers"
+name = "aerooffers"
 version = "3.0"
 requires-python = ">=3.12"
 dependencies = [
@@ -20,16 +20,24 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ruff==0.14.6",
-    "ddt==1.7.2",
+    {include-group = "lint"},
     "pytest==9.0.1",
     "pytest-cov==7.0.0",
+    "assertpy==1.1",
     "testcontainers[cosmosdb]==4.13.3",
+]
+lint = [
+    "ruff==0.14.6",
+    "mypy==1.18.2",
+    "types-requests==2.32.4.20250913",
+    "types-defusedxml==0.7.0.20250822",
+    "types-flask-cors==6.0.0.20250809",
+    "types-assertpy==1.1.0.20250502",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src", "tests"]
-addopts = ["--import-mode=importlib", ]
+pythonpath = "src"
+testpaths = ["tests"]
 
 [tool.coverage.run]
 omit = ["tests/*", "**/__init__.py", ]
@@ -40,19 +48,18 @@ select = [
     "A", # flake8-builtins
     "B", # flake8-bugbear
     "C90", # mccabe (complexity)
-    #"D", # pydocstyle
-    #"E", # pycodestyle errors
     "F", # pyflakes
     "I", # imports
     "N", # pep8-naming
     "PERF", # perflint
-    #"PT", # flake8-pytest-style
-    #"S", # flake-8 bandit (forbid plain asserts, secrets detection, etc)
+    "PT", # flake8-pytest-style
+    "S", # flake-8 bandit (forbid plain asserts, secrets detection, etc)
     "UP", # pyupgrade (better compatibility with newer python versions)
 ]
 ignore = [
     "E501", # `ruff format --check` takes care of this, as this rule enforcing max line length is not compatible with formatter
-    "D10" # disable requirement for everything needing a description
+    "D10", # disable requirement for everything needing a description
+    "S101" # plain asserts are useful sometimes
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -62,9 +69,15 @@ ignore = [
 order-by-type = false
 
 [tool.mypy]
-files = ["src", "tests"]
+files = ["src/aerooffers", "tests"]
 exclude = ".cache"
 strict_equality = true
 check_untyped_defs = true
 disallow_untyped_defs = true
 show_error_codes = true
+
+
+[[tool.mypy.overrides]]
+module = ["nltk.*", "flask_headers", "distutils.util", "testcontainers.*"]
+follow_untyped_imports = false
+ignore_missing_imports = true
