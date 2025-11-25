@@ -9,7 +9,7 @@ import offers_response from '@/views/__tests__/offers_resp.json'
 vi.mock('axios')
 
 describe('ModelDetails', () => {
-  it('renders properly', async () => {
+  it('renders median and avg prices properly', async () => {
     vi.mocked(axios).get.mockResolvedValue({ data: offers_response })
 
     const wrapper = mount(ModelDetails, {
