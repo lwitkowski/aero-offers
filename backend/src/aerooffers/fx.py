@@ -41,7 +41,7 @@ def update_exchange_rates(xml_data: str) -> int:
 
 def fetch_exchange_rates_from_ecb() -> None:
     start_time = time.time()
-    xml_response = requests.get(ECB_FX_RATES_URL).text
+    xml_response = requests.get(url=ECB_FX_RATES_URL, timeout=30).text
     count = update_exchange_rates(xml_response)
 
     logger.info("Fetched %d exchange rates in %.2fs", count, (time.time() - start_time))

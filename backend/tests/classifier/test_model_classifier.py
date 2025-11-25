@@ -7,7 +7,7 @@ model_classifier = classifier.ModelClassifier()
 
 
 @pytest.mark.parametrize(
-    "input_str,tokens",
+    ("input_str", "tokens"),
     [
         ("Hello  world", ["Hello", "world"]),
         ("Nimbus 3 25.5 m", ["Nimbus", "3", "255", "m"]),
@@ -24,7 +24,7 @@ def test_is_schleicher_model_re() -> None:
 
 
 @pytest.mark.parametrize(
-    "output_list,input_list",
+    ("output_list", "input_list"),
     [
         (["ab", "cd"], ["a", "b", "cd"]),
         (["DG", "800B"], ["DG", "800", "B"]),
@@ -51,7 +51,7 @@ def test_preprocess_removes_punctuation() -> None:
 
 
 @pytest.mark.parametrize(
-    "input_str,expected_manufacturer,expected_model",
+    ("input_str", "expected_manufacturer", "expected_model"),
     [
         ("Stemme S6-RT", "Stemme", "S6-RT"),
         ("DG 800 B", "DG Flugzeugbau", "DG-800B"),
