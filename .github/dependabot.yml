@@ -10,6 +10,11 @@ updates:
     development-dependencies:
       dependency-type: "development"
 
+- package-ecosystem: "docker"
+  directory: "/backend"
+  schedule:
+    interval: weekly
+
 - package-ecosystem: 'npm'
   directory: '/ui'
   schedule:
@@ -22,8 +27,6 @@ updates:
         - "chartist-plugin-tooltips-updated"
     development-dependencies:
       dependency-type: "development"
-
-
 
 - package-ecosystem: "github-actions"
   directory: "/"
