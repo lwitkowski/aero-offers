@@ -26,7 +26,7 @@ ENV PYTHONUNBUFFERED="true" \
   PATH="${PATH}:/home/python/.local/bin" \
   USER="python"
 
-RUN uv sync
+RUN uv sync --no-dev
 
 CMD ["bash"]
 
