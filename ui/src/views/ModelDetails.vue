@@ -221,20 +221,9 @@ export default {
 <style lang="scss">
 #chart {
   margin: auto;
-  width: 600px;
+  padding: 20px;
   height: 600px;
 }
-
-.chart-tooltip::before {
-  border-top-color: #011627;
-}
-
-.chart-tooltip {
-  color: #ffffff;
-  font-weight: 100;
-  background-color: #011627;
-}
-
 .modelinformation-table {
   text-align: left;
   margin: auto;
