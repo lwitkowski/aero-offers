@@ -13,9 +13,7 @@ def test_new_offer_is_not_duplicate(cosmos_db: CosmosClient) -> None:
     offers_db.store_offer(sample_offer(url="https://offers.com/2"))
 
     # when & then
-    pipelines.DuplicateDetection().process_item(
-        sample_offer(url="https://offers.com/1")
-    )
+    pipelines.SkipDuplicates().process_item(sample_offer(url="https://offers.com/1"))
 
 
 def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
@@ -24,7 +22,7 @@ def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
 
     # when
     with pytest.raises(DropItem) as e:
-        pipelines.DuplicateDetection().process_item(sample_offer())
+        pipelines.SkipDuplicates().process_item(sample_offer())
 
     # then
     assert_that(str(e.value)).is_equal_to(
@@ -45,7 +43,7 @@ def test_parse_valid_prices(raw_valid_price: str, expected_price: str) -> None:
     offer_with_valid_price = sample_offer(raw_price=raw_valid_price)
 
     # when
-    pipelines.PriceParser().process_item(offer_with_valid_price)
+    pipelines.ParsePrice().process_item(offer_with_valid_price)
 
     # then
     assert_that(offer_with_valid_price.price).is_equal_to(expected_price)
@@ -57,7 +55,7 @@ def test_parse_valid_prices(raw_valid_price: str, expected_price: str) -> None:
 def test_should_drop_if_price_is_missing() -> None:
     offer_with_invalid_price = sample_offer(raw_price="Ask for price")
     with pytest.raises(DropItem):
-        pipelines.PriceParser().process_item(offer_with_invalid_price)
+        pipelines.ParsePrice().process_item(offer_with_invalid_price)
 
 
 @pytest.mark.parametrize(
@@ -74,7 +72,7 @@ def test_should_drop_if_price_is_unreasonable(
     offer_with_unreasonable_price = sample_offer(raw_price=unreasonable_price)
 
     with pytest.raises(DropItem) as e:
-        pipelines.PriceParser().process_item(offer_with_unreasonable_price)
+        pipelines.ParsePrice().process_item(offer_with_unreasonable_price)
 
     assert_that(str(e.value)).contains(error_msg)
 
@@ -93,7 +91,7 @@ def test_search_offers_are_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
 
     with pytest.raises(DropItem) as e:
-        pipelines.FilterSearchAndCharterOffers().process_item(offer)
+        pipelines.SkipSearchAndCharterOffers().process_item(offer)
 
     assert_that(str(e.value)).is_equal_to("Dropping Search offer")
 
@@ -111,7 +109,7 @@ def test_charter_offers_are_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
 
     with pytest.raises(DropItem) as e:
-        pipelines.FilterSearchAndCharterOffers().process_item(offer)
+        pipelines.SkipSearchAndCharterOffers().process_item(offer)
 
     assert_that(str(e.value)).is_equal_to("Dropping Charter Offer")
 
@@ -123,7 +121,7 @@ def test_charter_offers_are_dropped(offer_title: str) -> None:
 def test_regular_offers_are_not_dropped(offer_title: str) -> None:
     offer = sample_offer(title=offer_title)
 
-    filtered_item = pipelines.FilterSearchAndCharterOffers().process_item(offer)
+    filtered_item = pipelines.SkipSearchAndCharterOffers().process_item(offer)
 
     assert_that(filtered_item).is_equal_to(offer)
 
@@ -135,7 +133,7 @@ def test_should_store_offer(cosmos_db: CosmosClient) -> None:
     )
 
     # when
-    pipelines.StoragePipeline().process_item(sample_raw_offer)
+    pipelines.StoreOffer().process_item(sample_raw_offer)
 
     # then
     all_gliders_in_db = offers_db.get_offers(category=AircraftCategory.glider)

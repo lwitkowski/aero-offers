@@ -3,7 +3,7 @@ import pprint
 from collections.abc import Mapping
 from datetime import datetime
 
-from scrapy.crawler import Crawler, CrawlerProcess
+from scrapy.crawler import Crawler, CrawlerProcess, Spider
 from scrapy.utils.project import get_project_settings
 
 from aerooffers.mailer import send_mail
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         logger.info(f"Item pipelines settings: {str(pipelines)}")
         process = CrawlerProcess(settings)
 
-        def create_crawler(spider_cls: type) -> tuple[str, Crawler]:
+        def create_crawler(spider_cls: type[Spider]) -> tuple[str, Crawler]:
             crawler: Crawler = process.create_crawler(crawler_or_spidercls=spider_cls)
             process.crawl(crawler)
             return spider_cls.__name__, crawler
