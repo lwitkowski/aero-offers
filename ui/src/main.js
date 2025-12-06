@@ -1,6 +1,5 @@
 import { createApp, h } from 'vue'
 import axios from 'axios'
-import vueChartist from 'vue-chartist'
 
 import App from './App.vue'
 import router from './router'
@@ -13,5 +12,4 @@ const app = createApp({
 })
 
 app.use(router)
-app.use(vueChartist)
 app.mount('#app')
