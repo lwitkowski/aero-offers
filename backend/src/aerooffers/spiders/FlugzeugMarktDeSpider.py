@@ -2,7 +2,7 @@
 import datetime
 import re
 from collections.abc import Generator
-from typing import Any
+from typing import Any, override
 
 import scrapy
 from scrapy.http import Response
@@ -28,7 +28,10 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
         "Helikopter": AircraftCategory.helicopter,
     }
 
-    def parse(self, response: Response) -> Generator[scrapy.Request, None]:
+    @override
+    def parse(
+        self, response: Response, **kwargs: Any
+    ) -> Generator[scrapy.Request, None]:
         self._logger.debug("Scraping %s", response.url)
         for detail_url in response.css("div.content-inner a::attr(href)").extract():
             full_url_to_crawl = BASE_URL + detail_url[2:]

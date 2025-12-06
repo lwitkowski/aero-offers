@@ -16,8 +16,8 @@ SMTP_HOST = ""
 
 # scrapy pipeline components config, do not delete this
 ITEM_PIPELINES = {
-    "pipelines.FilterSearchAndCharterOffers": 100,
-    "pipelines.DuplicateDetection": 200,
-    "pipelines.PriceParser": 300,
-    "pipelines.StoragePipeline": 400,
+    "aerooffers.pipelines.SkipSearchAndCharterOffers": 100,
+    "aerooffers.pipelines.SkipDuplicates": 200,
+    "aerooffers.pipelines.ParsePrice": 300,
+    "aerooffers.pipelines.StoreOffer": 400,
 }

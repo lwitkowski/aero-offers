@@ -2,7 +2,7 @@
 import datetime
 import re
 from collections.abc import Generator
-from typing import Any
+from typing import Any, override
 
 import scrapy
 from scrapy.http import Response
@@ -42,7 +42,10 @@ class SoaringDeSpider(scrapy.Spider):
             return _parse_int_or_none(match.group(0))
         return None
 
-    def parse(self, response: Response) -> Generator[scrapy.Request, None]:
+    @override
+    def parse(
+        self, response: Response, **kwargs: Any
+    ) -> Generator[scrapy.Request, None]:
         self._logger.debug("Scraping %s", response.url)
         for detail_url in response.css("div.listing-attr a::attr(href)").extract():
             if detail_url == BROKEN_OFFER_URL:
