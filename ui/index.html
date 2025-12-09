@@ -27,6 +27,11 @@
   <body>
     <div id="app"></div>
 
+    <!-- dirty fix for vue-chartist working correctly only with webpack -->
+    <script>
+      window.global ||= window
+    </script>
+
     <script type="module" src="/src/main.js"></script>
 
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"

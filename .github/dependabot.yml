@@ -24,6 +24,7 @@ updates:
       dependency-type: "production"
       exclude-patterns:
         - "vue-multiselect"
+        - "chartist-plugin-tooltips-updated"
     development-dependencies:
       dependency-type: "development"
 

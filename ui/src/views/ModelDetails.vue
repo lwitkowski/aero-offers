@@ -8,14 +8,14 @@
         <a :href="manufacturer_website" target="_blank">{{ manufacturer_website }}</a>
       </p>
       <h2>Price Chart</h2>
-      <div id="chart" class="ct-chart">
-        <Chart :data="chartData" :options="chartOptions" />
+      <div id="chart">
+        <chartist type="Line" ratio=".ct-chart" :data="chartData" :options="chartOptions" />
       </div>
       <h2>Offers</h2>
       <p>
         There were {{ offers.length }} offer(s). Median offer price is
-        <span class="median_price">{{ formatPrice(medianPrice, 'EUR') }},</span>
-        average {{ formatPrice(avgPrice, 'EUR') }}.
+        <span class="median_price">{{ formatPrice(medianPrice, 'EUR') }}</span>
+        , average {{ formatPrice(avgPrice, 'EUR') }}.
       </p>
       <table class="modelinformation-table">
         <tr>
@@ -54,30 +54,15 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 import regression from 'regression'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  TimeScale
-} from 'chart.js'
-import { Chart } from 'vue-chartjs'
-import 'chartjs-adapter-date-fns'
-
+import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 import { formatPrice, median } from '@/utils.js'
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, TimeScale)
 
 export default {
   name: 'ModelDetails',
 
-  components: {
-    Chart
-  },
+  components: {},
   props: {
     manufacturer: {
       type: String,
@@ -95,34 +80,17 @@ export default {
       avgPrice: 0,
       medianPrice: 0,
       chartData: {
-        datasets: []
+        series: [[], []]
       },
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            type: 'time',
-            parsing: false,
-            time: {
-              displayFormats: {
-                quarter: 'MMM YYYY'
-              }
-            }
-          }
-        },
-        plugins: {
-          tooltip: {
-            filter: function (tooltipItem) {
-              return tooltipItem.datasetIndex === 0
-            },
-            callbacks: {
-              label: function (context) {
-                return [context.raw.offer.title, formatPrice(context.parsed.y, 'EUR')]
-              }
-            }
-          }
-        }
+        width: 600,
+        height: 600,
+        showArea: false,
+        plugins: [
+          ChartistTooltip({
+            class: 'tooltip'
+          })
+        ]
       }
     }
   },
@@ -133,22 +101,42 @@ export default {
 
   methods: {
     formatPrice,
+    dateAlreadyPresent(date) {
+      for (let j = 0; j < this.chartData.series[0].length; j++) {
+        if (moment(this.chartData.series[0][j].x).isSame(date, 'day')) {
+          return true
+        }
+      }
+      return false
+    },
+
+    drawLinearRegressionLine(dataPoints) {
+      const regressionResult = regression.linear(dataPoints)
+      if (regressionResult.points.length >= 2) {
+        const startPoint = regressionResult.points[0]
+        const endPoint = regressionResult.points[regressionResult.points.length - 1]
+        this.chartData.series[1] = [
+          { x: new Date(startPoint[0] * 100000), y: startPoint[1] },
+          { x: new Date(endPoint[0] * 100000), y: endPoint[1] }
+        ]
+      } else {
+        this.chartData.series[1] = []
+      }
+    },
 
     fetchData() {
-      this.chartData.datasets = []
+      this.chartData.series = [[]]
       this.avgPrice = 0
-      this.medianPrice = 0
 
       axios.get(`/api/offers/${this.manufacturer}/${this.model}`).then((response) => {
         this.manufacturer_website = response.data.manufacturer_website
         this.offers = response.data.offers
+        this.offers.sort((a, b) => new Date(a.published_at) - new Date(b.published_at))
+
         if (this.offers.length === 0) {
           return
         }
 
-        this.offers.sort((a, b) => new Date(a.published_at) - new Date(b.published_at))
-
-        let points = []
         let prices = []
         let priceSum = 0
         const dataPointsForRegression = []
@@ -161,69 +149,87 @@ export default {
           }
 
           const datapoint = {
+            meta: offer.title,
             x: new Date(offer.published_at),
-            y: Number(offer.price.amount_in_euro),
-            offer: offer
+            y: Number(offer.price.amount_in_euro)
           }
-          points.push(datapoint)
+          if (this.dateAlreadyPresent(datapoint.x)) {
+            this.chartData.series.push([datapoint])
+            continue
+          }
+          this.chartData.series[0].push(datapoint)
           dataPointsForRegression.push([
             datapoint.x.getTime() / 100000, // this is needed for regression calculations to work correctly
             datapoint.y
           ])
         }
 
-        let datasets = [
-          {
-            label: 'Offers',
-            type: 'scatter',
-            backgroundColor: '#f87979',
-            borderColor: '#f87979',
-            pointRadius: 5,
-            data: points
-          }
-        ]
-
-        let regressionLine = this.drawLinearRegressionLine(dataPointsForRegression)
-        if (regressionLine) {
-          datasets.push(regressionLine)
+        this.chartOptions = {
+          showLine: true,
+          axisX: {
+            type: this.$chartist.FixedScaleAxis,
+            divisor: 6,
+            labelInterpolationFnc: function (value) {
+              return moment(value).format('MMM-DD-YYYY')
+            }
+          },
+          width: 600,
+          height: 600,
+          low: 0,
+          plugins: [
+            this.$chartist.plugins.tooltip({
+              transformTooltipTextFnc: (datapoint) => {
+                return formatPrice(datapoint.split(',')[1], 'EUR')
+              }
+            })
+          ]
         }
-        this.chartData = { datasets: datasets }
+        this.drawLinearRegressionLine(dataPointsForRegression)
 
         this.avgPrice = Math.round((priceSum / this.offers.length) * 100) / 100
         this.medianPrice = median(prices)
       })
-    },
-
-    drawLinearRegressionLine(dataPoints) {
-      const regressionResult = regression.linear(dataPoints)
-      if (regressionResult.points.length < 2) {
-        return null
-      }
-      const startPoint = regressionResult.points[0]
-      const endPoint = regressionResult.points[regressionResult.points.length - 1]
-
-      return {
-        label: 'regression',
-        type: 'line',
-        borderColor: '#4281ec66',
-        pointStyle: false,
-        borderWidth: 5,
-        data: [
-          { x: new Date(startPoint[0] * 100000), y: startPoint[1] },
-          { x: new Date(endPoint[0] * 100000), y: endPoint[1] }
-        ]
-      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+@import 'chartist/dist/scss/chartist.scss';
+@import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.scss';
+
 #chart {
   margin: auto;
-  padding: 20px;
+  width: 600px;
   height: 600px;
 }
+
+.ct-series-a .ct-line {
+  stroke-width: 0px;
+}
+.ct-series-a .ct-point {
+  stroke: #df3a26;
+  stroke-width: 10px;
+}
+
+.ct-series-b .ct-line {
+  stroke: #4281ec66;
+  stroke-width: 5px;
+}
+.ct-series-b .ct-point {
+  stroke-width: 0px;
+}
+
+.chartist-tooltip::before {
+  border-top-color: #011627;
+}
+
+.chartist-tooltip {
+  color: #ffffff;
+  font-weight: 100;
+  background-color: #011627;
+}
+
 .modelinformation-table {
   text-align: left;
   margin: auto;
