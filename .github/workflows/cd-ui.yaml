@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: 'Download dist artifacts'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ui-dist
           path: ui/dist
