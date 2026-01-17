@@ -11,9 +11,9 @@ dependencies = [
     "nltk==3.9.2",
     "price-parser==0.5.0",
     "requests==2.32.5",
-    "scrapy==2.13.4",
+    "scrapy==2.14.1",
     "twisted==25.5.0",
-    "azure-cosmos==4.14.3",
+    "azure-cosmos==4.14.4",
     "azure-identity==1.25.1",
     "defusedxml==0.7.1",
 ]

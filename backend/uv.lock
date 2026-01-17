@@ -46,7 +46,7 @@ lint = [
 
 [package.metadata]
 requires-dist = [
-    { name = "azure-cosmos", specifier = "==4.14.3" },
+    { name = "azure-cosmos", specifier = "==4.14.4" },
     { name = "azure-identity", specifier = "==1.25.1" },
     { name = "defusedxml", specifier = "==0.7.1" },
     { name = "flask", specifier = "==3.1.2" },
@@ -57,7 +57,7 @@ requires-dist = [
     { name = "nltk", specifier = "==3.9.2" },
     { name = "price-parser", specifier = "==0.5.0" },
     { name = "requests", specifier = "==2.32.5" },
-    { name = "scrapy", specifier = "==2.13.4" },
+    { name = "scrapy", specifier = "==2.14.1" },
     { name = "twisted", specifier = "==25.5.0" },
 ]
 
@@ -123,15 +123,15 @@ wheels = [
 
 [[package]]
 name = "azure-cosmos"
-version = "4.14.3"
+version = "4.14.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "azure-core" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e6/82/053b9b98c67da1b3d97be19eaf65e424e58629869ed3782e1352b872d45c/azure_cosmos-4.14.3.tar.gz", hash = "sha256:ae84aa0438dfcf8b8d6dec22dc7ce5219645321f37cddb50a13c84b69675f0bc", size = 2044817, upload-time = "2025-12-08T17:44:14.127Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/a9/623b6ac61895a2de8fc5a7bb13e25adef92fdd7964b8ce9b85b3d7ee5ca1/azure_cosmos-4.14.4.tar.gz", hash = "sha256:2a9bb92058a422990b2a29fe3359e8665cd61a4a5ca1338405451439c72834a8", size = 2049625, upload-time = "2026-01-12T19:01:53.283Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9f/32/1ce7d5ad9006715ccf62fdb4668e18272f6154ddb17a067d52b7efc6406c/azure_cosmos-4.14.3-py3-none-any.whl", hash = "sha256:67b20403520ecfddb23067caf3d4161a466823e36e63ef666f6bc2c079b03a88", size = 390727, upload-time = "2025-12-08T17:44:16.538Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/46/c0254ea4635d6093085ddd7ba67240eb0d1da145b9313e8bc92c0ff65ac5/azure_cosmos-4.14.4-py3-none-any.whl", hash = "sha256:7e386ef9723e4ddea892dcb315ebe9f41c83f8ab83eed4ebe4d2d908c5ff595c", size = 392924, upload-time = "2026-01-12T19:01:55.781Z" },
 ]
 
 [[package]]
@@ -1218,7 +1218,7 @@ wheels = [
 
 [[package]]
 name = "scrapy"
-version = "2.13.4"
+version = "2.14.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
@@ -1240,9 +1240,9 @@ dependencies = [
     { name = "w3lib" },
     { name = "zope-interface" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/08/ef/827db21986672723741ef1c384f4e5a09b0a552936ae638b6426e71d3a6e/scrapy-2.13.4.tar.gz", hash = "sha256:e09bce40c56b56f9f86b0d078a0e5cdd08283c83076170ce7a8eec7189ac2493", size = 1220580, upload-time = "2025-11-17T11:32:27.137Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/fb/0ccc11eaabdac1f210f27fb6b2ad4aa4ff8a5085cbc616102536fe2c56f4/scrapy-2.14.1.tar.gz", hash = "sha256:b2a4e61802e0a5518bc8293058adedbb6b0d51c08c125d1322b1af7c7cbca4c1", size = 1251898, upload-time = "2026-01-12T19:26:44.572Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/17/23/3a35660c44bd7c116a83ddd23f99a1add46276b15ca7103492a73d5fdf4f/scrapy-2.13.4-py3-none-any.whl", hash = "sha256:9bf36700aefa4983cc48b2cb0e1564161a340e19f73862778e2ed44ec5bbde6a", size = 321567, upload-time = "2025-11-17T11:32:24.891Z" },
+    { url = "https://files.pythonhosted.org/packages/28/5d/e9e42968535589423a0831adf9daac7555758e5e723f99fa2d6a7e68f715/scrapy-2.14.1-py3-none-any.whl", hash = "sha256:e3a3c7969b7e692864f7de05e10ecb2d1bc813ed571361dc71142e5368ff92dc", size = 331706, upload-time = "2026-01-12T19:26:42.434Z" },
 ]
 
 [[package]]
