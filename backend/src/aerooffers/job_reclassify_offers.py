@@ -1,7 +1,7 @@
 from aerooffers.classifier import classifier
 from aerooffers.my_logging import logging
 from aerooffers.offers_db import classify_offer, get_unclassified_offers
-from aerooffers.spiders.SoaringDeSpider import SoaringDeSpider
+from aerooffers.spiders.SegelflugDeSpider import SegelflugDeSpider
 
 logger = logging.getLogger("reclassify_job")
 aircraft_type_classifier = classifier.AircraftTypeClassifier()
@@ -9,7 +9,7 @@ model_classifier = classifier.ModelClassifier()
 
 
 def reclassify(db_offer: dict) -> None:
-    expect_manufacturer = db_offer["spider"] != SoaringDeSpider.name
+    expect_manufacturer = db_offer["spider"] != SegelflugDeSpider.name
     (manufacturer, model, category) = model_classifier.classify(
         db_offer["title"], expect_manufacturer, db_offer["page_content"]
     )

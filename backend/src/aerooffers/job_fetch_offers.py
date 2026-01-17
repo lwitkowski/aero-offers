@@ -8,7 +8,7 @@ from scrapy.utils.project import get_project_settings
 
 from aerooffers.mailer import send_mail
 from aerooffers.my_logging import logging
-from aerooffers.spiders import FlugzeugMarktDeSpider, SoaringDeSpider
+from aerooffers.spiders import FlugzeugMarktDeSpider, SegelflugDeSpider
 
 logger = logging.getLogger("offers_crawler")
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
             return spider_cls.__name__, crawler
 
         spiders: list[tuple[str, Crawler]] = [
-            create_crawler(SoaringDeSpider.SoaringDeSpider),
+            create_crawler(SegelflugDeSpider.SegelflugDeSpider),
             create_crawler(FlugzeugMarktDeSpider.FlugzeugMarktDeSpider),
         ]
 
