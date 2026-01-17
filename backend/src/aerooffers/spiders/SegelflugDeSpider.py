@@ -153,21 +153,14 @@ class SegelflugDeSpider(scrapy.Spider):
 
     def _extract_hours(self, response: Response) -> int | None:
         """Extract hours from the offer page."""
-        all_text = " ".join(response.css("::text").extract())
-
         hours_text = response.xpath('//text()[contains(., "Stunden:")]').extract_first()
-        if not hours_text:
-            # Search in all text (Stunden: might be in separate elements)
-            hours_match = re.search(r"Stunden[:\s]*(\d+)", all_text, re.IGNORECASE)
+        if hours_text:
+            hours_match = re.search(r"Stunden:\s*(\d+)", hours_text)
             if hours_match:
                 return self._extract_first_number(hours_match.group(1))
-            return None
 
-        hours_match = re.search(r"Stunden:\s*(\d+)", hours_text)
-        if hours_match:
-            return self._extract_first_number(hours_match.group(1))
-
-        # If not found in same text node, search in all text
+        # Search in all text (Stunden: might be in separate elements)
+        all_text = " ".join(response.css("::text").extract())
         hours_match = re.search(r"Stunden[:\s]*(\d+)", all_text, re.IGNORECASE)
         if hours_match:
             return self._extract_first_number(hours_match.group(1))
@@ -176,21 +169,14 @@ class SegelflugDeSpider(scrapy.Spider):
 
     def _extract_starts(self, response: Response) -> int | None:
         """Extract starts from the offer page."""
-        all_text = " ".join(response.css("::text").extract())
-
-        hours_text = response.xpath('//text()[contains(., "Stunden:")]').extract_first()
-        if not hours_text:
-            # Search in all text (they might be in separate elements)
-            starts_match = re.search(r"Starts[:\s]*(\d+)", all_text, re.IGNORECASE)
+        starts_text = response.xpath('//text()[contains(., "Starts:")]').extract_first()
+        if starts_text:
+            starts_match = re.search(r"Starts:\s*(\d+)", starts_text)
             if starts_match:
                 return self._extract_first_number(starts_match.group(1))
-            return None
 
-        starts_match = re.search(r"Starts:\s*(\d+)", hours_text)
-        if starts_match:
-            return self._extract_first_number(starts_match.group(1))
-
-        # Search in all text (they might be in separate elements)
+        # Search in all text (Starts: might be in separate elements)
+        all_text = " ".join(response.css("::text").extract())
         starts_match = re.search(r"Starts[:\s]*(\d+)", all_text, re.IGNORECASE)
         if starts_match:
             return self._extract_first_number(starts_match.group(1))
