@@ -43,7 +43,7 @@ def store_offer(
 
 def classify_offer(
     offer_id: str,
-    category: str | None = None,
+    category: AircraftCategory | None = None,
     manufacturer: str | None = None,
     model: str | None = None,
 ) -> None:
@@ -54,7 +54,9 @@ def classify_offer(
     ]
 
     if category is not None:
-        operations.append(dict(op="replace", path="/category", value=category))
+        operations.append(
+            dict[str, Any](op="replace", path="/category", value=str(category))
+        )
 
     offers_container().patch_item(
         partition_key=offer_id, item=offer_id, patch_operations=operations
