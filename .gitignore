@@ -5,3 +5,6 @@
 node_modules
 db/backups
 backend/.env.local
+terraform/terraform.tfvars
+terraform/tfplan
+terraform/.terraform
