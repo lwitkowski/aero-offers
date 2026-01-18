@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and fill in the values
+# terraform.tfvars is in .gitignore and should not be committed
+#
+# Note: Most configuration values are now in locals.tf. Only sensitive/required values
+# need to be provided here. To override locals, you can modify locals.tf directly.
+
+# Get from GitHub: Settings -> Developer settings -> Personal access tokens -> Fine-grained tokens
+# Or use GitHub Packages read token
+container_registry_password = "your-ghcr-token"

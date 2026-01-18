@@ -9,3 +9,10 @@ git add src tests
 cd ../ui
 npm run lint-fix
 git add src
+
+cd ../terraform
+if [ -n "$(git diff --cached --name-only -- '*.tf' '*.tfvars')" ]; then
+  echo "Formatting Terraform files"
+  terraform fmt
+  git add .
+fi

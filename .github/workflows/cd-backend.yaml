@@ -88,34 +88,28 @@ jobs:
     needs:
       - build-api
     permissions:
-      id-token: write
-      contents: read
+      contents: write
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          echo "API_DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: 'Azure Login'
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: 'Deploy API'
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          resourceGroup: rg-aerooffers
-          containerAppEnvironment: cae-aerooffers-prod
-          containerAppName: aerooffers-api
-          imageToDeploy: ${{ env.API_DOCKER_IMAGE }}
-          disableTelemetry: true
-
-      - name: 'Deploy Job - update offers'
+      - name: 'Update docker image tag in Terraform'
+        working-directory: ./terraform
         run: |
-          az containerapp job update \
-             -g rg-aerooffers \
-            --name update-offers-job \
-            --image ${{ env.API_DOCKER_IMAGE }}
+          # Update docker_image_tag in locals.tf
+          sed -i.bak "s/docker_image_tag = \".*\"/docker_image_tag = \"${DOCKER_IMAGE_TAG}\"/" locals.tf
+          rm -f locals.tf.bak
+          cat locals.tf | grep docker_image_tag
+
+      - name: 'Commit and push docker image tag change'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add terraform/locals.tf
+          git diff --staged --quiet || git commit -m "Deploy new API docker image: ${DOCKER_IMAGE_TAG}"
+          git push

@@ -17,7 +17,7 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
 
 #### Deployment
 
-Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env. Currently, the project is running in Azure.
+Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env. Currently, the project is running in Azure, managed via Terraform.
 
 ### TODO
 - [ ] Scraper: update db offer if price or location (or any other parameter) has changed
@@ -29,6 +29,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 - [ ] crawler for Facebook Marketplace - do they have an api?
 - [ ] crawler for https://www.aircraft24.de
 - [ ] crawler for https://plane-sale.com
+- [ ] Migrate to managed identity for API and update-offers job to Cosmos DB communication
 
 ### Running backend locally without Python
 `docker compose up --build` - starts CosmosDb and Python Flask backend
