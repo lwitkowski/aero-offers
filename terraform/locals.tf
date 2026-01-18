@@ -32,5 +32,5 @@ locals {
   job_replica_timeout = 1800
 
   # Docker image configuration
-  docker_image_tag = "5db80e9"
+  docker_image_tag = "4171b99"
 }
