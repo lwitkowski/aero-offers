@@ -31,6 +31,5 @@ locals {
   job_cron_expression = "17 3/11 * * *"
   job_replica_timeout = 1800
 
-  # Docker image configuration
   docker_image_tag = "4171b99"
 }
