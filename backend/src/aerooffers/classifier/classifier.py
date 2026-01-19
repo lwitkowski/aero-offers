@@ -70,7 +70,7 @@ class ModelClassifier:
 
         return None, None, None
 
-    def _classify_against_models(
+    def _classify_against_models(  # noqa: C901
         self,
         grams: list[str],
         models: dict[AircraftCategory, list[str]],

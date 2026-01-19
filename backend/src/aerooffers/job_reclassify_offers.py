@@ -6,7 +6,7 @@ logger = logging.getLogger("reclassify_job")
 model_classifier = classifier.ModelClassifier()
 
 
-def reclassify(db_offers: list[dict]) -> None:
+def _reclassify(db_offers: list[dict]) -> None:
     for db_offer in db_offers:
         (category, manufacturer, model) = model_classifier.classify(db_offer["title"])
         logger.debug(
@@ -27,7 +27,7 @@ def reclassify_all() -> int:
     limit = 100
     while True:
         offers = get_unclassified_offers(offset=offset, limit=limit)
-        reclassify(offers)
+        _reclassify(offers)
 
         offers_processed += len(offers)
 
