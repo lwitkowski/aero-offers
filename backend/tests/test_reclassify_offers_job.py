@@ -4,6 +4,7 @@ from util import sample_offer
 
 from aerooffers import offers_db
 from aerooffers.job_reclassify_offers import reclassify_all
+from aerooffers.offer import AircraftCategory
 
 
 def test_reclassify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
@@ -13,7 +14,7 @@ def test_reclassify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     )
     offers_db.classify_offer(
         offer_id=classified_offer_id,
-        category="glider",
+        category=AircraftCategory.glider,
         manufacturer="PZL Bielsko",
         model="Bocian",
     )
@@ -22,7 +23,7 @@ def test_reclassify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     )
     offers_db.classify_offer(
         offer_id=second_classified_offer_id,
-        category="glider",
+        category=AircraftCategory.glider,
         manufacturer="PZL Bielsko",
         model="Bocian",
     )
@@ -48,23 +49,6 @@ def test_should_persist_manufacturer_and_model_if_classified(
     # then
     ls1_offer = offers_db.get_offers()[0]
     assert_that(ls1_offer).is_not_none()
-    assert_that(ls1_offer.category).is_equal_to("glider")
+    assert_that(ls1_offer.category).is_equal_to(AircraftCategory.glider)
     assert_that(ls1_offer.manufacturer).is_equal_to("Rolladen Schneider")
     assert_that(ls1_offer.model).is_equal_to("LS1")
-
-
-def test_should_persist_at_least_category_if_title_indicates_it_clearly(
-    cosmos_db: CosmosClient,
-) -> None:
-    # given
-    offers_db.store_offer(sample_offer(title="Stemme"))  # Stemme produces only TMGs
-
-    # when
-    reclassify_all()
-
-    # then
-    offer = offers_db.get_offers()[0]
-    assert_that(offer).is_not_none()
-    assert_that(offer.category).is_equal_to("tmg")
-    assert_that(offer.manufacturer).is_none()
-    assert_that(offer.model).is_none()

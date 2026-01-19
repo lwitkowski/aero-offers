@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from datetime import date
-from enum import Enum
+from enum import auto, StrEnum
 
 
-class AircraftCategory(Enum):
-    glider = 1
-    airplane = 2
-    tmg = 3
-    ultralight = 4
-    helicopter = 5
-    unknown = 99
+class AircraftCategory(StrEnum):
+    glider = auto()
+    airplane = auto()
+    tmg = auto()
+    ultralight = auto()
+    helicopter = auto()
+    unknown = auto()
 
 
 @dataclass

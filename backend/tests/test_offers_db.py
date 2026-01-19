@@ -43,7 +43,7 @@ def test_should_filter_offers_by_manufacturer_and_model(
     stored_offer_id = offers_db.store_offer(sample_offer())
     offers_db.classify_offer(
         offer_id=stored_offer_id,
-        category="glider",
+        category=AircraftCategory.glider,
         manufacturer="Schempp-Hirth",
         model="Mini-Nimbus",
     )
@@ -64,7 +64,7 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
     stored_offer_id = offers_db.store_offer(sample_offer())
     offers_db.classify_offer(
         offer_id=stored_offer_id,
-        category="glider",
+        category=AircraftCategory.glider,
         manufacturer="Schempp-Hirth",
         model="Mini-Nimbus",
     )
