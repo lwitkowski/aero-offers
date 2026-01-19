@@ -16,15 +16,11 @@ env:
   DOCKER_REPO: ghcr.io/lwitkowski
 
 jobs:
-  build-api:
+  validate-api:
     runs-on: ubuntu-latest
-    permissions: write-all
 
     steps:
       - uses: actions/checkout@v6
-
-      - run: |
-          echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -62,33 +58,14 @@ jobs:
           files: |
             ./backend/test-results.xml
 
-      - name: 'Build docker image'
-        working-directory: ./backend
-        run: |
-          docker build . -t ${DOCKER_IMAGE}
-
-      - name: 'Log in to the Container Registry'
-        uses: docker/login-action@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 'Push image to Container Registry (ghcr)'
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker push ${DOCKER_IMAGE}
-
-  # only for main builds
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    environment: production
     if: github.ref == 'refs/heads/main'
     needs:
-      - build-api
+      - validate-api
     permissions:
       contents: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v6
@@ -96,7 +73,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          echo "DOCKER_IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          DOCKER_IMAGE_TAG=${GITHUB_SHA::7}
+          echo "DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE=${DOCKER_REPO}/aerooffers-api:${DOCKER_IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: 'Build docker image'
+        working-directory: ./backend
+        run: |
+          docker build . -t ${DOCKER_IMAGE}
+
+      - name: 'Log in to the Container Registry'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Push image to Container Registry (ghcr)'
+        run: |
+          docker push ${DOCKER_IMAGE}
 
       - name: 'Update docker image tag in Terraform'
         working-directory: ./terraform
@@ -106,7 +101,7 @@ jobs:
           rm -f locals.tf.bak
           cat locals.tf | grep docker_image_tag
 
-      - name: 'Commit and push docker image tag change'
+      - name: 'Push changes to trigger deployment pipeline'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
