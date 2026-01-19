@@ -3,12 +3,14 @@ from aerooffers.my_logging import logging
 from aerooffers.offers_db import classify_offer, get_unclassified_offers
 
 logger = logging.getLogger("reclassify_job")
+
 model_classifier = classifier.ModelClassifier()
 
 
 def _reclassify(db_offers: list[dict]) -> None:
     for db_offer in db_offers:
         (category, manufacturer, model) = model_classifier.classify(db_offer["title"])
+
         logger.debug(
             "Classified '%s' as '%s' '%s'", db_offer["title"], manufacturer, model
         )

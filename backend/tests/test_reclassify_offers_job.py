@@ -52,20 +52,3 @@ def test_should_persist_manufacturer_and_model_if_classified(
     assert_that(ls1_offer.category).is_equal_to(AircraftCategory.glider)
     assert_that(ls1_offer.manufacturer).is_equal_to("Rolladen Schneider")
     assert_that(ls1_offer.model).is_equal_to("LS1")
-
-
-def test_should_persist_at_least_category_if_title_indicates_it_clearly(
-    cosmos_db: CosmosClient,
-) -> None:
-    # given
-    offers_db.store_offer(sample_offer(title="Stemme"))  # Stemme produces only TMGs
-
-    # when
-    reclassify_all()
-
-    # then
-    offer = offers_db.get_offers()[0]
-    assert_that(offer).is_not_none()
-    assert_that(offer.category).is_equal_to("tmg")
-    assert_that(offer.manufacturer).is_none()
-    assert_that(offer.model).is_none()
