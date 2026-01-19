@@ -6,18 +6,19 @@ logger = logging.getLogger("reclassify_job")
 model_classifier = classifier.ModelClassifier()
 
 
-def reclassify(db_offer: dict) -> None:
-    (manufacturer, model, category) = model_classifier.classify(
-        db_offer["title"], spider=db_offer["spider"]
-    )
-    logger.debug("Classified '%s' as '%s' '%s'", db_offer["title"], manufacturer, model)
+def reclassify(db_offers: list[dict]) -> None:
+    for db_offer in db_offers:
+        (category, manufacturer, model) = model_classifier.classify(db_offer["title"])
+        logger.debug(
+            "Classified '%s' as '%s' '%s'", db_offer["title"], manufacturer, model
+        )
 
-    classify_offer(
-        offer_id=db_offer["id"],
-        category=category,
-        manufacturer=manufacturer,
-        model=model,
-    )
+        classify_offer(
+            offer_id=db_offer["id"],
+            category=category,
+            manufacturer=manufacturer,
+            model=model,
+        )
 
 
 def reclassify_all() -> int:
@@ -26,8 +27,7 @@ def reclassify_all() -> int:
     limit = 100
     while True:
         offers = get_unclassified_offers(offset=offset, limit=limit)
-        for offer in offers:
-            reclassify(offer)
+        reclassify(offers)
 
         offers_processed += len(offers)
 
