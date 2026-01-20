@@ -43,6 +43,7 @@ def store_offer(
 
 def classify_offer(
     offer_id: str,
+    classifier_name: str,
     category: AircraftCategory | None = None,
     manufacturer: str | None = None,
     model: str | None = None,
@@ -51,12 +52,24 @@ def classify_offer(
         dict(op="replace", path="/classified", value=True),
         dict(op="replace", path="/manufacturer", value=manufacturer),
         dict(op="replace", path="/model", value=model),
+        dict(op="add", path="/classifier_name", value=classifier_name),
     ]
 
     if category is not None:
         operations.append(
             dict[str, Any](op="replace", path="/category", value=str(category))
         )
+
+    offers_container().patch_item(
+        partition_key=offer_id, item=offer_id, patch_operations=operations
+    )
+
+
+def unclassify_offer(offer_id: str) -> None:
+    """Set classified flag to false for an offer."""
+    operations: list[dict[str, Any]] = [
+        dict(op="replace", path="/classified", value=False),
+    ]
 
     offers_container().patch_item(
         partition_key=offer_id, item=offer_id, patch_operations=operations
@@ -72,7 +85,7 @@ def offer_url_exists(url: str) -> bool:
         )
         return next(offer, None) is not None
     except Exception as e:
-        logger.error("database error, assuming we don't have this offer already")
+        logger.error("database error, assuming we don't have this offer yet")
         logger.error(e)
         return False
 
@@ -138,9 +151,31 @@ def get_offers(
     )
 
 
-def get_unclassified_offers(offset: int = 0, limit: int = 100) -> list[Any]:
+def get_unclassified_offers(limit: int = 100) -> list[Any]:
     query = (
-        "SELECT * FROM offers o WHERE o.classified = false OFFSET @offset LIMIT @limit"
+        "SELECT * FROM offers o "
+        "WHERE o.classified = false "
+        "ORDER BY o.id ASC "
+        "OFFSET 0 LIMIT @limit"
+    )
+    params = [dict(name="@limit", value=limit)]
+    return list(
+        offers_container().query_items(
+            query=query, parameters=params, enable_cross_partition_query=True
+        )
+    )
+
+
+def get_classified_offers_missing_fields(
+    offset: int = 0, limit: int = 100
+) -> list[Any]:
+    query = (
+        "SELECT * FROM offers o "
+        "WHERE o.classified = true "
+        "AND (o.manufacturer = null OR o.model = null) "
+        "AND NOT IS_DEFINED(o.classifier_name) "
+        "ORDER BY o._ts DESC "
+        "OFFSET @offset LIMIT @limit"
     )
     params = [dict(name="@offset", value=offset), dict(name="@limit", value=limit)]
     return list(
@@ -151,5 +186,5 @@ def get_unclassified_offers(offset: int = 0, limit: int = 100) -> list[Any]:
 
 
 if __name__ == "__main__":
-    print("All gliders from DB: ", get_offers(category=AircraftCategory.glider))
-    print("Unclassified offers: ", get_unclassified_offers())
+    print("First 30 gliders from DB: ", get_offers(category=AircraftCategory.glider))
+    print("First 100 unclassified offers: ", get_unclassified_offers())

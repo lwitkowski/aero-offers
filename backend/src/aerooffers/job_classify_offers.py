@@ -5,10 +5,10 @@ from aerooffers.classifier.classifiers import AircraftClassifier, Classification
 from aerooffers.my_logging import logging
 from aerooffers.offers_db import classify_offer, get_unclassified_offers
 
-logger = logging.getLogger("reclassify_job")
+logger = logging.getLogger("classify_job")
 
 
-def _reclassify(db_offers: list[dict], model_classifier: AircraftClassifier) -> None:
+def _classify(db_offers: list[dict], model_classifier: AircraftClassifier) -> None:
     titles_dict = {db_offer["id"]: db_offer["title"] for db_offer in db_offers}
 
     results = model_classifier.classify_many(titles_dict)
@@ -33,29 +33,28 @@ def _reclassify(db_offers: list[dict], model_classifier: AircraftClassifier) -> 
 
         classify_offer(
             offer_id=offer_id,
+            classifier_name=model_classifier.name,
             category=result.aircraft_type,
             manufacturer=result.manufacturer,
             model=result.model,
         )
 
 
-def reclassify_all(model_classifier: AircraftClassifier) -> int:
+def classify_pending(model_classifier: AircraftClassifier) -> int:
     logger.info(f"Using {model_classifier.__class__.__name__} classifier")
 
     offers_processed = 0
-    offset = 0
     limit = 10
     while True:
-        offers = get_unclassified_offers(offset=offset, limit=limit)
+        offers = get_unclassified_offers(limit=limit)
         if len(offers) == 0:
             break
 
         logger.info(f"Loaded {len(offers)} unclassified offers, calling classifier...")
 
-        _reclassify(db_offers=offers, model_classifier=model_classifier)
+        _classify(db_offers=offers, model_classifier=model_classifier)
 
         offers_processed += len(offers)
-        offset += limit
 
     if offers_processed == 0:
         logger.info("No unclassified offers found in the database")
@@ -80,4 +79,4 @@ if __name__ == "__main__":
 
         classifier = RuleBasedClassifier()
 
-    reclassify_all(classifier)
+    classify_pending(classifier)

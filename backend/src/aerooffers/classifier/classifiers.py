@@ -33,6 +33,9 @@ class ClassificationResult:
 
 
 class AircraftClassifier(Protocol):
+    name: str
+    """A concise identifier for this classifier."""
+
     def classify_many(self, titles: dict[str, str]) -> dict[str, ClassificationResult]:
         """Classify multiple aircraft offer titles in batch.
 
