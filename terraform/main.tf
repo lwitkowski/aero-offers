@@ -144,6 +144,11 @@ resource "azurerm_container_app_job" "update_offers" {
         name        = "GEMINI_API_KEY"
         secret_name = "gemini-api-key"
       }
+
+      env {
+        name  = "USE_LLM_CLASSIFIER"
+        value = "true"
+      }
     }
   }
 }

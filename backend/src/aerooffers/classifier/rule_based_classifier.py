@@ -44,6 +44,9 @@ class RuleBasedClassifier:
     - Pattern-based normalization
     """
 
+    name: str = "rule_based"
+    """A concise identifier for this classifier."""
+
     _DEFAULT_CUTOFF_SCORE = 0.85
     _is_dg_model_re = re.compile(r"^DG[0-9]{3,4}$")
     _is_binder_model_re = re.compile(r"^(EB28|EB29)$")

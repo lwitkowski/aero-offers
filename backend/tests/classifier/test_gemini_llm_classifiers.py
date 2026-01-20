@@ -27,6 +27,7 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
     titles = {
         "offer1": "Stemme S6-RT",
         "offer2": "DG 800 B",
+        "offer3": "Stemme S99",
     }
     api_response_json = json.dumps(
         [
@@ -35,6 +36,11 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
                 "manufacturer": "DG Flugzeugbau",
                 "model": "DG-800B",
                 "aircraft_type": "glider",
+            },
+            {
+                "manufacturer": "Stemme",
+                "model": "S99",
+                "aircraft_type": "tmg",
             },
         ]
     )
@@ -50,7 +56,7 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
 
     # then
     assert_that(results).is_not_none()
-    assert_that(len(results)).is_equal_to(2)
+    assert_that(len(results)).is_equal_to(3)
 
     result1 = results.get("offer1")
     assert_that(result1).is_not_none()
@@ -66,6 +72,14 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
     assert_that(result2.model).is_equal_to("DG-800B")
     assert_that(result2.aircraft_type).is_equal_to(AircraftCategory.glider)
 
+    result3 = results.get("offer3")
+    assert_that(result3).is_not_none()
+    assert result3 is not None  # Type narrowing for mypy
+    # Model "S99" is not in models.json, so it should be set to None
+    assert_that(result3.manufacturer).is_equal_to("Stemme")
+    assert_that(result3.model).is_none()
+    assert_that(result3.aircraft_type).is_equal_to(AircraftCategory.tmg)
+
 
 @pytest.mark.skip(reason="Only for exploratory testing (tweaking prompts etc.)")
 def test_using_real_gemini_api() -> None:
@@ -76,9 +90,11 @@ def test_using_real_gemini_api() -> None:
     load_dotenv(dotenv_path=env_path, override=False)
 
     active_test_cases: dict[str, str] = {
-        "1": "PEGASE 90  mint condition",
-        "2": "Diana2 FES",
-        "3": "SZD55-1 FOR SALE",
+        #"1": "PEGASE 90  mint condition",
+        #"2": "Diana2 FES",
+        #"3": "SZD55-1 FOR SALE",
+        "4": "L1-f ready to fly",
+        #"5": "Stemme S10",
     }
 
     classifier = GeminiLLMClassifier()

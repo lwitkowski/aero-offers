@@ -60,7 +60,7 @@ def test_get_offers_for_given_manufacturer_and_model(api_client: FlaskClient) ->
     # given
     offer_id = offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
     offers_db.classify_offer(
-        offer_id, AircraftCategory.glider, "PZL Bielsko", "SZD-9 Bocian"
+        offer_id, "Manual", AircraftCategory.glider, "PZL Bielsko", "SZD-9 Bocian"
     )
 
     # when

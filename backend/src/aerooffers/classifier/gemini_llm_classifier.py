@@ -23,7 +23,10 @@ class GeminiLLMClassifier:
     Implements the AircraftClassifier protocol.
     """
 
-    _DEFAULT_MODEL = "gemini-2.5-flash"
+    name: str = "gemini_llm"
+    """A concise identifier for this classifier."""
+
+    _DEFAULT_MODEL = "gemini-2.5-flash-lite"
     _TEMPERATURE = 0
 
     def __init__(self) -> None:
@@ -127,43 +130,45 @@ Remember: manufacturer and model must match EXACTLY from the list above."""
         keys = list(titles.keys())
         titles_list = list(titles.values())
 
-        try:
-            # Build multiple prompts - one per title
-            # Each title becomes a separate content part in the API call
-            prompts = [
-                f"Extract aircraft information from this title: {title}"
-                for title in titles_list
-            ]
+        # Build multiple prompts - one per title
+        # Each title becomes a separate content part in the API call
+        prompts = [
+            f"Extract aircraft information from this title: {title}"
+            for title in titles_list
+        ]
 
-            response = self._client.models.generate_content(
-                model=self._DEFAULT_MODEL,
-                contents=prompts,
-                config=GenerateContentConfig(
-                    system_instruction=self._build_system_prompt(),
-                    response_mime_type="application/json",
-                    response_schema=self._build_response_schema(),
-                    temperature=self._TEMPERATURE,
-                ),
-            )
+        response = self._client.models.generate_content(
+            model=self._DEFAULT_MODEL,
+            contents=prompts,
+            config=GenerateContentConfig(
+                system_instruction=self._build_system_prompt(),
+                response_mime_type="application/json",
+                response_schema=self._build_response_schema(),
+                temperature=self._TEMPERATURE,
+            ),
+        )
 
-            if response.text is None:
-                logger.error("Gemini API returned None response text")
-                return {key: ClassificationResult.unknown() for key in keys}
+        if response.text is None:
+            error_msg = "Gemini API returned None response text"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
 
-            return self._process_api_response(response.text, keys, titles_list)
-
-        except Exception as e:
-            logger.error(f"Gemini batch classification failed: {e}")
-            return {key: ClassificationResult.unknown() for key in keys}
+        return self._process_api_response(response.text, keys, titles_list)
 
     def _process_api_response(
         self, response_text: str, keys: list[str], titles_list: list[str]
     ) -> dict[str, ClassificationResult]:
-        results_array = json.loads(response_text)
+        try:
+            results_array = json.loads(response_text)
+        except json.JSONDecodeError as e:
+            error_msg = f"Failed to parse Gemini API response as JSON: {e}"
+            logger.error(error_msg)
+            raise ValueError(error_msg) from e
 
         if not isinstance(results_array, list):
-            logger.error(f"Expected array of results, got: {type(results_array)}")
-            return {key: ClassificationResult.unknown() for key in keys}
+            error_msg = f"Expected array of results, got: {type(results_array)}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
 
         results: dict[str, ClassificationResult] = {}
         for i, result in enumerate(results_array):
