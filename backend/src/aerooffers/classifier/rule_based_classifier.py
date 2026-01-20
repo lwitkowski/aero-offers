@@ -1,5 +1,3 @@
-import json
-import os
 import re
 import string
 
@@ -8,6 +6,10 @@ from nltk.corpus import stopwords
 from nltk.metrics import distance
 from nltk.util import ngrams
 
+from aerooffers.classifier.classifiers import (
+    ClassificationResult,
+    load_all_models,
+)
 from aerooffers.my_logging import logging
 from aerooffers.offer import AircraftCategory
 
@@ -15,17 +17,7 @@ nltk.download("stopwords")
 
 logger = logging.getLogger("classifier")
 
-
-def get_all_models() -> dict[str, dict]:
-    models_file = "models.json"
-    with open(
-        os.path.dirname(os.path.realpath(__file__)) + os.sep + models_file
-    ) as json_file:
-        manufacturers = json.load(json_file)
-    return manufacturers
-
-
-_manufacturers: dict[str, dict] = get_all_models()
+_manufacturers: dict[str, dict] = load_all_models()
 
 _aircraft_types_set = {
     AircraftCategory.glider,
@@ -43,20 +35,38 @@ _stop_words_en = stopwords.words("english")
 _stop_words_de = stopwords.words("german")
 
 
-class ModelClassifier:
+class RuleBasedClassifier:
+    """Rule-based classifier using fuzzy string matching and pattern recognition.
+
+    This is the original/legacy classifier implementation that uses:
+    - N-gram matching
+    - Jaro similarity
+    - Pattern-based normalization
+    """
+
     _DEFAULT_CUTOFF_SCORE = 0.85
     _is_dg_model_re = re.compile(r"^DG[0-9]{3,4}$")
     _is_binder_model_re = re.compile(r"^(EB28|EB29)$")
     _is_schleicher_model_re = re.compile(r"AS[H|W|K|G]\s?[0-9]{2}(\sMi)?$")
 
-    def classify(
-        self,
-        offer_title: str,
-    ) -> tuple[AircraftCategory | None, str | None, str | None]:
+    def classify_many(self, titles: dict[str, str]) -> dict[str, ClassificationResult]:
+        """Classify multiple aircraft offer titles in batch.
+
+        :param titles: Dictionary mapping identifier to title
+        :return: Dictionary mapping identifier to ClassificationResult
+        """
+        # Classify each title individually
+        results: dict[str, ClassificationResult] = {}
+        for key, title in titles.items():
+            results[key] = self._classify(title)
+
+        return results
+
+    def _classify(self, offer_title: str) -> ClassificationResult:
         """Try to get the correct manufacturer and model for an airplane offer
 
         :param offer_title: the title of the airplane offer
-        :return: triplet of: (aircraft_type, manufacturer, model)
+        :return: ClassificationResult with aircraft_type, manufacturer, and model
         """
         grams = self._build_grams(offer_title)
 
@@ -66,9 +76,13 @@ class ModelClassifier:
                 models,
             )
             if model is not None:
-                return aircraft_type, manufacturer, model
+                return ClassificationResult(
+                    aircraft_type=aircraft_type,
+                    manufacturer=manufacturer,
+                    model=model,
+                )
 
-        return None, None, None
+        return ClassificationResult.unknown()
 
     def _classify_against_models(  # noqa: C901
         self,
@@ -93,7 +107,7 @@ class ModelClassifier:
                     if len(test_str) < 4 or len(joined_gram) < 4:
                         this_cutoff_score = 0.9
                     else:
-                        this_cutoff_score = ModelClassifier._DEFAULT_CUTOFF_SCORE
+                        this_cutoff_score = RuleBasedClassifier._DEFAULT_CUTOFF_SCORE
 
                     joined_gram_lower = joined_gram.lower()
                     test_str_lower = test_str.lower()
@@ -216,3 +230,7 @@ class ModelClassifier:
     def _normalize_for_matching(self, text: str) -> str:
         """Normalize text for matching: lowercase, remove spaces."""
         return text.lower().replace(" ", "")
+
+
+# For backward compatibility
+ModelClassifier = RuleBasedClassifier

@@ -3,6 +3,7 @@ from azure.cosmos import CosmosClient
 from util import sample_offer
 
 from aerooffers import offers_db
+from aerooffers.classifier.rule_based_classifier import RuleBasedClassifier
 from aerooffers.job_reclassify_offers import reclassify_all
 from aerooffers.offer import AircraftCategory
 
@@ -30,7 +31,7 @@ def test_reclassify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     offers_db.store_offer(sample_offer(url="https://offers.com/3"))
 
     # when
-    offers_processed = reclassify_all()
+    offers_processed = reclassify_all(RuleBasedClassifier())
 
     # then
     assert_that(offers_processed).is_equal_to(1)
@@ -44,7 +45,7 @@ def test_should_persist_manufacturer_and_model_if_classified(
     offers_db.store_offer(sample_offer(title="LS-1"))
 
     # when
-    reclassify_all()
+    reclassify_all(RuleBasedClassifier())
 
     # then
     ls1_offer = offers_db.get_offers()[0]

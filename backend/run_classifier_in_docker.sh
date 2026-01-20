@@ -8,4 +8,4 @@ docker run \
   --env-file ./.env \
   $USE_LLM_CLASSIFIER \
   aerooffers-local:latest \
-  sh ./run_update_offers.sh
+  sh ./run_reclassifier.sh

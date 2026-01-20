@@ -8,6 +8,7 @@
 # - AZURE_TENANT_ID
 # - AZURE_SUBSCRIPTION_ID
 # - CONTAINER_REGISTRY_PASSWORD (GitHub Container Registry token)
+# - GEMINI_API_KEY (Gemini API key for LLM classifier)
 
 name: Deploy Infrastructure Changes
 
@@ -84,6 +85,7 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         env:
           TF_VAR_container_registry_password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+          TF_VAR_gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
         run: |
           terraform plan -no-color -out=tfplan
 

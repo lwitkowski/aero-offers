@@ -1,18 +1,12 @@
-import os
+from pathlib import Path
 
-# database
-COSMOSDB_URL = os.getenv("COSMOSDB_URL", "http://localhost:8081")
-COSMOSDB_CREDENTIAL = os.getenv(
-    "COSMOSDB_CREDENTIAL",
-    "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
-)
-COSMOSDB_DB_NAME = "aerooffers"
+from dotenv import load_dotenv
 
-# mailer
-SEND_RESULT_MAIL = False
-SMTP_USER = ""
-SMTP_PASSWORD = ""
-SMTP_HOST = ""
+# Load environment variables from .env file
+# Look for .env file in backend directory (settings.py is in src/aerooffers/)
+# Path: src/aerooffers/settings.py -> src/aerooffers -> src -> backend -> .env
+env_path = Path(__file__).parent.parent.parent / ".env"
+load_dotenv(env_path, override=False)
 
 # scrapy pipeline components config, do not delete this
 ITEM_PIPELINES = {
