@@ -166,9 +166,8 @@ def get_unclassified_offers(limit: int = 100) -> list[Any]:
     )
 
 
-def get_classified_offers_missing_fields(
-    offset: int = 0, limit: int = 100
-) -> list[Any]:
+def get_poorly_classified_offers(offset: int = 0, limit: int = 100) -> list[Any]:
+    """Returns offers from db for which legacy rule-based classifier failed to classify correctly."""
     query = (
         "SELECT * FROM offers o "
         "WHERE o.classified = true "

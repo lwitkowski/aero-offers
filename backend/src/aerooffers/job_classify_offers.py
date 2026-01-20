@@ -40,7 +40,7 @@ def _classify(db_offers: list[dict], model_classifier: AircraftClassifier) -> No
 
 
 def classify_pending(model_classifier: AircraftClassifier) -> int:
-    logger.info(f"Using {model_classifier.__class__.__name__} classifier")
+    logger.info(f"Using '{model_classifier.name}' classifier")
 
     offers_processed = 0
     limit = 10
