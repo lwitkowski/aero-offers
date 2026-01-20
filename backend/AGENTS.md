@@ -6,9 +6,11 @@ Quick reference for non-obvious patterns and conventions.
 
 **Spiders**: Extract into `_extract_*` methods, inline calls, no redundant variables. Motorplanes = `AircraftCategory.airplane`, gliders = `AircraftCategory.glider`.
 
-**Tests**: Update HTML samples with real data when website changes. Test with/without optional fields.
+**Code**
+- Don't add comments that are obvious from the code
 
-**Refactoring**: Extract commented sections → methods. Remove redundant conditionals (if field accepts None, assign directly).
+**Tests**: 
+- Use `# given` / `# when` / `# then` structure for all tests
 
 ## Tools
 - `uv` (not pip), `ruff`, `mypy` (strict), `pytest` (80% coverage min)
