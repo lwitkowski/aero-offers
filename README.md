@@ -69,7 +69,7 @@ npm run dev
 ```
 UI has own, detailed README.md file.
 
-Run crawlers/spiders & reclassifier:
+Run crawlers/spiders & classifier:
 ```
 cd backend
 ./run_spiders.sh && ./run_classifier.sh

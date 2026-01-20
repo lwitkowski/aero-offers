@@ -10,7 +10,7 @@ def unclassify_offers_missing_fields(count: int) -> int:
     """
     Unclassify offers that are classified but missing manufacturer or model.
     Only unclassifies offers without classifier_name stored in the database.
-    Sets classified flag to false for these offers so they can be reclassified.
+    Sets classified flag to false for these offers so they can be classified again.
 
     Returns:
         int: Number of offers unclassified

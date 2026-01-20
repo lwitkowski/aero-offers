@@ -1,2 +1,2 @@
 ./run_spiders.sh
-./run_reclassifier.sh
+./run_classifier.sh

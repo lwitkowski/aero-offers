@@ -8,7 +8,7 @@ from aerooffers.job_classify_offers import classify_pending
 from aerooffers.offer import AircraftCategory
 
 
-def test_reclassify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
+def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     # given
     classified_offer_id = offers_db.store_offer(
         sample_offer(url="https://offers.com/1")
