@@ -12,6 +12,10 @@ from aerooffers.spiders import FlugzeugMarktDeSpider, SegelflugDeSpider
 logger = logging.getLogger("offers_crawler")
 
 if __name__ == "__main__":
+    from aerooffers.utils import load_env
+
+    load_env()
+
     settings_file_path = "settings"
     os.environ.setdefault("SCRAPY_SETTINGS_MODULE", settings_file_path)
 

@@ -1,7 +1,6 @@
 import json
 import os
 from collections.abc import Callable
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -83,11 +82,9 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
 
 @pytest.mark.skip(reason="Only for exploratory testing (tweaking prompts etc.)")
 def test_using_real_gemini_api() -> None:
-    # load gemini api key from .env file
-    from dotenv import load_dotenv
+    from aerooffers.utils import load_env
 
-    env_path = Path(__file__).parent.parent.parent / ".env"
-    load_dotenv(dotenv_path=env_path, override=False)
+    load_env()
 
     active_test_cases: dict[str, str] = {
         # "1": "PEGASE 90  mint condition",

@@ -45,7 +45,6 @@ class RuleBasedClassifier:
     """
 
     name: str = "rule_based"
-    """A concise identifier for this classifier."""
 
     _DEFAULT_CUTOFF_SCORE = 0.85
     _is_dg_model_re = re.compile(r"^DG[0-9]{3,4}$")

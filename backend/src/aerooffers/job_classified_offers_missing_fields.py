@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from aerooffers.my_logging import logging
 from aerooffers.offers_db import get_classified_offers_missing_fields, unclassify_offer
 
@@ -38,13 +36,8 @@ def unclassify_offers_missing_fields(count: int) -> int:
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
+    from aerooffers.utils import load_env
 
-    env_path = Path(__file__).parent.parent.parent / ".env"
-    load_dotenv(env_path, override=False)
+    load_env()
 
     unclassify_offers_missing_fields(100)
-    # offers = get_classified_offers_missing_manufacturer_or_model()
-    # print(f"Found {len(offers)} classified offers missing manufacturer or model")
-    # for offer in offers:
-    #    print(f"Offer ID: {offer['id']}, Title: {offer['title']}, Manufacturer: {offer.get('manufacturer')}, Model: {offer.get('model')}")

@@ -186,5 +186,9 @@ def get_classified_offers_missing_fields(
 
 
 if __name__ == "__main__":
+    from aerooffers.utils import load_env
+
+    load_env()
+
     print("First 30 gliders from DB: ", get_offers(category=AircraftCategory.glider))
     print("First 100 unclassified offers: ", get_unclassified_offers())

@@ -24,7 +24,6 @@ class GeminiLLMClassifier:
     """
 
     name: str = "gemini_llm"
-    """A concise identifier for this classifier."""
 
     _DEFAULT_MODEL = "gemini-2.5-flash-lite"
     _TEMPERATURE = 0
@@ -197,12 +196,7 @@ Remember: manufacturer and model must match EXACTLY from the list above."""
     def _validate_and_normalize_result(
         self, result: dict, title: str
     ) -> ClassificationResult:
-        """Validate and normalize a classification result.
-
-        :param result: Raw result from API
-        :param title: Original title being classified
-        :return: Tuple of (manufacturer, model, aircraft_type)
-        """
+        """Validate and normalize a classification result."""
         manufacturer = result.get("manufacturer")
         model = result.get("model")
 

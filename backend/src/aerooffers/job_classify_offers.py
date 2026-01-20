@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 from aerooffers.classifier.classifiers import AircraftClassifier, ClassificationResult
 from aerooffers.my_logging import logging
@@ -65,10 +64,9 @@ def classify_pending(model_classifier: AircraftClassifier) -> int:
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
+    from aerooffers.utils import load_env
 
-    env_path = Path(__file__).parent.parent / ".env"
-    load_dotenv(env_path, override=False)
+    load_env()
 
     if os.getenv("USE_LLM_CLASSIFIER", "").lower() in ("true", "1", "yes"):
         from aerooffers.classifier.gemini_llm_classifier import GeminiLLMClassifier
