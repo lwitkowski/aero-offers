@@ -89,7 +89,7 @@ jobs:
 
       - name: Upload Terraform Plan
         if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: terraform-plan
           path: ${{ env.TF_WORKING_DIR }}/tfplan
