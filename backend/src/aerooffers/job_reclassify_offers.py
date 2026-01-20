@@ -1,46 +1,83 @@
-from aerooffers.classifier import classifier
+import os
+from pathlib import Path
+
+from aerooffers.classifier.classifiers import AircraftClassifier, ClassificationResult
 from aerooffers.my_logging import logging
 from aerooffers.offers_db import classify_offer, get_unclassified_offers
 
 logger = logging.getLogger("reclassify_job")
 
-model_classifier = classifier.ModelClassifier()
 
+def _reclassify(db_offers: list[dict], model_classifier: AircraftClassifier) -> None:
+    titles_dict = {db_offer["id"]: db_offer["title"] for db_offer in db_offers}
 
-def _reclassify(db_offers: list[dict]) -> None:
+    results = model_classifier.classify_many(titles_dict)
+
+    # Process results
     for db_offer in db_offers:
-        (category, manufacturer, model) = model_classifier.classify(db_offer["title"])
+        offer_id = db_offer["id"]
+        result = results.get(offer_id, ClassificationResult.unknown())
 
-        logger.debug(
-            "Classified '%s' as '%s' '%s'", db_offer["title"], manufacturer, model
-        )
+        if result.model is None:
+            logger.warning(
+                f"No classification result for offer {offer_id} with title '{db_offer['title']}'"
+            )
+        else:
+            logger.info(
+                "Offer id %s with title '%s' successfully classified as '%s' '%s'",
+                offer_id,
+                db_offer["title"],
+                result.manufacturer,
+                result.model,
+            )
 
         classify_offer(
-            offer_id=db_offer["id"],
-            category=category,
-            manufacturer=manufacturer,
-            model=model,
+            offer_id=offer_id,
+            category=result.aircraft_type,
+            manufacturer=result.manufacturer,
+            model=result.model,
         )
 
 
-def reclassify_all() -> int:
+def reclassify_all(model_classifier: AircraftClassifier) -> int:
+    logger.info(f"Using {model_classifier.__class__.__name__} classifier")
+
     offers_processed = 0
     offset = 0
-    limit = 100
+    limit = 10
     while True:
         offers = get_unclassified_offers(offset=offset, limit=limit)
-        _reclassify(offers)
+        if len(offers) == 0:
+            break
+
+        logger.info(f"Loaded {len(offers)} unclassified offers, calling classifier...")
+
+        _reclassify(db_offers=offers, model_classifier=model_classifier)
 
         offers_processed += len(offers)
+        offset += limit
 
-        if len(offers) < limit:
-            break
-        else:
-            offset += limit
+    if offers_processed == 0:
+        logger.info("No unclassified offers found in the database")
+    else:
+        logger.info(f"Finished classifying {offers_processed} offers")
 
     return offers_processed
 
 
 if __name__ == "__main__":
-    processed = reclassify_all()
-    logger.info(f"Finished classifying {processed} offers")
+    from dotenv import load_dotenv
+
+    env_path = Path(__file__).parent.parent / ".env"
+    load_dotenv(env_path, override=False)
+
+    if os.getenv("USE_LLM_CLASSIFIER", "").lower() in ("true", "1", "yes"):
+        from aerooffers.classifier.gemini_llm_classifier import GeminiLLMClassifier
+
+        classifier: AircraftClassifier = GeminiLLMClassifier()
+    else:
+        from aerooffers.classifier.rule_based_classifier import RuleBasedClassifier
+
+        classifier = RuleBasedClassifier()
+
+    reclassify_all(classifier)

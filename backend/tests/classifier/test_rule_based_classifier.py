@@ -1,10 +1,10 @@
 import pytest
 from assertpy import assert_that
 
-from aerooffers.classifier import classifier
+from aerooffers.classifier.rule_based_classifier import RuleBasedClassifier
 from aerooffers.offer import AircraftCategory
 
-model_classifier = classifier.ModelClassifier()
+classifier = RuleBasedClassifier()
 
 
 @pytest.mark.parametrize(
@@ -141,10 +141,11 @@ def test_classify(
     expected_model: str | None,
     expected_aircraft_type: AircraftCategory,
 ) -> None:
-    (aircraft_type, manufacturer, model) = model_classifier.classify(
-        offer_title=offer_title
-    )
+    results = classifier.classify_many({"test_id": offer_title})
+    result = results.get("test_id")
 
-    assert_that(manufacturer).is_equal_to(expected_manufacturer)
-    assert_that(model).is_equal_to(expected_model)
-    assert_that(aircraft_type).is_equal_to(expected_aircraft_type)
+    assert_that(result).is_not_none()
+    assert result is not None  # Type guard for mypy
+    assert_that(result.manufacturer).is_equal_to(expected_manufacturer)
+    assert_that(result.model).is_equal_to(expected_model)
+    assert_that(result.aircraft_type).is_equal_to(expected_aircraft_type)

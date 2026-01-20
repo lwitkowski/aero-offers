@@ -105,6 +105,11 @@ resource "azurerm_container_app_job" "update_offers" {
     value = azurerm_cosmosdb_account.main.primary_key
   }
 
+  secret {
+    name  = "gemini-api-key"
+    value = var.gemini_api_key
+  }
+
   schedule_trigger_config {
     cron_expression          = local.job_cron_expression
     parallelism              = 1
@@ -133,6 +138,11 @@ resource "azurerm_container_app_job" "update_offers" {
       env {
         name        = "COSMOSDB_CREDENTIAL"
         secret_name = "db-credential"
+      }
+
+      env {
+        name        = "GEMINI_API_KEY"
+        secret_name = "gemini-api-key"
       }
     }
   }

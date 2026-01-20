@@ -36,7 +36,7 @@ class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
 @pytest.fixture(scope="session")
 def session_cosmos_db() -> Generator[CosmosClient, None, None]:
-    from aerooffers.settings import COSMOSDB_DB_NAME
+    from aerooffers.db import COSMOSDB_DB_NAME
 
     print("Starting CosmosDb TestContainers, db name=" + COSMOSDB_DB_NAME)
 
