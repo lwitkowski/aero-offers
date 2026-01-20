@@ -73,7 +73,11 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
 
     # when
     offers_db.classify_offer(
-        offer_id=stored_offer_id, classifier_name="Manual", category=None, manufacturer=None, model=None
+        offer_id=stored_offer_id,
+        classifier_name="Manual",
+        category=None,
+        manufacturer=None,
+        model=None,
     )
 
     # then

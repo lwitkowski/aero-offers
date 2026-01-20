@@ -90,11 +90,11 @@ def test_using_real_gemini_api() -> None:
     load_dotenv(dotenv_path=env_path, override=False)
 
     active_test_cases: dict[str, str] = {
-        #"1": "PEGASE 90  mint condition",
-        #"2": "Diana2 FES",
-        #"3": "SZD55-1 FOR SALE",
+        # "1": "PEGASE 90  mint condition",
+        # "2": "Diana2 FES",
+        # "3": "SZD55-1 FOR SALE",
         "4": "L1-f ready to fly",
-        #"5": "Stemme S10",
+        # "5": "Stemme S10",
     }
 
     classifier = GeminiLLMClassifier()
