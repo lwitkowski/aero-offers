@@ -1,5 +1,6 @@
 import json
 import os
+from collections.abc import Callable
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -11,8 +12,8 @@ from aerooffers.offer import AircraftCategory
 
 
 @pytest.fixture
-def mock_gemini_response():
-    def _create_mock_response(response_text: str):
+def mock_gemini_response() -> Callable[[str], MagicMock]:
+    def _create_mock_response(response_text: str) -> MagicMock:
         mock_response = MagicMock()
         mock_response.text = response_text
         return mock_response
@@ -21,7 +22,7 @@ def mock_gemini_response():
 
 
 @patch.dict(os.environ, {"GEMINI_API_KEY": "test-api-key"})
-def test_classify_many(mock_gemini_response):
+def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None:
     # given
     titles = {
         "offer1": "Stemme S6-RT",
@@ -53,19 +54,21 @@ def test_classify_many(mock_gemini_response):
 
     result1 = results.get("offer1")
     assert_that(result1).is_not_none()
+    assert result1 is not None  # Type narrowing for mypy
     assert_that(result1.manufacturer).is_equal_to("Stemme")
     assert_that(result1.model).is_equal_to("S6-RT")
     assert_that(result1.aircraft_type).is_equal_to(AircraftCategory.tmg)
 
     result2 = results.get("offer2")
     assert_that(result2).is_not_none()
+    assert result2 is not None  # Type narrowing for mypy
     assert_that(result2.manufacturer).is_equal_to("DG Flugzeugbau")
     assert_that(result2.model).is_equal_to("DG-800B")
     assert_that(result2.aircraft_type).is_equal_to(AircraftCategory.glider)
 
 
 @pytest.mark.skip(reason="Only for exploratory testing (tweaking prompts etc.)")
-def test_using_real_gemini_api():
+def test_using_real_gemini_api() -> None:
     # load gemini api key from .env file
     from dotenv import load_dotenv
 
