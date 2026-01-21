@@ -34,30 +34,44 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
             id="offer3", title="Stemme S99", category=AircraftCategory.tmg
         ),
     ]
-    api_response_json = json.dumps(
+    # TMG offers response (offer1 and offer3)
+    tmg_response_json = json.dumps(
         [
             {"manufacturer": "Stemme", "model": "S6-RT"},
-            {
-                "manufacturer": "DG Flugzeugbau",
-                "model": "DG-800B",
-            },
-            {
-                "manufacturer": "Stemme",
-                "model": "S99",
-            },
+            {"manufacturer": "Stemme", "model": "S99"},
+        ]
+    )
+    # Glider offers response (offer2)
+    glider_response_json = json.dumps(
+        [
+            {"manufacturer": "DG Flugzeugbau", "model": "DG-800B"},
         ]
     )
     classifier = GeminiLLMClassifier()
 
     # when
+    call_count = 0
+
+    def mock_generate_content(*args: object, **kwargs: object) -> MagicMock:
+        nonlocal call_count
+        call_count += 1
+        # First call should be for TMG category (2 offers), second for glider (1 offer)
+        if call_count == 1:
+            return mock_gemini_response(tmg_response_json)
+        else:
+            return mock_gemini_response(glider_response_json)
+
     with patch.object(
         classifier._client.models,
         "generate_content",
-        return_value=mock_gemini_response(api_response_json),
+        side_effect=mock_generate_content,
     ):
         results = classifier.classify_many(offers)
 
     # then
+    # Verify that separate API calls were made for each category
+    assert_that(call_count).is_equal_to(2)
+
     assert_that(results).is_not_none()
     assert_that(len(results)).is_equal_to(3)
 

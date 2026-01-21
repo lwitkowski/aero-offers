@@ -200,7 +200,6 @@ def get_poorly_classified_offer_ids(offset: int = 0, limit: int = 100) -> list[s
     query = (
         "SELECT o.id FROM offers o "
         "WHERE o.classified = true "
-        "AND o.category IN ('glider', 'tmg') "
         "AND (o.manufacturer = null OR o.model = null) "
         "AND NOT IS_DEFINED(o.classifier_name) "
         "ORDER BY o._ts DESC "

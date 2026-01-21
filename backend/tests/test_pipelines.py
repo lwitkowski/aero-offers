@@ -114,7 +114,7 @@ def test_charter_offers_are_dropped(offer_title: str) -> None:
     with pytest.raises(DropItem) as e:
         pipelines.SkipSearchAndCharterOffers().process_item(offer)
 
-    assert_that(str(e.value)).is_equal_to("Dropping Charter Offer")
+    assert_that(str(e.value)).is_equal_to("Dropping search/charter offer")
 
 
 @pytest.mark.parametrize(
