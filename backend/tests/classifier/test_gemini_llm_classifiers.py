@@ -52,7 +52,7 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
     # when
     call_count = 0
 
-    def mock_generate_content(*args, **kwargs):
+    def mock_generate_content(*args: object, **kwargs: object) -> MagicMock:
         nonlocal call_count
         call_count += 1
         # First call should be for TMG category (2 offers), second for glider (1 offer)
