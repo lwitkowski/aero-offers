@@ -6,7 +6,6 @@ Quick reference for non-obvious patterns and conventions.
 
 **Code**
 - Don't add comments that are obvious from the code
-- Before creating PR always: check and fix ruff linter and mypy rules (via `uv`), run and fix all automated tests
 
 **Tests**: 
 - Use `# given` / `# when` / `# then` structure for all tests
@@ -15,6 +14,15 @@ Quick reference for non-obvious patterns and conventions.
 - `uv` (not pip), `ruff`, `mypy` (strict), `pytest` (80% coverage min)
 
 **Creating PR**:
+
+**BEFORE creating ANY PR, you MUST complete ALL of the following:**
+1. **Linting**: Run `uv run ruff check` on all files (not only modified) and fix any issues
+2. **Type checking**: Run `uv run mypy` on all files (not only modified) and fix any issues
+3. **ALL tests**: Run `uv run pytest` (ALL backend tests, not just related ones) and fix any failures
+4. **Verify**: All checks must pass before creating the PR
+
+**This checklist is MANDATORY - do not skip any step.**
+
 - Keep descriptions simple and focused on functional changes only
 - Group changes by component when relevant
 - Don't mention obvious things: linting fixes, test updates, pre-PR check status (expected anyway)
