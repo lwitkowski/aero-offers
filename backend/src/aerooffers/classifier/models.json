@@ -507,6 +507,14 @@
       ]
     }
   },
+  "Mistral": {
+    "models": {
+      "glider": [
+        "Strauber Mistral",
+        "Mistral C"
+      ]
+    }
+  },
   "Mooney": {
     "models": {
       "airplane": [
@@ -702,6 +710,8 @@
         "Arcus",
         "Arcus M",
         "Arcus T",
+        "Janus A",
+        "Janus B",
         "Janus cT",
         "Standard Cirrus",
         "Standard Cirrus WL",

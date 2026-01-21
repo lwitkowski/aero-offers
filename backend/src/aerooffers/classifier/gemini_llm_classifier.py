@@ -13,15 +13,9 @@ from aerooffers.offer import AircraftCategory, UnclassifiedOffer
 
 logger = logging.getLogger("classifier.gemini_llm")
 
-# Valid aircraft types for classification (exclude "unknown")
-_VALID_AIRCRAFT_TYPES = [AircraftCategory.glider, AircraftCategory.tmg]
-
 
 class GeminiLLMClassifier:
-    """LLM-based classifier using Google Gemini API.
-
-    Implements the AircraftClassifier protocol.
-    """
+    """LLM-based classifier using Google Gemini API."""
 
     name: str = "gemini_llm"
 
@@ -77,10 +71,8 @@ class GeminiLLMClassifier:
             models_by_type = details["models"]
             if category in models_by_type and models_by_type[category]:
                 models = models_by_type[category]
-                models_str = ", ".join(f'"{model}"' for model in sorted(models))
-                lines.append(f"Manufacturer: {manufacturer}")
-                lines.append(f"  {category}: {models_str}")
-                lines.append("")
+                models_str = ", ".join(f"{model}" for model in sorted(models))
+                lines.append(f"{manufacturer}: {models_str}")
 
         return "\n".join(lines)
 
@@ -90,13 +82,14 @@ class GeminiLLMClassifier:
         models_list_text = self._build_models_list_text_for_category(category)
         examples = self._get_category_examples(category)
 
-        return f"""You are an expert classifying {category_name} based on sell ads titles.
+        return f"""You are an expert classifying aircraft of type '{category_name}' based on sell ads titles.
 
-Your task is to extract:
+Your task is to find - for given title - best match:
 1. manufacturer - must match exactly one of the known manufacturers (case-sensitive)
 2. model - must match exactly one of the known models for that manufacturer (case-sensitive)
 
 IMPORTANT RULES:
+- below you are given a list of available models for each manufacturer, in format `manufacturer: model1, model2, ...`
 - manufacturer and model must match EXACTLY from the list below (case-sensitive)
 - If you cannot find an exact match, return null for manufacturer and/or model
 - Handle variations like "DG 800 B" → manufacturer: "DG Flugzeugbau", model: "DG-800B"
@@ -180,8 +173,7 @@ Remember: manufacturer and model must match EXACTLY from the list above."""
 
         # Build prompts - one per title
         prompts = [
-            f"Extract aircraft information from this title: {title}"
-            for title in titles_list
+            f"Identify aircraft from this title: {title}" for title in titles_list
         ]
 
         # Use category-specific system prompt
