@@ -4,7 +4,7 @@ from assertpy import assert_that
 from azure.cosmos import CosmosClient
 from util import sample_offer
 
-from aerooffers import offers_db
+from aerooffers import db, offers_db
 from aerooffers.offer import AircraftCategory, Offer
 
 
@@ -109,3 +109,68 @@ def test_should_check_url_exists(cosmos_db: CosmosClient) -> None:
     # then
     assert_that(url_exists).is_true()
     assert_that(offers_db.offer_url_exists("https://offers.com/2")).is_false()
+
+
+def test_should_not_store_page_content_in_offers_container(
+    cosmos_db: CosmosClient,
+) -> None:
+    # given
+    test_page_content = "<html><body>Test page content</body></html>"
+    offer = sample_offer(page_content=test_page_content)
+
+    # when
+    offer_id = offers_db.store_offer(offer, spider="test")
+
+    # then - page_content should NOT be in offers container
+    offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
+    assert_that(offer_doc).does_not_contain_key("page_content")
+
+
+def test_should_store_page_content_in_separate_container(
+    cosmos_db: CosmosClient,
+) -> None:
+    # given
+    test_page_content = (
+        "<html><body>Test page content for separate container</body></html>"
+    )
+    offer = sample_offer(page_content=test_page_content)
+
+    # when
+    offer_id = offers_db.store_offer(offer, spider="test")
+
+    # then - page_content SHOULD be in offer_page_content container
+    page_content_doc = db.page_content_container().read_item(
+        item=offer_id, partition_key=offer_id
+    )
+    assert_that(page_content_doc).contains_key("page_content")
+    assert_that(page_content_doc["page_content"]).is_equal_to(test_page_content)
+    assert_that(page_content_doc["id"]).is_equal_to(offer_id)
+
+
+def test_should_store_offer_with_page_content_in_both_containers(
+    cosmos_db: CosmosClient,
+) -> None:
+    # given
+    test_page_content = "<html><body>Complete test content</body></html>"
+    offer = sample_offer(
+        url="https://test.com/offer",
+        title="Test Offer",
+        page_content=test_page_content,
+    )
+
+    # when
+    offer_id = offers_db.store_offer(offer, spider="test")
+
+    # then - offer should be in offers container without page_content
+    offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
+    assert_that(offer_doc["id"]).is_equal_to(offer_id)
+    assert_that(offer_doc["title"]).is_equal_to("Test Offer")
+    assert_that(offer_doc["url"]).is_equal_to("https://test.com/offer")
+    assert_that(offer_doc).does_not_contain_key("page_content")
+
+    # and - page_content should be in separate container
+    page_content_doc = db.page_content_container().read_item(
+        item=offer_id, partition_key=offer_id
+    )
+    assert_that(page_content_doc["id"]).is_equal_to(offer_id)
+    assert_that(page_content_doc["page_content"]).is_equal_to(test_page_content)
