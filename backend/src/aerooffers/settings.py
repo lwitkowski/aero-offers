@@ -11,7 +11,6 @@ load_dotenv(env_path, override=False)
 # scrapy pipeline components config, do not delete this
 ITEM_PIPELINES = {
     "aerooffers.pipelines.SkipSearchAndCharterOffers": 100,
-    "aerooffers.pipelines.SkipDuplicates": 200,
     "aerooffers.pipelines.ParsePrice": 300,
     "aerooffers.pipelines.StoreOffer": 400,
 }

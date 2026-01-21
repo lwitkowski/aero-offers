@@ -84,10 +84,22 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
 
 def test_should_order_offers_by_published_date_desc(cosmos_db: CosmosClient) -> None:
     # given
-    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 2)), spider="test")
-    offers_db.store_offer(sample_offer(published_at=date(2024, 2, 1)), spider="test")
-    offers_db.store_offer(sample_offer(published_at=date(2023, 3, 15)), spider="test")
-    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 31)), spider="test")
+    offers_db.store_offer(
+        sample_offer(url="https://offers.com/1", published_at=date(2024, 1, 2)),
+        spider="test",
+    )
+    offers_db.store_offer(
+        sample_offer(url="https://offers.com/2", published_at=date(2024, 2, 1)),
+        spider="test",
+    )
+    offers_db.store_offer(
+        sample_offer(url="https://offers.com/3", published_at=date(2023, 3, 15)),
+        spider="test",
+    )
+    offers_db.store_offer(
+        sample_offer(url="https://offers.com/4", published_at=date(2024, 1, 31)),
+        spider="test",
+    )
 
     # when
     orders = offers_db.get_offers()

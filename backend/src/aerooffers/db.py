@@ -4,9 +4,6 @@ from azure.cosmos import (
     ContainerProxy,
     CosmosClient,
     DatabaseProxy,
-    IndexingMode,
-    PartitionKey,
-    ThroughputProperties,
 )
 
 from aerooffers.my_logging import logging
@@ -56,35 +53,6 @@ def offers_container() -> ContainerProxy:
     return _offers_container
 
 
-def create_offers_container_if_not_exists() -> ContainerProxy:
-    return lazy_database().create_container_if_not_exists(
-        id="offers",
-        partition_key=PartitionKey(path="/id"),
-        offer_throughput=ThroughputProperties(offer_throughput="600"),
-        indexing_policy=dict(
-            automatic=True,
-            indexingMode=IndexingMode.Consistent,
-            includedPaths=[
-                dict(path="/published_at/?"),
-                dict(path="/url/?"),
-                dict(path="/classified/?"),
-            ],
-            excludedPaths=[dict(path="/*")],
-            compositeIndexes=[
-                [
-                    dict(path="/category", order="ascending"),
-                    dict(path="/published_at", order="descending"),
-                ],
-                [
-                    dict(path="/manufacturer", order="ascending"),
-                    dict(path="/model", order="ascending"),
-                    dict(path="/published_at", order="descending"),
-                ],
-            ],
-        ),
-    )
-
-
 _page_content_container: ContainerProxy | None = None
 
 
@@ -97,19 +65,3 @@ def page_content_container() -> ContainerProxy:
         container="offer_page_content"
     )
     return _page_content_container
-
-
-def create_page_content_container_if_not_exists() -> ContainerProxy:
-    return lazy_database().create_container_if_not_exists(
-        id="offer_page_content",
-        partition_key=PartitionKey(path="/id"),
-        offer_throughput=ThroughputProperties(
-            offer_throughput="400"
-        ),  # both containers should use less than 100 to stay under free tier limit
-        indexing_policy=dict(
-            automatic=True,
-            indexingMode=IndexingMode.Consistent,
-            includedPaths=[],
-            excludedPaths=[dict(path="/*")],
-        ),
-    )

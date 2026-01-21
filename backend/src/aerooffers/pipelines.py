@@ -8,7 +8,7 @@ from scrapy.exceptions import DropItem
 from aerooffers.fx import to_price_in_euro
 from aerooffers.my_logging import logging
 from aerooffers.offer import OfferPageItem
-from aerooffers.offers_db import offer_url_exists, store_offer
+from aerooffers.offers_db import store_offer
 
 
 class OfferPipelineFilter(ABC):
@@ -34,20 +34,6 @@ class SkipSearchAndCharterOffers(OfferPipelineFilter):
                 )
                 raise DropItem("Dropping search/charter offer")
         return item
-
-
-class SkipDuplicates(OfferPipelineFilter):
-    logger = logging.getLogger("DuplicateDetection")
-
-    @override
-    def process_item(self, item: OfferPageItem) -> OfferPageItem:
-        if offer_url_exists(item.url):
-            self.logger.debug(f"Existing offer, title='{item.title}', url={item.url}")
-            raise DropItem(
-                f"Offer already exists in DB, title='{item.title}' url={item.url}"
-            )
-        else:
-            return item
 
 
 class ParsePrice(OfferPipelineFilter):

@@ -1,6 +1,6 @@
 import os
 
-from aerooffers.db import (
+from util import (
     create_offers_container_if_not_exists,
     create_page_content_container_if_not_exists,
 )

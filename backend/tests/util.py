@@ -1,8 +1,15 @@
 import os
 from datetime import date
 
+from azure.cosmos import (
+    ContainerProxy,
+    IndexingMode,
+    PartitionKey,
+    ThroughputProperties,
+)
 from scrapy.http import HtmlResponse, Request
 
+from aerooffers.db import lazy_database
 from aerooffers.offer import AircraftCategory, OfferPageItem
 
 
@@ -66,3 +73,48 @@ def fake_response_from_file(
     )
     response.meta["aircraft_category"] = AircraftCategory.glider
     return response
+
+
+def create_offers_container_if_not_exists() -> ContainerProxy:
+    return lazy_database().create_container_if_not_exists(
+        id="offers",
+        partition_key=PartitionKey(path="/id"),
+        offer_throughput=ThroughputProperties(offer_throughput="600"),
+        indexing_policy=dict(
+            automatic=True,
+            indexingMode=IndexingMode.Consistent,
+            includedPaths=[
+                dict(path="/published_at/?"),
+                dict(path="/url/?"),
+                dict(path="/classified/?"),
+            ],
+            excludedPaths=[dict(path="/*")],
+            compositeIndexes=[
+                [
+                    dict(path="/category", order="ascending"),
+                    dict(path="/published_at", order="descending"),
+                ],
+                [
+                    dict(path="/manufacturer", order="ascending"),
+                    dict(path="/model", order="ascending"),
+                    dict(path="/published_at", order="descending"),
+                ],
+            ],
+        ),
+    )
+
+
+def create_page_content_container_if_not_exists() -> ContainerProxy:
+    return lazy_database().create_container_if_not_exists(
+        id="offer_page_content",
+        partition_key=PartitionKey(path="/id"),
+        offer_throughput=ThroughputProperties(
+            offer_throughput="400"
+        ),  # both containers should use less than 100 to stay under free tier limit
+        indexing_policy=dict(
+            automatic=True,
+            indexingMode=IndexingMode.Consistent,
+            includedPaths=[],
+            excludedPaths=[dict(path="/*")],
+        ),
+    )

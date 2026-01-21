@@ -11,6 +11,7 @@ from twisted.python.failure import Failure
 
 from aerooffers.my_logging import logging
 from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.offers_db import offer_url_exists
 
 ROOT_URL = "https://www.segelflug.de"
 
@@ -104,9 +105,16 @@ class SegelflugDeSpider(scrapy.Spider):
 
             visited.add(detail_url)
 
-            self._logger.debug("Adding offer for scraping %s", ROOT_URL + detail_url)
+            full_url = ROOT_URL + detail_url
+
+            # Check if already exists in DB (duplication detection)
+            if offer_url_exists(full_url):
+                self._logger.debug("Skipping existing offer: %s", full_url)
+                continue
+
+            self._logger.debug("Adding offer for scraping %s", full_url)
             yield scrapy.Request(
-                ROOT_URL + detail_url,
+                full_url,
                 callback=self._parse_detail_page,
                 errback=self._errback,
                 meta={"aircraft_category": category},

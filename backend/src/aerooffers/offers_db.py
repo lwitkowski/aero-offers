@@ -1,6 +1,8 @@
-import uuid
+import hashlib
 from datetime import datetime, UTC
 from typing import Any
+
+from azure.cosmos.exceptions import CosmosResourceNotFoundError
 
 from aerooffers.db import offers_container, page_content_container
 from aerooffers.my_logging import logging
@@ -15,8 +17,13 @@ from aerooffers.offer import (
 logger = logging.getLogger("offers_db")
 
 
+def _url_to_id(url: str) -> str:
+    """Generate a deterministic ID from a URL using SHA-256 hash."""
+    return hashlib.sha256(url.encode()).hexdigest()
+
+
 def store_offer(offer: OfferPageItem, spider: str) -> str:
-    offer_id = str(uuid.uuid4())
+    offer_id = _url_to_id(offer.url)
 
     # Store offer WITHOUT page_content
     offers_container().upsert_item(
@@ -84,16 +91,18 @@ def unclassify_offer(offer_id: str) -> None:
 
 
 def offer_url_exists(url: str) -> bool:
+    """
+    Check if an offer with the given URL exists using a fast point read.
+    Uses a deterministic ID derived from the URL for optimal performance.
+    """
     try:
-        offer = offers_container().query_items(
-            query="SELECT o.id FROM offers o WHERE o.url = @url OFFSET 0 LIMIT 1",
-            parameters=[dict(name="@url", value=url)],
-            enable_cross_partition_query=True,
-        )
-        return next(offer, None) is not None
+        offer_id = _url_to_id(url)
+        offers_container().read_item(item=offer_id, partition_key=offer_id)
+        return True
+    except CosmosResourceNotFoundError:
+        return False
     except Exception as e:
-        logger.error("database error, assuming we don't have this offer yet")
-        logger.error(e)
+        logger.error("database error, assuming we don't have this offer yet", e)
         return False
 
 
@@ -193,23 +202,6 @@ def get_unclassified_offers(limit: int = 100) -> list[UnclassifiedOffer]:
         )
         for result in result_set
     ]
-
-
-def get_poorly_classified_offer_ids(offset: int = 0, limit: int = 100) -> list[str]:
-    """Returns offers from db for which legacy rule-based classifier failed to classify correctly."""
-    query = (
-        "SELECT o.id FROM offers o "
-        "WHERE o.classified = true "
-        "AND (o.manufacturer = null OR o.model = null) "
-        "AND NOT IS_DEFINED(o.classifier_name) "
-        "ORDER BY o._ts DESC "
-        "OFFSET @offset LIMIT @limit"
-    )
-    params = [dict(name="@offset", value=offset), dict(name="@limit", value=limit)]
-    result_set = offers_container().query_items(
-        query=query, parameters=params, enable_cross_partition_query=True
-    )
-    return [result["id"] for result in result_set]
 
 
 if __name__ == "__main__":
