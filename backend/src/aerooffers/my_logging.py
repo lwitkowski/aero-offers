@@ -32,11 +32,13 @@ def remove_scrapy_handlers() -> None:
     # Our handler uses " - " separator, Scrapy's uses " [" and "] "
     for handler in root_logger.handlers[:]:
         if hasattr(handler, "formatter") and handler.formatter:
-            fmt = (
-                handler.formatter._fmt
-                if hasattr(handler.formatter, "_fmt")
-                else str(handler.formatter)
-            )
+            if (
+                hasattr(handler.formatter, "_fmt")
+                and handler.formatter._fmt is not None
+            ):
+                fmt: str = handler.formatter._fmt
+            else:
+                fmt = str(handler.formatter)
             # Our format uses " - " separator, Scrapy's uses " [" and "] "
             if " - " not in fmt or "[" in fmt:
                 # This is Scrapy's handler or an unknown handler, remove it
