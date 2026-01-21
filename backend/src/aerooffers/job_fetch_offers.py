@@ -28,7 +28,8 @@ if __name__ == "__main__":
             "Pipelines missing/not loaded properly, most likely scrapy.cfg/settings.py was not loaded properly"
         )
 
-    logger.info(f"Item pipelines settings: {str(pipelines)}")
+    logger.debug(f"Item pipelines settings: {str(pipelines)}")
+
     process = CrawlerProcess(settings)
 
     def create_crawler(spider_cls: type[Spider]) -> tuple[str, Crawler]:

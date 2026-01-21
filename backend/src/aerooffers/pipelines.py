@@ -72,8 +72,8 @@ class ParsePrice(OfferPipelineFilter):
                 self.logger.info(msg)
                 raise DropItem(msg)
 
-            if price.amount > 500_000:
-                msg = f"Offer has unreasonable price higher than 500_000, price={price.amount_text}, url={item.url} "
+            if price.amount > 1_500_000:
+                msg = f"Offer has unreasonable price higher than 1_500_000, price={price.amount_text}, url={item.url} "
                 self.logger.info(msg)
                 raise DropItem(msg)
 
