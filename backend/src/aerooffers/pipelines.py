@@ -106,7 +106,9 @@ class StoreOffer(OfferPipelineFilter):
 
     @override
     def process_item(self, item: OfferPageItem) -> OfferPageItem:
-        self.logger.info("Storing offer title='%s', url=%s", item.title, item.url)
+        self.logger.info(
+            "Storing '%s' offer title='%s', url=%s", item.category, item.title, item.url
+        )
 
         spider = self._crawler.spider
         if spider is not None:

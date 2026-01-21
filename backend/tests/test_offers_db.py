@@ -44,7 +44,6 @@ def test_should_filter_offers_by_manufacturer_and_model(
     offers_db.classify_offer(
         offer_id=stored_offer_id,
         classifier_name="Manual",
-        category=AircraftCategory.glider,
         manufacturer="Schempp-Hirth",
         model="Mini-Nimbus",
     )
@@ -66,7 +65,6 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
     offers_db.classify_offer(
         offer_id=stored_offer_id,
         classifier_name="Manual",
-        category=AircraftCategory.glider,
         manufacturer="Schempp-Hirth",
         model="Mini-Nimbus",
     )
@@ -75,7 +73,6 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
     offers_db.classify_offer(
         offer_id=stored_offer_id,
         classifier_name="Manual",
-        category=None,
         manufacturer=None,
         model=None,
     )

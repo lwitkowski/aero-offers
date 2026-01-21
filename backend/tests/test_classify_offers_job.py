@@ -16,7 +16,6 @@ def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     offers_db.classify_offer(
         offer_id=classified_offer_id,
         classifier_name="Manual",
-        category=AircraftCategory.glider,
         manufacturer="PZL Bielsko",
         model="Bocian",
     )
@@ -26,7 +25,6 @@ def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     offers_db.classify_offer(
         offer_id=second_classified_offer_id,
         classifier_name="Manual",
-        category=AircraftCategory.glider,
         manufacturer="PZL Bielsko",
         model="Bocian",
     )

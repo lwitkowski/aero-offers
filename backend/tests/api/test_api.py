@@ -6,7 +6,6 @@ from util import sample_offer
 
 from aerooffers import offers_db
 from aerooffers.api.flask_app import app
-from aerooffers.offer import AircraftCategory
 
 
 @pytest.fixture
@@ -63,9 +62,7 @@ def test_get_offers_for_given_manufacturer_and_model(api_client: FlaskClient) ->
     offer_id = offers_db.store_offer(
         sample_offer(price="29500", currency="EUR"), spider="test"
     )
-    offers_db.classify_offer(
-        offer_id, "Manual", AircraftCategory.glider, "PZL Bielsko", "SZD-9 Bocian"
-    )
+    offers_db.classify_offer(offer_id, "Manual", "PZL Bielsko", "SZD-9 Bocian")
 
     # when
     response = api_client.get("/api/offers/PZL Bielsko/SZD-9 Bocian")

@@ -7,7 +7,7 @@ import pytest
 from assertpy import assert_that
 
 from aerooffers.classifier.gemini_llm_classifier import GeminiLLMClassifier
-from aerooffers.offer import AircraftCategory
+from aerooffers.offer import AircraftCategory, UnclassifiedOffer
 
 
 @pytest.fixture
@@ -23,23 +23,27 @@ def mock_gemini_response() -> Callable[[str], MagicMock]:
 @patch.dict(os.environ, {"GEMINI_API_KEY": "test-api-key"})
 def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None:
     # given
-    titles = {
-        "offer1": "Stemme S6-RT",
-        "offer2": "DG 800 B",
-        "offer3": "Stemme S99",
-    }
+    offers = [
+        UnclassifiedOffer(
+            id="offer1", title="Stemme S6-RT", category=AircraftCategory.tmg
+        ),
+        UnclassifiedOffer(
+            id="offer2", title="DG 800 B", category=AircraftCategory.glider
+        ),
+        UnclassifiedOffer(
+            id="offer3", title="Stemme S99", category=AircraftCategory.tmg
+        ),
+    ]
     api_response_json = json.dumps(
         [
-            {"manufacturer": "Stemme", "model": "S6-RT", "aircraft_type": "tmg"},
+            {"manufacturer": "Stemme", "model": "S6-RT"},
             {
                 "manufacturer": "DG Flugzeugbau",
                 "model": "DG-800B",
-                "aircraft_type": "glider",
             },
             {
                 "manufacturer": "Stemme",
                 "model": "S99",
-                "aircraft_type": "tmg",
             },
         ]
     )
@@ -51,7 +55,7 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
         "generate_content",
         return_value=mock_gemini_response(api_response_json),
     ):
-        results = classifier.classify_many(titles)
+        results = classifier.classify_many(offers)
 
     # then
     assert_that(results).is_not_none()
@@ -62,14 +66,12 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
     assert result1 is not None  # Type narrowing for mypy
     assert_that(result1.manufacturer).is_equal_to("Stemme")
     assert_that(result1.model).is_equal_to("S6-RT")
-    assert_that(result1.aircraft_type).is_equal_to(AircraftCategory.tmg)
 
     result2 = results.get("offer2")
     assert_that(result2).is_not_none()
     assert result2 is not None  # Type narrowing for mypy
     assert_that(result2.manufacturer).is_equal_to("DG Flugzeugbau")
     assert_that(result2.model).is_equal_to("DG-800B")
-    assert_that(result2.aircraft_type).is_equal_to(AircraftCategory.glider)
 
     result3 = results.get("offer3")
     assert_that(result3).is_not_none()
@@ -77,7 +79,6 @@ def test_classify_many(mock_gemini_response: Callable[[str], MagicMock]) -> None
     # Model "S99" is not in models.json, so it should be set to None
     assert_that(result3.manufacturer).is_equal_to("Stemme")
     assert_that(result3.model).is_none()
-    assert_that(result3.aircraft_type).is_equal_to(AircraftCategory.tmg)
 
 
 @pytest.mark.skip(reason="Only for exploratory testing (tweaking prompts etc.)")
@@ -86,13 +87,15 @@ def test_using_real_gemini_api() -> None:
 
     load_env()
 
-    active_test_cases: dict[str, str] = {
-        # "1": "PEGASE 90  mint condition",
-        # "2": "Diana2 FES",
-        # "3": "SZD55-1 FOR SALE",
-        "4": "L1-f ready to fly",
-        # "5": "Stemme S10",
-    }
+    active_test_cases = [
+        # UnclassifiedOffer(id="1", title="PEGASE 90  mint condition", category=AircraftCategory.glider),
+        # UnclassifiedOffer(id="2", title="Diana2 FES", category=AircraftCategory.glider),
+        # UnclassifiedOffer(id="3", title="SZD55-1 FOR SALE", category=AircraftCategory.glider),
+        UnclassifiedOffer(
+            id="4", title="L1-f ready to fly", category=AircraftCategory.glider
+        ),
+        # UnclassifiedOffer(id="5", title="Stemme S10", category=AircraftCategory.glider),
+    ]
 
     classifier = GeminiLLMClassifier()
 
@@ -101,11 +104,11 @@ def test_using_real_gemini_api() -> None:
     results = classifier.classify_many(active_test_cases)
 
     # then
-    for i, title in active_test_cases.items():
-        result = results.get(i)
+    for offer in active_test_cases:
+        result = results.get(offer.id)
         if result is None:
             result_msg = "❌ No result returned"
         else:
-            result_msg = f"classified as {result.aircraft_type} / {result.manufacturer} / {result.model}"
+            result_msg = f"classified as {result.manufacturer} / {result.model}"
 
-        print(f"[{i}] ('{title}'):  {result_msg}")
+        print(f"[{offer.id}] ('{offer.title}'):  {result_msg}")

@@ -24,27 +24,27 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
         "RANDOMIZE_DOWNLOAD_DELAY": 0.5,  # Randomization factor: delay varies between 50% and 150% of DOWNLOAD_DELAY
     }
 
-    start_urls = [
-        "https://www.flugzeugmarkt.de/segelflugzeuge",
-        "https://www.flugzeugmarkt.de/motorsegler",
-        "https://www.flugzeugmarkt.de/motorflugzeuge",
-        "https://www.flugzeugmarkt.de/ultraleichtflugzeuge",
-        "https://www.flugzeugmarkt.de/helikopter",
-    ]
-
-    aircraft_type_mapping = {
-        "Motorsegler": AircraftCategory.tmg,
-        "Segelflugzeug": AircraftCategory.glider,
-        "Motorflugzeug": AircraftCategory.airplane,
-        "Ultraleichtflugzeug": AircraftCategory.ultralight,
-        "Helikopter": AircraftCategory.helicopter,
+    start_urls_with_category: dict[str, AircraftCategory] = {
+        "https://www.flugzeugmarkt.de/segelflugzeuge": AircraftCategory.glider,
+        "https://www.flugzeugmarkt.de/motorsegler": AircraftCategory.tmg,
+        "https://www.flugzeugmarkt.de/motorflugzeuge": AircraftCategory.airplane,
+        "https://www.flugzeugmarkt.de/ultraleichtflugzeuge": AircraftCategory.ultralight,
+        "https://www.flugzeugmarkt.de/helikopter": AircraftCategory.helicopter,
     }
+
+    @property
+    def start_urls(self) -> list[str]:  # type: ignore[override]
+        """Generate start_urls from dictionary keys for Scrapy compatibility."""
+        return list(self.start_urls_with_category.keys())
 
     @override
     def parse(
         self, response: Response, **kwargs: Any
     ) -> Generator[scrapy.Request, None]:
         self._logger.debug("Scraping %s", response.url)
+        category = self.start_urls_with_category.get(
+            response.url, AircraftCategory.unknown
+        )
         seen: set[str] = set()
         detail_urls = response.css("div.aircraft-listing a.slide::attr(href)").extract()
         if not detail_urls:
@@ -64,6 +64,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
                 full_url_to_crawl,
                 callback=self._parse_detail_page,
                 errback=self._errback,
+                meta={"aircraft_category": category},
             )
 
     def _errback(self, failure: Failure) -> Any:
@@ -97,20 +98,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
     def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem, None]:
         self._logger.debug("Parsing offer page %s", response.url)
         try:
-            aircraft_type_german = self._extract_detail_value("Flugzeugtyp", response)
-            if (
-                aircraft_type_german
-                and aircraft_type_german in self.aircraft_type_mapping
-            ):
-                category = (
-                    self.aircraft_type_mapping[aircraft_type_german]
-                    or AircraftCategory.unknown
-                )
-            else:
-                category = AircraftCategory.unknown
-                self._logger.info(
-                    f"Couldn't determine aircraft type for offer with url: {response.url}"
-                )
+            category = response.meta.get("aircraft_category", AircraftCategory.unknown)
 
             date = response.css(
                 "meta[property='article:published_time']::attr(content)"
