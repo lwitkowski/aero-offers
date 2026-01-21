@@ -28,7 +28,9 @@ def test_get_aircraft_models(api_client: FlaskClient) -> None:
 
 def test_get_offers_for_all_categories(api_client: FlaskClient) -> None:
     # given
-    offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
+    offers_db.store_offer(
+        sample_offer(price="29500", currency="EUR"), spider="whatever"
+    )
 
     # when
     response = api_client.get("/api/offers")

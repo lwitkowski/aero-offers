@@ -27,7 +27,7 @@ class SegelflugDeSpider(scrapy.Spider):
 
     start_urls = [
         GLIDER_OFFERS_URL,
-        GLIDER_OFFERS_URL + "?start=48",
+        # GLIDER_OFFERS_URL + "?start=48",
         # GLIDER_OFFERS_URL + "?start=96",
         # GLIDER_OFFERS_URL + "?start=144",
         ENGINE_OFFERS_URL,
@@ -106,9 +106,7 @@ class SegelflugDeSpider(scrapy.Spider):
             else:
                 aircraft_category = AircraftCategory.glider
 
-            self._logger.debug(
-                "Adding detail page for scraping %s", ROOT_URL + detail_url
-            )
+            self._logger.debug("Adding offer for scraping %s", ROOT_URL + detail_url)
             yield scrapy.Request(
                 ROOT_URL + detail_url,
                 callback=self._parse_detail_page,

@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import pytest
 from assertpy import assert_that
 from azure.cosmos import CosmosClient
@@ -10,7 +12,7 @@ from aerooffers.offer import AircraftCategory
 
 def test_new_offer_is_not_duplicate(cosmos_db: CosmosClient) -> None:
     # given offer in DB with different url
-    offers_db.store_offer(sample_offer(url="https://offers.com/2"))
+    offers_db.store_offer(sample_offer(url="https://offers.com/2"), spider="test")
 
     # when & then
     pipelines.SkipDuplicates().process_item(sample_offer(url="https://offers.com/1"))
@@ -18,7 +20,7 @@ def test_new_offer_is_not_duplicate(cosmos_db: CosmosClient) -> None:
 
 def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
     # given offer in DB with same url
-    offers_db.store_offer(sample_offer())
+    offers_db.store_offer(sample_offer(), spider="test")
 
     # when
     with pytest.raises(DropItem) as e:
@@ -26,7 +28,7 @@ def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
 
     # then
     assert_that(str(e.value)).is_equal_to(
-        "Offer already exists in DB, url=https://offers.com/1"
+        "Offer already exists in DB, title='Glider A' url=https://offers.com/1"
     )
 
 
@@ -131,13 +133,16 @@ def test_should_store_offer(cosmos_db: CosmosClient) -> None:
     sample_raw_offer = sample_offer(
         price="123456.00", currency="EUR", location="Moon", hours=1000, starts=300
     )
+    crawler = MagicMock()
+    crawler.spider.name = "awesome_spider"
 
     # when
-    pipelines.StoreOffer().process_item(sample_raw_offer)
+    pipelines.StoreOffer(crawler).process_item(sample_raw_offer)
 
     # then
     all_gliders_in_db = offers_db.get_offers(category=AircraftCategory.glider)
     assert_that(all_gliders_in_db).is_length(1)
+    assert_that(all_gliders_in_db[0].spider).is_equal_to("awesome_spider")
     assert_that(all_gliders_in_db[0].title).is_equal_to("Glider A")
     assert_that(all_gliders_in_db[0].category).is_equal_to("glider")
     assert_that(all_gliders_in_db[0].url).is_equal_to("https://offers.com/1")

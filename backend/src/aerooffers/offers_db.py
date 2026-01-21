@@ -9,10 +9,7 @@ from aerooffers.offer import AircraftCategory, Offer, OfferPageItem, OfferPrice
 logger = logging.getLogger("offers_db")
 
 
-def store_offer(
-    offer: OfferPageItem,
-    spider: str = "unknown",
-) -> str:
+def store_offer(offer: OfferPageItem, spider: str) -> str:
     offer_id = str(uuid.uuid4())
     offers_container().upsert_item(
         dict(
@@ -145,6 +142,7 @@ def get_offers(
                 location=db_offer["location"],
                 manufacturer=db_offer["manufacturer"],
                 model=db_offer["model"],
+                spider=db_offer.get("spider"),
             ),
             db_offers,
         )
