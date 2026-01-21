@@ -12,7 +12,8 @@ spider = SegelflugDeSpider.SegelflugDeSpider()
 def test_collect_urls_of_all_offer_on_listing_page() -> None:
     # given
     listing_page_http_response = fake_response_from_file(
-        "spiders/samples/segelflug_de_listing.html"
+        "spiders/samples/segelflug_de_listing.html",
+        url="https://www.segelflug.de/index.php/de/kleinanzeigen/filterseite-de/com-djclassifieds-cat-sailplanes,5",
     )
 
     # when

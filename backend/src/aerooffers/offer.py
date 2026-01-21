@@ -53,3 +53,10 @@ class Offer:
     manufacturer: str
     model: str
     spider: str | None
+
+
+@dataclass(frozen=True)
+class UnclassifiedOffer:
+    id: str
+    title: str
+    category: AircraftCategory

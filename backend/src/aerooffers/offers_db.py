@@ -4,7 +4,13 @@ from typing import Any
 
 from aerooffers.db import offers_container
 from aerooffers.my_logging import logging
-from aerooffers.offer import AircraftCategory, Offer, OfferPageItem, OfferPrice
+from aerooffers.offer import (
+    AircraftCategory,
+    Offer,
+    OfferPageItem,
+    OfferPrice,
+    UnclassifiedOffer,
+)
 
 logger = logging.getLogger("offers_db")
 
@@ -41,7 +47,6 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
 def classify_offer(
     offer_id: str,
     classifier_name: str,
-    category: AircraftCategory | None = None,
     manufacturer: str | None = None,
     model: str | None = None,
 ) -> None:
@@ -51,11 +56,6 @@ def classify_offer(
         dict(op="replace", path="/model", value=model),
         dict(op="add", path="/classifier_name", value=classifier_name),
     ]
-
-    if category is not None:
-        operations.append(
-            dict[str, Any](op="replace", path="/category", value=str(category))
-        )
 
     offers_container().patch_item(
         partition_key=offer_id, item=offer_id, patch_operations=operations
@@ -149,19 +149,40 @@ def get_offers(
     )
 
 
-def get_unclassified_offers(limit: int = 100) -> list[Any]:
+def get_unclassified_offers(limit: int = 100) -> list[UnclassifiedOffer]:
     query = (
-        "SELECT * FROM offers o "
+        "SELECT o.id, o.title, o.category FROM offers o "
         "WHERE o.classified = false "
+        "AND IS_DEFINED(o.category) "
+        "AND o.category != null "
+        "AND o.category != 'undefined' "
         "ORDER BY o.id ASC "
         "OFFSET 0 LIMIT @limit"
     )
     params = [dict(name="@limit", value=limit)]
-    return list(
-        offers_container().query_items(
-            query=query, parameters=params, enable_cross_partition_query=True
-        )
+    db_offers = offers_container().query_items(
+        query=query, parameters=params, enable_cross_partition_query=True
     )
+
+    def _to_category(raw: object) -> AircraftCategory:
+        if not isinstance(raw, str) or not raw:
+            return AircraftCategory.unknown
+        try:
+            return AircraftCategory[raw]
+        except (KeyError, ValueError):
+            try:
+                return AircraftCategory(raw)
+            except (KeyError, ValueError):
+                return AircraftCategory.unknown
+
+    return [
+        UnclassifiedOffer(
+            id=db_offer["id"],
+            title=db_offer["title"],
+            category=_to_category(db_offer.get("category")),
+        )
+        for db_offer in db_offers
+    ]
 
 
 def get_poorly_classified_offers(offset: int = 0, limit: int = 100) -> list[Any]:

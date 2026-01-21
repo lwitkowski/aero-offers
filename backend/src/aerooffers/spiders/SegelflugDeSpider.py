@@ -13,8 +13,6 @@ from aerooffers.my_logging import logging
 from aerooffers.offer import AircraftCategory, OfferPageItem
 
 ROOT_URL = "https://www.segelflug.de"
-GLIDER_OFFERS_URL = "https://www.segelflug.de/index.php/de/kleinanzeigen/filterseite-de/com-djclassifieds-cat-sailplanes,5"
-ENGINE_OFFERS_URL = "https://www.segelflug.de/index.php/de/kleinanzeigen/filterseite-de/com-djclassifieds-cat-motorplanes,11"
 
 
 def _parse_int_or_none(param: str) -> int:
@@ -25,13 +23,15 @@ class SegelflugDeSpider(scrapy.Spider):
     name = "segelflug_de_kleinanzeigen"
     _logger = logging.getLogger(name)
 
-    start_urls = [
-        GLIDER_OFFERS_URL,
-        # GLIDER_OFFERS_URL + "?start=48",
-        # GLIDER_OFFERS_URL + "?start=96",
-        # GLIDER_OFFERS_URL + "?start=144",
-        ENGINE_OFFERS_URL,
-    ]
+    start_urls_with_category: dict[str, AircraftCategory] = {
+        "https://www.segelflug.de/index.php/de/kleinanzeigen/filterseite-de/com-djclassifieds-cat-sailplanes,5": AircraftCategory.glider,
+        "https://www.segelflug.de/index.php/de/kleinanzeigen/filterseite-de/com-djclassifieds-cat-motorplanes,11": AircraftCategory.tmg,
+    }
+
+    @property
+    def start_urls(self) -> list[str]:  # type: ignore[override]
+        """Generate start_urls from dictionary keys for Scrapy compatibility."""
+        return list(self.start_urls_with_category.keys())
 
     def _extract_first_number(self, text: str) -> int | None:
         match = re.search(r"\d+", text)
@@ -95,23 +95,21 @@ class SegelflugDeSpider(scrapy.Spider):
         self._logger.debug("Scraping %s", response.url)
 
         visited = set()
+        category = self.start_urls_with_category.get(
+            response.request.url, AircraftCategory.unknown
+        )
         for detail_url in response.css("h3.el-title a::attr(href)").extract():
             if detail_url in visited or "task=addFavourite" in detail_url:
                 continue
 
             visited.add(detail_url)
 
-            if response.request.url == ENGINE_OFFERS_URL:
-                aircraft_category = AircraftCategory.airplane
-            else:
-                aircraft_category = AircraftCategory.glider
-
             self._logger.debug("Adding offer for scraping %s", ROOT_URL + detail_url)
             yield scrapy.Request(
                 ROOT_URL + detail_url,
                 callback=self._parse_detail_page,
                 errback=self._errback,
-                meta={"aircraft_category": aircraft_category},
+                meta={"aircraft_category": category},
             )
 
     def _errback(self, failure: Failure) -> Any:

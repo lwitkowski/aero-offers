@@ -11,7 +11,7 @@ from aerooffers.classifier.classifiers import (
     load_all_models,
 )
 from aerooffers.my_logging import logging
-from aerooffers.offer import AircraftCategory
+from aerooffers.offer import AircraftCategory, UnclassifiedOffer
 
 nltk.download("stopwords")
 
@@ -51,35 +51,43 @@ class RuleBasedClassifier:
     _is_binder_model_re = re.compile(r"^(EB28|EB29)$")
     _is_schleicher_model_re = re.compile(r"AS[H|W|K|G]\s?[0-9]{2}(\sMi)?$")
 
-    def classify_many(self, titles: dict[str, str]) -> dict[str, ClassificationResult]:
-        """Classify multiple aircraft offer titles in batch.
-
-        :param titles: Dictionary mapping identifier to title
-        :return: Dictionary mapping identifier to ClassificationResult
-        """
+    def classify_many(
+        self,
+        offers: list[UnclassifiedOffer],
+    ) -> dict[str, ClassificationResult]:
         # Classify each title individually
         results: dict[str, ClassificationResult] = {}
-        for key, title in titles.items():
-            results[key] = self._classify(title)
+        for offer in offers:
+            results[offer.id] = self._classify(offer)
 
         return results
 
-    def _classify(self, offer_title: str) -> ClassificationResult:
+    def _classify(self, offer: UnclassifiedOffer) -> ClassificationResult:
         """Try to get the correct manufacturer and model for an airplane offer
 
-        :param offer_title: the title of the airplane offer
-        :return: ClassificationResult with aircraft_type, manufacturer, and model
+        :param offer: UnclassifiedOffer with title and category
+        :return: ClassificationResult with manufacturer and model
         """
-        grams = self._build_grams(offer_title)
+        grams = self._build_grams(offer.title)
 
-        for manufacturer, models in _manufacturers_filtered.items():
+        # Filter models to only search in the offer's category
+        manufacturers_to_search = {
+            mfr: {
+                cat: models for cat, models in details.items() if cat == offer.category
+            }
+            for mfr, details in _manufacturers_filtered.items()
+        }
+
+        for manufacturer, models in manufacturers_to_search.items():
+            # Skip manufacturers with no models in the filtered category
+            if not models:
+                continue
             (aircraft_type, _, model) = self._classify_against_models(
                 grams,
                 models,
             )
             if model is not None:
                 return ClassificationResult(
-                    aircraft_type=aircraft_type,
                     manufacturer=manufacturer,
                     model=model,
                 )

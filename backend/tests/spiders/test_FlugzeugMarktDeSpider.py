@@ -12,7 +12,8 @@ spider = FlugzeugMarktDeSpider()
 def test_collect_urls_of_all_offer_on_listing_page() -> None:
     # given
     listing_page_http_response = fake_response_from_file(
-        "spiders/samples/flugzeugmarkt_de_listing.html"
+        "spiders/samples/flugzeugmarkt_de_listing.html",
+        url="https://www.flugzeugmarkt.de/segelflugzeuge",
     )
 
     # when
@@ -32,11 +33,12 @@ def test_collect_urls_of_all_offer_on_listing_page() -> None:
 
 def test_parse_detail_page() -> None:
     # given
-    item: OfferPageItem = next(
-        spider._parse_detail_page(
-            fake_response_from_file("spiders/samples/flugzeugmarkt_de_offer.html")
-        )
+    response = fake_response_from_file(
+        "spiders/samples/flugzeugmarkt_de_offer.html",
+        url="https://www.flugzeugmarkt.de/segelflugzeuge/schempp-hirth/ventus-b/kaufen-3730.html",
     )
+    response.meta["aircraft_category"] = AircraftCategory.glider
+    item: OfferPageItem = next(spider._parse_detail_page(response))
 
     # then
     assert_that(item.title).is_equal_to("Schempp-Hirth Ventus b")
