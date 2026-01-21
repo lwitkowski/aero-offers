@@ -11,7 +11,7 @@ from aerooffers.offer import AircraftCategory
 def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
     # given
     classified_offer_id = offers_db.store_offer(
-        sample_offer(url="https://offers.com/1")
+        sample_offer(url="https://offers.com/1"), spider="test"
     )
     offers_db.classify_offer(
         offer_id=classified_offer_id,
@@ -21,7 +21,7 @@ def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
         model="Bocian",
     )
     second_classified_offer_id = offers_db.store_offer(
-        sample_offer(url="https://offers.com/2")
+        sample_offer(url="https://offers.com/2"), spider="test"
     )
     offers_db.classify_offer(
         offer_id=second_classified_offer_id,
@@ -30,7 +30,7 @@ def test_classify_only_unclassified_offers(cosmos_db: CosmosClient) -> None:
         manufacturer="PZL Bielsko",
         model="Bocian",
     )
-    offers_db.store_offer(sample_offer(url="https://offers.com/3"))
+    offers_db.store_offer(sample_offer(url="https://offers.com/3"), spider="test")
 
     # when
     offers_processed = classify_pending(RuleBasedClassifier())
@@ -44,7 +44,7 @@ def test_should_persist_manufacturer_and_model_if_classified(
     cosmos_db: CosmosClient,
 ) -> None:
     # given
-    offers_db.store_offer(sample_offer(title="LS-1"))
+    offers_db.store_offer(sample_offer(title="LS-1"), spider="test")
 
     # when
     classify_pending(RuleBasedClassifier())

@@ -28,7 +28,9 @@ def test_get_aircraft_models(api_client: FlaskClient) -> None:
 
 def test_get_offers_for_all_categories(api_client: FlaskClient) -> None:
     # given
-    offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
+    offers_db.store_offer(
+        sample_offer(price="29500", currency="EUR"), spider="whatever"
+    )
 
     # when
     response = api_client.get("/api/offers")
@@ -48,7 +50,7 @@ def test_get_offers_for_all_categories(api_client: FlaskClient) -> None:
 
 def test_get_offers_for_given_category(api_client: FlaskClient) -> None:
     # given
-    offers_db.store_offer(sample_offer())
+    offers_db.store_offer(sample_offer(), spider="test")
 
     # when & then
     assert_that(api_client.get("/api/offers?category=glider").json).is_length(1)
@@ -58,7 +60,9 @@ def test_get_offers_for_given_category(api_client: FlaskClient) -> None:
 
 def test_get_offers_for_given_manufacturer_and_model(api_client: FlaskClient) -> None:
     # given
-    offer_id = offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
+    offer_id = offers_db.store_offer(
+        sample_offer(price="29500", currency="EUR"), spider="test"
+    )
     offers_db.classify_offer(
         offer_id, "Manual", AircraftCategory.glider, "PZL Bielsko", "SZD-9 Bocian"
     )
@@ -97,7 +101,7 @@ def test_get_offers_404_for_unknown_manufacturer_or_model(
     api_client: FlaskClient,
 ) -> None:
     # given
-    offers_db.store_offer(sample_offer())
+    offers_db.store_offer(sample_offer(), spider="test")
 
     # when & then
     assert_that(

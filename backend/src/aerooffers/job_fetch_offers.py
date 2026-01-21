@@ -1,12 +1,10 @@
 import os
-import pprint
-from collections.abc import Mapping
-from datetime import datetime
 
 from scrapy.crawler import Crawler, CrawlerProcess, Spider
+from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 
-from aerooffers.my_logging import logging
+from aerooffers.my_logging import logging, remove_scrapy_handlers
 from aerooffers.spiders import FlugzeugMarktDeSpider, SegelflugDeSpider
 
 logger = logging.getLogger("offers_crawler")
@@ -15,6 +13,10 @@ if __name__ == "__main__":
     from aerooffers.utils import load_env
 
     load_env()
+
+    # Configure Scrapy logging to not install its own root handler
+    # This prevents duplicate logs since we use custom logging.conf
+    configure_logging(install_root_handler=False)
 
     settings_file_path = "settings"
     os.environ.setdefault("SCRAPY_SETTINGS_MODULE", settings_file_path)
@@ -39,15 +41,10 @@ if __name__ == "__main__":
         create_crawler(FlugzeugMarktDeSpider.FlugzeugMarktDeSpider),
     ]
 
+    # Remove Scrapy's handlers to prevent duplicate log messages
+    # This must be done after creating crawlers but before starting the process
+    remove_scrapy_handlers()
+
     process.start()  # the script will block here until all crawling jobs are finished
 
-    stats_per_spider: dict[str, Mapping[str, float]] = {}
-
-    for spider_name, crawler in spiders:
-        logger.debug("Fetching stats for spider: %s", spider_name)
-        assert crawler.stats is not None
-        stats_per_spider[spider_name] = crawler.stats.get_stats()
-
-    logger.info(
-        f"Crawling offers completed at {str(datetime.now())} \n\n {pprint.pformat(stats_per_spider)} \n"
-    )
+    logger.info("Crawling offers completed")

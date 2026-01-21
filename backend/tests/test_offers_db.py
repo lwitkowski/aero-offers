@@ -10,7 +10,7 @@ from aerooffers.offer import AircraftCategory, Offer
 
 def test_should_store_and_fetch_offer(cosmos_db: CosmosClient) -> None:
     # given
-    offers_db.store_offer(sample_offer(price="29500", currency="EUR"))
+    offers_db.store_offer(sample_offer(price="29500", currency="EUR"), spider="test")
 
     # when
     all_offers = offers_db.get_offers()
@@ -25,7 +25,7 @@ def test_should_store_and_fetch_offer(cosmos_db: CosmosClient) -> None:
 
 def test_should_filter_offers_by_aircraft_type(cosmos_db: CosmosClient) -> None:
     # given
-    offers_db.store_offer(sample_offer())
+    offers_db.store_offer(sample_offer(), spider="test")
 
     # when
     gliders_only = offers_db.get_offers(category=AircraftCategory.glider)
@@ -40,7 +40,7 @@ def test_should_filter_offers_by_manufacturer_and_model(
     cosmos_db: CosmosClient,
 ) -> None:
     # given
-    stored_offer_id = offers_db.store_offer(sample_offer())
+    stored_offer_id = offers_db.store_offer(sample_offer(), spider="test")
     offers_db.classify_offer(
         offer_id=stored_offer_id,
         classifier_name="Manual",
@@ -62,7 +62,7 @@ def test_should_filter_offers_by_manufacturer_and_model(
 
 def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
     # given
-    stored_offer_id = offers_db.store_offer(sample_offer())
+    stored_offer_id = offers_db.store_offer(sample_offer(), spider="test")
     offers_db.classify_offer(
         offer_id=stored_offer_id,
         classifier_name="Manual",
@@ -87,10 +87,10 @@ def test_should_not_reset_category_if_none(cosmos_db: CosmosClient) -> None:
 
 def test_should_order_offers_by_published_date_desc(cosmos_db: CosmosClient) -> None:
     # given
-    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 2)))
-    offers_db.store_offer(sample_offer(published_at=date(2024, 2, 1)))
-    offers_db.store_offer(sample_offer(published_at=date(2023, 3, 15)))
-    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 31)))
+    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 2)), spider="test")
+    offers_db.store_offer(sample_offer(published_at=date(2024, 2, 1)), spider="test")
+    offers_db.store_offer(sample_offer(published_at=date(2023, 3, 15)), spider="test")
+    offers_db.store_offer(sample_offer(published_at=date(2024, 1, 31)), spider="test")
 
     # when
     orders = offers_db.get_offers()
@@ -104,7 +104,7 @@ def test_should_order_offers_by_published_date_desc(cosmos_db: CosmosClient) -> 
 
 def test_should_check_url_exists(cosmos_db: CosmosClient) -> None:
     # given offer exists in db
-    offers_db.store_offer(sample_offer(url="https://offers.com/1"))
+    offers_db.store_offer(sample_offer(url="https://offers.com/1"), spider="test")
 
     # when
     url_exists = offers_db.offer_url_exists("https://offers.com/1")

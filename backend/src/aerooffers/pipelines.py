@@ -1,7 +1,8 @@
-from typing import override, Protocol
+from abc import ABC, abstractmethod
+from typing import override
 
 from price_parser import Price
-from scrapy import Spider
+from scrapy.crawler import Crawler
 from scrapy.exceptions import DropItem
 
 from aerooffers.fx import to_price_in_euro
@@ -10,62 +11,55 @@ from aerooffers.offer import OfferPageItem
 from aerooffers.offers_db import offer_url_exists, store_offer
 
 
-class PipelineFilter(Protocol):
+class OfferPipelineFilter(ABC):
     """It is very easy to break scrapy pipelines if process_item has invalid signature, this protocol helps keeping it exactly as scrapy wants it to be."""
 
-    def process_item(
-        self, item: OfferPageItem, spider: Spider | None = None
-    ) -> OfferPageItem:
+    @abstractmethod
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         pass
 
 
-class SkipSearchAndCharterOffers(PipelineFilter):
+class SkipSearchAndCharterOffers(OfferPipelineFilter):
     logger = logging.getLogger("FilterSearchAndCharterOffers")
 
     search_offer_terms = ["suche", "gesucht", "looking for", "searching"]
     charter_offer_terms = ["charter", "for rent"]
 
-    def process_item(
-        self, item: OfferPageItem, spider: Spider | None = None
-    ) -> OfferPageItem:
-        self.logger.info("Checking if offer page is sell offer: " + item.url)
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         for search_offer_term in self.search_offer_terms:
             if search_offer_term in item.title.lower():
-                self.logger.info(
+                self.logger.debug(
                     "Dropping search offer, title='%s' url=%s", item.title, item.url
                 )
                 raise DropItem("Dropping Search offer")
         for charter_term in self.charter_offer_terms:
             if charter_term in item.title.lower():
-                self.logger.info(
+                self.logger.debug(
                     "Dropping charter offer, title='%s' url=%s", item.title, item.url
                 )
                 raise DropItem("Dropping Charter Offer")
         return item
 
 
-class SkipDuplicates(PipelineFilter):
+class SkipDuplicates(OfferPipelineFilter):
     logger = logging.getLogger("DuplicateDetection")
 
     @override
-    def process_item(
-        self, item: OfferPageItem, spider: Spider | None = None
-    ) -> OfferPageItem:
-        self.logger.info("Checking if offer is already stored in DB: " + item.url)
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         if offer_url_exists(item.url):
-            self.logger.debug(f"Offer already exists in DB, url={item.url}")
-            raise DropItem(f"Offer already exists in DB, url={item.url}")
-        return item
+            self.logger.debug(f"Existing offer, title='{item.title}', url={item.url}")
+            raise DropItem(
+                f"Offer already exists in DB, title='{item.title}' url={item.url}"
+            )
+        else:
+            return item
 
 
-class ParsePrice(PipelineFilter):
+class ParsePrice(OfferPipelineFilter):
     logger = logging.getLogger("PriceParser")
 
     @override
-    def process_item(
-        self, item: OfferPageItem, spider: Spider | None = None
-    ) -> OfferPageItem:
-        self.logger.info("Parsing price: " + item.url)
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
         try:
             price = Price.fromstring(item.raw_price)
             if price is None or price.amount is None:
@@ -100,23 +94,27 @@ class ParsePrice(PipelineFilter):
             raise DropItem(msg) from e
 
 
-class StoreOffer(PipelineFilter):
+class StoreOffer(OfferPipelineFilter):
     logger = logging.getLogger("StoragePipeline")
 
+    def __init__(self, crawler: Crawler):
+        self._crawler = crawler
+
+    @classmethod
+    def from_crawler(cls, crawler: Crawler) -> "StoreOffer":
+        return cls(crawler)
+
     @override
-    def process_item(
-        self, item: OfferPageItem, spider: Spider | None = None
-    ) -> OfferPageItem:
-        self.logger.debug(
-            "Storing offer title='%s', url=%s, currency=%s",
-            item.title,
-            item.url,
-            item.currency,
-        )
+    def process_item(self, item: OfferPageItem) -> OfferPageItem:
+        self.logger.info("Storing offer title='%s', url=%s", item.title, item.url)
 
+        spider = self._crawler.spider
         if spider is not None:
-            assert spider.crawler.stats is not None
-            spider.crawler.stats.inc_value("items_stored")
+            spider_name = spider.name or "unknown"
+            if self._crawler.stats:
+                self._crawler.stats.inc_value("items_stored")
+        else:
+            spider_name = "unknown"
 
-        store_offer(offer=item, spider=spider.name if spider is not None else "unknown")
+        store_offer(offer=item, spider=spider_name)
         return item

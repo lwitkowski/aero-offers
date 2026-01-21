@@ -15,3 +15,8 @@ ITEM_PIPELINES = {
     "aerooffers.pipelines.ParsePrice": 300,
     "aerooffers.pipelines.StoreOffer": 400,
 }
+
+# Scrapy logging configuration
+# Set to INFO to prevent DEBUG messages from appearing
+# This works together with logging.conf to control log levels
+LOG_LEVEL = "INFO"

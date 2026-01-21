@@ -52,3 +52,4 @@ class Offer:
     price: OfferPrice
     manufacturer: str
     model: str
+    spider: str | None
