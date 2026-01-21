@@ -20,7 +20,7 @@ def _classify(
 
         if result.model is None:
             logger.warning(
-                f"No classification result for offer {offer_id} with title '{offer.title}'"
+                f"No classification result for {offer.category.value} '{offer.title}', id={offer_id}"
             )
         else:
             logger.info(

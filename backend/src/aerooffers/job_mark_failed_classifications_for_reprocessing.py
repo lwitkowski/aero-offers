@@ -30,4 +30,4 @@ if __name__ == "__main__":
 
     load_env()
 
-    mark_poorly_classified_offers_for_reprocessing(5)
+    mark_poorly_classified_offers_for_reprocessing(25)

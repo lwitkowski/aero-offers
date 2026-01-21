@@ -37,31 +37,60 @@ class GeminiLLMClassifier:
             )
         self._client = genai.Client(api_key=api_key)
         self._models_data = load_all_models()
-        self._models_list_text = self._build_models_list_text()
 
-    def _build_models_list_text(self) -> str:
-        """Build formatted text listing all known manufacturers and models."""
+    def _get_category_examples(self, category: AircraftCategory) -> str:
+        """Get category-specific examples for the system prompt."""
+        examples_by_category: dict[AircraftCategory, list[str]] = {
+            AircraftCategory.glider: [
+                '"DG 800 B" → manufacturer: "DG Flugzeugbau", model: "DG-800B"',
+                '"ASK 21 D-6854" → manufacturer: "Alexander Schleicher", model: "ASK 21"',
+                '"Ka 6 CR-Pe" → manufacturer: "Alexander Schleicher", model: "Ka6"',
+                '"Nimbus 3 25.5 m" → manufacturer: "Schempp-Hirth", model: "Nimbus 3"',
+            ],
+            AircraftCategory.tmg: [
+                '"Stemme S6-RT" → manufacturer: "Stemme", model: "S6-RT"',
+                '"G109b" → manufacturer: "Grob", model: "G109b"',
+                '"SF 25 C" → manufacturer: "Scheibe", model: "SF 25"',
+            ],
+            AircraftCategory.airplane: [
+                '"Cessna F-172 H" → manufacturer: "Cessna", model: "172"',
+                '"Piper PA-28" → manufacturer: "Piper", model: "PA-28"',
+            ],
+            AircraftCategory.ultralight: [
+                '"TL-3000 Sirius" → manufacturer: "TL Ultralight", model: "TL-3000 Sirius"',
+                '"Pipistrel Virus" → manufacturer: "Pipistrel", model: "Virus"',
+            ],
+            AircraftCategory.helicopter: [
+                '"Robinson R44" → manufacturer: "Robinson Helicopter", model: "R44"',
+            ],
+        }
+
+        examples = examples_by_category.get(category, [])
+
+        return "\n".join(f"- {example}" for example in examples)
+
+    def _build_models_list_text_for_category(self, category: AircraftCategory) -> str:
+        """Build formatted text listing manufacturers and models for a specific category."""
         lines: list[str] = ["KNOWN MANUFACTURERS AND MODELS:", ""]
 
         for manufacturer, details in sorted(self._models_data.items()):
             models_by_type = details["models"]
-            manufacturer_lines: list[str] = list()
-            for aircraft_type in _VALID_AIRCRAFT_TYPES:
-                if aircraft_type in models_by_type and models_by_type[aircraft_type]:
-                    models = models_by_type[aircraft_type]
-                    models_str = ", ".join(f'"{model}"' for model in sorted(models))
-                    manufacturer_lines.append(f"  {aircraft_type}: {models_str}")
-
-            if len(manufacturer_lines) > 0:
+            if category in models_by_type and models_by_type[category]:
+                models = models_by_type[category]
+                models_str = ", ".join(f'"{model}"' for model in sorted(models))
                 lines.append(f"Manufacturer: {manufacturer}")
-                lines += manufacturer_lines
+                lines.append(f"  {category}: {models_str}")
                 lines.append("")
 
         return "\n".join(lines)
 
-    def _build_system_prompt(self) -> str:
-        """Build system prompt with examples and known models."""
-        return f"""You are an expert classifying gliders and TMGs based on sell ads titles.
+    def _build_system_prompt_for_category(self, category: AircraftCategory) -> str:
+        """Build system prompt optimized for a specific category."""
+        category_name = category.value
+        models_list_text = self._build_models_list_text_for_category(category)
+        examples = self._get_category_examples(category)
+
+        return f"""You are an expert classifying {category_name} based on sell ads titles.
 
 Your task is to extract:
 1. manufacturer - must match exactly one of the known manufacturers (case-sensitive)
@@ -77,12 +106,9 @@ IMPORTANT RULES:
 Each result should follow the format below.
 
 EXAMPLES:
-- "Stemme S6-RT" → manufacturer: "Stemme", model: "S6-RT"
-- "DG 800 B" → manufacturer: "DG Flugzeugbau", model: "DG-800B"
-- "ASK 21 D-6854" → manufacturer: "Alexander Schleicher", model: "ASK 21"
-- "Ka 6 CR-Pe" → manufacturer: "Alexander Schleicher", model: "Ka6"
+{examples}
 
-{self._models_list_text}
+{models_list_text}
 
 Remember: manufacturer and model must match EXACTLY from the list above."""
 
@@ -115,26 +141,57 @@ Remember: manufacturer and model must match EXACTLY from the list above."""
         if not offers:
             return {}
 
+        # Group offers by category
+        offers_by_category: dict[AircraftCategory, list[UnclassifiedOffer]] = {}
+        for offer in offers:
+            category = offer.category
+            if category not in offers_by_category:
+                offers_by_category[category] = []
+            offers_by_category[category].append(offer)
+
+        # Log summary of categories to be processed
+        category_summary = ", ".join(
+            f"{category.value}: {len(category_offers)}"
+            for category, category_offers in sorted(offers_by_category.items())
+        )
+        logger.info(
+            f"Classifying {len(offers)} offers grouped by category: {category_summary}"
+        )
+
+        # Process each category group separately
+        all_results: dict[str, ClassificationResult] = {}
+        for category, category_offers in offers_by_category.items():
+            category_results = self._classify_category_group(category, category_offers)
+            all_results.update(category_results)
+
+        return all_results
+
+    def _classify_category_group(
+        self,
+        category: AircraftCategory,
+        offers: list[UnclassifiedOffer],
+    ) -> dict[str, ClassificationResult]:
+        """Classify a group of offers that all belong to the same category."""
+        if not offers:
+            return {}
+
         ids = [offer.id for offer in offers]
         titles_list = [offer.title for offer in offers]
-        categories_list = [offer.category for offer in offers]
 
-        # Build multiple prompts - one per title
-        # Each title becomes a separate content part in the API call
-        # Include category hint
-        prompts = []
-        for title, category in zip(titles_list, categories_list, strict=True):
-            prompts.append(
-                f"Extract aircraft information from this title: {title}\n"
-                f"Note: This aircraft is known to be a {category.value}. "
-                f"Focus your search on {category.value} models only."
-            )
+        # Build prompts - one per title
+        prompts = [
+            f"Extract aircraft information from this title: {title}"
+            for title in titles_list
+        ]
+
+        # Use category-specific system prompt
+        system_prompt = self._build_system_prompt_for_category(category)
 
         response = self._client.models.generate_content(
             model=self._DEFAULT_MODEL,
             contents=prompts,
             config=GenerateContentConfig(
-                system_instruction=self._build_system_prompt(),
+                system_instruction=system_prompt,
                 response_mime_type="application/json",
                 response_schema=self._build_response_schema(),
                 temperature=self._TEMPERATURE,
@@ -146,10 +203,7 @@ Remember: manufacturer and model must match EXACTLY from the list above."""
             logger.error(error_msg)
             raise ValueError(error_msg)
 
-        categories_dict = {
-            offer_id: category
-            for offer_id, category in zip(ids, categories_list, strict=True)
-        }
+        categories_dict = {offer_id: category for offer_id in ids}
         return self._process_api_response(
             response.text, ids, titles_list, categories_dict
         )
