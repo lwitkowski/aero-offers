@@ -1,6 +1,9 @@
 import os
 
-from aerooffers.db import create_offers_container_if_not_exists
+from aerooffers.db import (
+    create_offers_container_if_not_exists,
+    create_page_content_container_if_not_exists,
+)
 
 os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
     "mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20250122"
@@ -74,4 +77,10 @@ def _truncate_all_tables() -> None:
     except CosmosResourceNotFoundError:
         print("ntbd")
 
+    try:
+        lazy_database().delete_container(container="offer_page_content")
+    except CosmosResourceNotFoundError:
+        print("ntbd")
+
     create_offers_container_if_not_exists()
+    create_page_content_container_if_not_exists()

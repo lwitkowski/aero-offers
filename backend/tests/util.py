@@ -16,13 +16,14 @@ def sample_offer(
     location: str | None = None,
     hours: int | None = None,
     starts: int | None = None,
+    page_content: str = "<some html content>",
 ) -> OfferPageItem:
     return OfferPageItem(
         url=url,
         category=AircraftCategory.glider,
         title=title,
         published_at=published_at,
-        page_content="does not matter",
+        page_content=page_content,
         raw_price=raw_price,
         price=price,
         currency=currency,

@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, UTC
 from typing import Any
 
-from aerooffers.db import offers_container
+from aerooffers.db import offers_container, page_content_container
 from aerooffers.my_logging import logging
 from aerooffers.offer import (
     AircraftCategory,
@@ -17,6 +17,8 @@ logger = logging.getLogger("offers_db")
 
 def store_offer(offer: OfferPageItem, spider: str) -> str:
     offer_id = str(uuid.uuid4())
+
+    # Store offer WITHOUT page_content
     offers_container().upsert_item(
         dict(
             id=offer_id,
@@ -35,12 +37,21 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
             location=offer.location,
             hours=offer.hours,
             starts=offer.starts,
-            page_content=offer.page_content,
+            # page_content REMOVED - stored in separate container
             classified=False,
             manufacturer=None,
             model=None,
         )
     )
+
+    # Store page_content in separate container
+    page_content_container().upsert_item(
+        dict(
+            id=offer_id,
+            page_content=offer.page_content,
+        )
+    )
+
     return offer_id
 
 
