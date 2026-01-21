@@ -26,8 +26,8 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
             category=offer.category.name,
             url=offer.url,
             title=offer.title,
-            published_at=str(offer.published_at),
-            indexed_at=str(datetime.now(UTC)),
+            published_at=offer.published_at.isoformat(),
+            indexed_at=datetime.now(UTC).isoformat(),
             price=dict(
                 amount=offer.price,
                 currency=offer.currency,

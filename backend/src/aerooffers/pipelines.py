@@ -22,22 +22,17 @@ class OfferPipelineFilter(ABC):
 class SkipSearchAndCharterOffers(OfferPipelineFilter):
     logger = logging.getLogger("FilterSearchAndCharterOffers")
 
-    search_offer_terms = ["suche", "gesucht", "looking for", "searching"]
-    charter_offer_terms = ["charter", "for rent"]
+    triggering_words = ["suche", "gesucht", "looking", "search", "charter", "for rent"]
 
     def process_item(self, item: OfferPageItem) -> OfferPageItem:
-        for search_offer_term in self.search_offer_terms:
-            if search_offer_term in item.title.lower():
+        for word in self.triggering_words:
+            if word in item.title.lower():
                 self.logger.debug(
-                    "Dropping search offer, title='%s' url=%s", item.title, item.url
+                    "Dropping search/charter offer, title='%s' url=%s",
+                    item.title,
+                    item.url,
                 )
-                raise DropItem("Dropping Search offer")
-        for charter_term in self.charter_offer_terms:
-            if charter_term in item.title.lower():
-                self.logger.debug(
-                    "Dropping charter offer, title='%s' url=%s", item.title, item.url
-                )
-                raise DropItem("Dropping Charter Offer")
+                raise DropItem("Dropping search/charter offer")
         return item
 
 

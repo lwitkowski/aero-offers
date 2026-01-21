@@ -65,7 +65,7 @@ def test_should_drop_if_price_is_missing() -> None:
     [
         ("0 Euro €", "Offer has unreasonable price smaller than 1"),
         ("0,89  Euro €", "Offer has unreasonable price smaller than 1"),
-        ("1500.001,00 Euro €", "Offer has unreasonable price higher than 1_500_000"),
+        ("1.500.001,00 Euro €", "Offer has unreasonable price higher than 1_500_000"),
     ],
 )
 def test_should_drop_if_price_is_unreasonable(
@@ -87,6 +87,7 @@ def test_should_drop_if_price_is_unreasonable(
         "searching for Stemme S12",
         "Looking for Stemme S12",
         "Discus CS - SUCHE",
+        "Looking 18m for WGC2026",
     ],
 )
 def test_search_offers_are_dropped(offer_title: str) -> None:
@@ -95,7 +96,7 @@ def test_search_offers_are_dropped(offer_title: str) -> None:
     with pytest.raises(DropItem) as e:
         pipelines.SkipSearchAndCharterOffers().process_item(offer)
 
-    assert_that(str(e.value)).is_equal_to("Dropping Search offer")
+    assert_that(str(e.value)).is_equal_to("Dropping search/charter offer")
 
 
 @pytest.mark.parametrize(
