@@ -10,6 +10,7 @@ from twisted.python.failure import Failure
 
 from aerooffers.my_logging import logging
 from aerooffers.offer import AircraftCategory, OfferPageItem
+from aerooffers.offers_db import offer_url_exists
 
 BASE_URL = "https://www.flugzeugmarkt.de/"
 
@@ -59,6 +60,12 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
             seen.add(detail_url)
 
             full_url_to_crawl = BASE_URL + detail_url[2:]
+
+            # Check if already exists in DB (duplication detection)
+            if offer_url_exists(full_url_to_crawl):
+                self._logger.debug("Skipping existing offer: %s", full_url_to_crawl)
+                continue
+
             self._logger.debug("Adding detail page for scraping %s", full_url_to_crawl)
             yield scrapy.Request(
                 full_url_to_crawl,
@@ -75,13 +82,6 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
         # <div class="day">Standort</div> ... <span class="schedule">Verviers</span>
         raw = response.xpath(
             f"//div[@class='day' and normalize-space()='{name}']/../../span[contains(@class,'schedule')]//text()"
-        ).get()
-        if raw:
-            return raw.strip()
-
-        # Fallback to older table markup
-        raw = response.xpath(
-            f"//tr/td[contains(.,'{name}')]/../td[@class='value']//text()"
         ).get()
         return (raw or "").strip()
 

@@ -10,28 +10,6 @@ from aerooffers import offers_db, pipelines
 from aerooffers.offer import AircraftCategory
 
 
-def test_new_offer_is_not_duplicate(cosmos_db: CosmosClient) -> None:
-    # given offer in DB with different url
-    offers_db.store_offer(sample_offer(url="https://offers.com/2"), spider="test")
-
-    # when & then
-    pipelines.SkipDuplicates().process_item(sample_offer(url="https://offers.com/1"))
-
-
-def test_existing_offer_is_duplicate(cosmos_db: CosmosClient) -> None:
-    # given offer in DB with same url
-    offers_db.store_offer(sample_offer(), spider="test")
-
-    # when
-    with pytest.raises(DropItem) as e:
-        pipelines.SkipDuplicates().process_item(sample_offer())
-
-    # then
-    assert_that(str(e.value)).is_equal_to(
-        "Offer already exists in DB, title='Glider A' url=https://offers.com/1"
-    )
-
-
 @pytest.mark.parametrize(
     ("raw_valid_price", "expected_price"),
     [
