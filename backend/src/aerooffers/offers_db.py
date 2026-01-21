@@ -37,7 +37,6 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
             location=offer.location,
             hours=offer.hours,
             starts=offer.starts,
-            # page_content REMOVED - stored in separate container
             classified=False,
             manufacturer=None,
             model=None,
