@@ -8,7 +8,7 @@ Quick reference for non-obvious patterns and conventions.
 
 **Code**
 - Don't add comments that are obvious from the code
-- always check ruff linter and mypy rules (via `uv`) before creating PR
+- Before creating PR always: check and fix ruff linter and mypy rules (via `uv`), run and fix all automated tests
 
 **Tests**: 
 - Use `# given` / `# when` / `# then` structure for all tests

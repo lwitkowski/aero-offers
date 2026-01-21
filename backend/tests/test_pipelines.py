@@ -65,7 +65,7 @@ def test_should_drop_if_price_is_missing() -> None:
     [
         ("0 Euro €", "Offer has unreasonable price smaller than 1"),
         ("0,89  Euro €", "Offer has unreasonable price smaller than 1"),
-        ("500.001,00 Euro €", "Offer has unreasonable price higher than 500_000"),
+        ("1500.001,00 Euro €", "Offer has unreasonable price higher than 1_500_000"),
     ],
 )
 def test_should_drop_if_price_is_unreasonable(
