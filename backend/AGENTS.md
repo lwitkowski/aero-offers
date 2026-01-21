@@ -20,3 +20,4 @@ Quick reference for non-obvious patterns and conventions.
 - Don't mention obvious things: linting fixes, test updates, pre-PR check status (expected anyway)
 - Don't include implementation details that are obvious from code
 - Don't mention temporary changes unless they're the main focus of the PR
+- When adding reasons/justifications: only include claims that are directly supported by the code changes or commit messages. Don't make assumptions about motivations (e.g., cost optimization, architectural patterns) unless explicitly stated in the code or commit
