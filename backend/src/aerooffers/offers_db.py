@@ -160,7 +160,7 @@ def get_unclassified_offers(limit: int = 100) -> list[UnclassifiedOffer]:
         "OFFSET 0 LIMIT @limit"
     )
     params = [dict(name="@limit", value=limit)]
-    db_offers = offers_container().query_items(
+    result_set = offers_container().query_items(
         query=query, parameters=params, enable_cross_partition_query=True
     )
 
@@ -177,30 +177,30 @@ def get_unclassified_offers(limit: int = 100) -> list[UnclassifiedOffer]:
 
     return [
         UnclassifiedOffer(
-            id=db_offer["id"],
-            title=db_offer["title"],
-            category=_to_category(db_offer.get("category")),
+            id=result["id"],
+            title=result["title"],
+            category=_to_category(result.get("category")),
         )
-        for db_offer in db_offers
+        for result in result_set
     ]
 
 
-def get_poorly_classified_offers(offset: int = 0, limit: int = 100) -> list[Any]:
+def get_poorly_classified_offer_ids(offset: int = 0, limit: int = 100) -> list[str]:
     """Returns offers from db for which legacy rule-based classifier failed to classify correctly."""
     query = (
-        "SELECT * FROM offers o "
+        "SELECT o.id FROM offers o "
         "WHERE o.classified = true "
+        "AND o.category IN ('glider', 'tmg') "
         "AND (o.manufacturer = null OR o.model = null) "
         "AND NOT IS_DEFINED(o.classifier_name) "
         "ORDER BY o._ts DESC "
         "OFFSET @offset LIMIT @limit"
     )
     params = [dict(name="@offset", value=offset), dict(name="@limit", value=limit)]
-    return list(
-        offers_container().query_items(
-            query=query, parameters=params, enable_cross_partition_query=True
-        )
+    result_set = offers_container().query_items(
+        query=query, parameters=params, enable_cross_partition_query=True
     )
+    return [result["id"] for result in result_set]
 
 
 if __name__ == "__main__":
