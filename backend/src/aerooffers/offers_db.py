@@ -4,7 +4,7 @@ from typing import Any
 
 from azure.cosmos.exceptions import CosmosResourceNotFoundError
 
-from aerooffers.db import offers_container, page_content_container
+from aerooffers.db import offers_container
 from aerooffers.my_logging import logging
 from aerooffers.offer import (
     AircraftCategory,
@@ -13,6 +13,7 @@ from aerooffers.offer import (
     OfferPrice,
     UnclassifiedOffer,
 )
+from aerooffers.page_content_storage import store_page_content
 
 logger = logging.getLogger("offers_db")
 
@@ -50,13 +51,8 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
         )
     )
 
-    # Store page_content in separate container
-    page_content_container().upsert_item(
-        dict(
-            id=offer_id,
-            page_content=offer.page_content,
-        )
-    )
+    if offer.page_content:
+        store_page_content(offer_id, offer.page_content, offer.url)
 
     return offer_id
 

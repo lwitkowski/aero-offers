@@ -15,6 +15,7 @@ dependencies = [
     "twisted==25.5.0",
     "azure-cosmos==4.14.5",
     "azure-identity==1.25.1",
+    "azure-storage-blob==12.28.0",
     "defusedxml==0.7.1",
     "google-genai==1.59.0",
     "python-dotenv==1.2.1",

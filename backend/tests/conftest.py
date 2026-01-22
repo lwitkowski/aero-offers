@@ -12,6 +12,7 @@ os.environ["AZURE_COSMOS_EMULATOR_IMAGE"] = (
 import os
 from collections.abc import Generator
 from typing import Self
+from unittest.mock import patch
 
 import pytest
 from azure.cosmos import CosmosClient
@@ -61,6 +62,12 @@ def session_cosmos_db() -> Generator[CosmosClient, None, None]:
     yield client
 
     emulator.stop(force=True, delete_volume=True)
+
+
+@pytest.fixture(autouse=True)
+def mock_store_page_content() -> Generator[None, None, None]:
+    with patch("aerooffers.offers_db.store_page_content"):
+        yield
 
 
 @pytest.fixture
