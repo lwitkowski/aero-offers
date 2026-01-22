@@ -64,5 +64,14 @@ class UnclassifiedOffer:
 
 
 def url_to_id(url: str) -> str:
-    """Generate a deterministic ID from a URL using SHA-256 hash."""
+    """
+    Generate a deterministic ID from a URL using SHA-256 hash.
+
+    This ID is used as the primary identifier in:
+    - Cosmos DB offers container (as the document ID)
+    - Azure Blob Storage (as the blob name for page content)
+
+    The deterministic nature ensures the same URL always produces the same ID,
+    enabling efficient lookups and preventing duplicates.
+    """
     return hashlib.sha256(url.encode()).hexdigest()
