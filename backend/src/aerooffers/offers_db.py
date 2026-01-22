@@ -1,4 +1,3 @@
-import hashlib
 from datetime import datetime, UTC
 from typing import Any
 
@@ -12,19 +11,14 @@ from aerooffers.offer import (
     OfferPageItem,
     OfferPrice,
     UnclassifiedOffer,
+    url_to_id,
 )
-from aerooffers.page_content_storage import store_page_content
 
 logger = logging.getLogger("offers_db")
 
 
-def _url_to_id(url: str) -> str:
-    """Generate a deterministic ID from a URL using SHA-256 hash."""
-    return hashlib.sha256(url.encode()).hexdigest()
-
-
 def store_offer(offer: OfferPageItem, spider: str) -> str:
-    offer_id = _url_to_id(offer.url)
+    offer_id = url_to_id(offer.url)
 
     # Store offer WITHOUT page_content
     offers_container().upsert_item(
@@ -50,9 +44,6 @@ def store_offer(offer: OfferPageItem, spider: str) -> str:
             model=None,
         )
     )
-
-    if offer.page_content:
-        store_page_content(offer_id, offer.page_content, offer.url)
 
     return offer_id
 
@@ -92,7 +83,7 @@ def offer_url_exists(url: str) -> bool:
     Uses a deterministic ID derived from the URL for optimal performance.
     """
     try:
-        offer_id = _url_to_id(url)
+        offer_id = url_to_id(url)
         offers_container().read_item(item=offer_id, partition_key=offer_id)
         return True
     except CosmosResourceNotFoundError:
