@@ -110,6 +110,11 @@ resource "azurerm_container_app_job" "update_offers" {
     value = var.gemini_api_key
   }
 
+  secret {
+    name  = "storage-connection-string"
+    value = azurerm_storage_account.main.primary_connection_string
+  }
+
   schedule_trigger_config {
     cron_expression          = local.job_cron_expression
     parallelism              = 1
@@ -148,6 +153,11 @@ resource "azurerm_container_app_job" "update_offers" {
       env {
         name  = "USE_LLM_CLASSIFIER"
         value = "true"
+      }
+
+      env {
+        name        = "AZURE_STORAGE_CONNECTION_STRING"
+        secret_name = "storage-connection-string"
       }
     }
   }
@@ -206,6 +216,41 @@ resource "azurerm_log_analytics_workspace" "main" {
   resource_group_name = azurerm_resource_group.main.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+}
+
+# Storage Account
+resource "azurerm_storage_account" "main" {
+  name                     = local.storage_account_name
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+# Storage Container for offer html pages
+resource "azurerm_storage_container" "offer_pages" {
+  name                  = local.offer_pages_container_name
+  storage_account_name  = azurerm_storage_account.main.name
+  container_access_type = "private"
+}
+
+# Storage Management Policy for offer pages (lifecycle: archive after 7 days)
+resource "azurerm_storage_management_policy" "main" {
+  storage_account_id = azurerm_storage_account.main.id
+
+  rule {
+    name    = "archive-offer-pages"
+    enabled = true
+    filters {
+      blob_types   = ["blockBlob"]
+      prefix_match = ["${local.offer_pages_container_name}/"]
+    }
+    actions {
+      base_blob {
+        tier_to_archive_after_days_since_modification_greater_than = 7
+      }
+    }
+  }
 }
 
 

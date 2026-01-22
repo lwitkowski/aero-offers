@@ -9,6 +9,8 @@ locals {
   cosmosdb_database_name         = "aerooffers"
   container_app_name             = "aerooffers-api"
   container_app_job_name         = "update-offers-job"
+  storage_account_name           = "aerooffers"
+  offer_pages_container_name     = "offer-pages"
 
   location = "Switzerland North"
 
