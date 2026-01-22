@@ -102,19 +102,3 @@ def create_offers_container_if_not_exists() -> ContainerProxy:
             ],
         ),
     )
-
-
-def create_page_content_container_if_not_exists() -> ContainerProxy:
-    return lazy_database().create_container_if_not_exists(
-        id="offer_page_content",
-        partition_key=PartitionKey(path="/id"),
-        offer_throughput=ThroughputProperties(
-            offer_throughput="400"
-        ),  # both containers should use less than 100 to stay under free tier limit
-        indexing_policy=dict(
-            automatic=True,
-            indexingMode=IndexingMode.Consistent,
-            includedPaths=[],
-            excludedPaths=[dict(path="/*")],
-        ),
-    )
