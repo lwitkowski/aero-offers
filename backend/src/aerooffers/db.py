@@ -1,5 +1,4 @@
 import os
-import warnings
 
 from azure.cosmos import (
     ContainerProxy,
@@ -52,22 +51,3 @@ def offers_container() -> ContainerProxy:
 
     _offers_container = lazy_database().get_container_client(container="offers")
     return _offers_container
-
-
-_page_content_container: ContainerProxy | None = None
-
-
-def page_content_container() -> ContainerProxy:
-    warnings.warn(
-        "page_content_container() is deprecated. Use aerooffers.page_content_storage.store_page_content() instead.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    global _page_content_container
-    if _page_content_container is not None:
-        return _page_content_container
-
-    _page_content_container = lazy_database().get_container_client(
-        container="offer_page_content"
-    )
-    return _page_content_container

@@ -28,17 +28,20 @@ def _get_blob_service_client() -> BlobServiceClient:
 
 
 def store_page_content(offer_id: str, page_content: str, url: str) -> None:
-    blob_client = _get_blob_service_client().get_blob_client(
-        container=_container_name, blob=offer_id
-    )
+    try:
+        blob_client = _get_blob_service_client().get_blob_client(
+            container=_container_name, blob=offer_id
+        )
 
-    blob_client.upload_blob(
-        data=page_content,
-        overwrite=True,
-        content_settings=ContentSettings(content_type="text/html; charset=utf-8"),
-        metadata={
-            "url": url,
-            "stored_at": datetime.now(UTC).isoformat(),
-        },
-    )
-    logger.debug(f"Stored page_content for offer_id: {offer_id}")
+        blob_client.upload_blob(
+            data=page_content,
+            overwrite=True,
+            content_settings=ContentSettings(content_type="text/html; charset=utf-8"),
+            metadata={
+                "url": url,
+                "stored_at": datetime.now(UTC).isoformat(),
+            },
+        )
+        logger.debug(f"Stored page_content for offer_id: {offer_id}")
+    except Exception as e:
+        logger.error(f"Could not upload page content for offer {offer_id}", e)
