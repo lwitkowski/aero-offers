@@ -1,3 +1,4 @@
+import hashlib
 from dataclasses import dataclass
 from datetime import date
 from enum import auto, StrEnum
@@ -60,3 +61,8 @@ class UnclassifiedOffer:
     id: str
     title: str
     category: AircraftCategory
+
+
+def url_to_id(url: str) -> str:
+    """Generate a deterministic ID from a URL using SHA-256 hash."""
+    return hashlib.sha256(url.encode()).hexdigest()

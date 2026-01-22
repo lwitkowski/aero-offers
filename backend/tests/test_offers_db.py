@@ -1,5 +1,4 @@
 from datetime import date
-from unittest.mock import patch
 
 from assertpy import assert_that
 from azure.cosmos import CosmosClient
@@ -137,46 +136,3 @@ def test_should_not_store_page_content_in_offers_container(
     # then - page_content should NOT be in offers container
     offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
     assert_that(offer_doc).does_not_contain_key("page_content")
-
-
-def test_should_store_page_content_in_separate_container(
-    cosmos_db: CosmosClient,
-) -> None:
-    # given
-    test_page_content = (
-        "<html><body>Test page content for separate container</body></html>"
-    )
-    offer = sample_offer(page_content=test_page_content)
-
-    # when
-    with patch("aerooffers.offers_db.store_page_content") as mock_store:
-        offer_id = offers_db.store_offer(offer, spider="test")
-
-    # then
-    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)
-
-
-def test_should_store_offer_with_page_content_in_both_containers(
-    cosmos_db: CosmosClient,
-) -> None:
-    # given
-    test_page_content = "<html><body>Complete test content</body></html>"
-    offer = sample_offer(
-        url="https://test.com/offer",
-        title="Test Offer",
-        page_content=test_page_content,
-    )
-
-    # when
-    with patch("aerooffers.offers_db.store_page_content") as mock_store:
-        offer_id = offers_db.store_offer(offer, spider="test")
-
-    # then - offer should be in offers container without page_content
-    offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
-    assert_that(offer_doc["id"]).is_equal_to(offer_id)
-    assert_that(offer_doc["title"]).is_equal_to("Test Offer")
-    assert_that(offer_doc["url"]).is_equal_to("https://test.com/offer")
-    assert_that(offer_doc).does_not_contain_key("page_content")
-
-    # and - page_content should be stored via blob storage
-    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)

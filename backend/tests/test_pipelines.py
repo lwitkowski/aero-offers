@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from assertpy import assert_that
@@ -6,8 +6,8 @@ from azure.cosmos import CosmosClient
 from scrapy.exceptions import DropItem
 from util import sample_offer
 
-from aerooffers import offers_db, pipelines
-from aerooffers.offer import AircraftCategory
+from aerooffers import db, offers_db, pipelines
+from aerooffers.offer import AircraftCategory, url_to_id
 
 
 @pytest.mark.parametrize(
@@ -125,3 +125,50 @@ def test_should_store_offer(cosmos_db: CosmosClient) -> None:
     assert_that(all_gliders_in_db[0].title).is_equal_to("Glider A")
     assert_that(all_gliders_in_db[0].category).is_equal_to("glider")
     assert_that(all_gliders_in_db[0].url).is_equal_to("https://offers.com/1")
+
+
+def test_should_store_page_content_in_pipeline(cosmos_db: CosmosClient) -> None:
+    # given
+    test_page_content = (
+        "<html><body>Test page content for separate container</body></html>"
+    )
+    offer = sample_offer(page_content=test_page_content)
+    crawler = MagicMock()
+    crawler.spider.name = "test_spider"
+
+    # when
+    with patch("aerooffers.pipelines.store_page_content") as mock_store:
+        pipelines.StoreOffer(crawler).process_item(offer)
+
+    # then - page_content should be stored via blob storage
+    offer_id = url_to_id(offer.url)
+    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)
+
+
+def test_should_store_offer_in_db_and_page_content_in_blob_storage(
+    cosmos_db: CosmosClient,
+) -> None:
+    # given
+    test_page_content = "<html><body>Complete test content</body></html>"
+    offer = sample_offer(
+        url="https://test.com/offer",
+        title="Test Offer",
+        page_content=test_page_content,
+    )
+    crawler = MagicMock()
+    crawler.spider.name = "test_spider"
+
+    # when
+    with patch("aerooffers.pipelines.store_page_content") as mock_store:
+        pipelines.StoreOffer(crawler).process_item(offer)
+
+    # then - offer should be in offers container without page_content
+    offer_id = url_to_id(offer.url)
+    offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
+    assert_that(offer_doc["id"]).is_equal_to(offer_id)
+    assert_that(offer_doc["title"]).is_equal_to("Test Offer")
+    assert_that(offer_doc["url"]).is_equal_to("https://test.com/offer")
+    assert_that(offer_doc).does_not_contain_key("page_content")
+
+    # and - page_content should be stored via blob storage
+    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)

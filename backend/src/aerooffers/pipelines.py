@@ -9,6 +9,7 @@ from aerooffers.fx import to_price_in_euro
 from aerooffers.my_logging import logging
 from aerooffers.offer import OfferPageItem
 from aerooffers.offers_db import store_offer
+from aerooffers.page_content_storage import store_page_content
 
 
 class OfferPipelineFilter(ABC):
@@ -99,5 +100,10 @@ class StoreOffer(OfferPipelineFilter):
         else:
             spider_name = "unknown"
 
-        store_offer(offer=item, spider=spider_name)
+        offer_id = store_offer(offer=item, spider=spider_name)
+
+        # Store page content in blob storage if present
+        if item.page_content:
+            store_page_content(offer_id, item.page_content, item.url)
+
         return item

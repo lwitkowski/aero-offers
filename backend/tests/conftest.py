@@ -63,7 +63,7 @@ def session_cosmos_db() -> Generator[CosmosClient, None, None]:
 
 @pytest.fixture(autouse=True)
 def mock_store_page_content() -> Generator[None, None, None]:
-    with patch("aerooffers.offers_db.store_page_content"):
+    with patch("aerooffers.pipelines.store_page_content"):
         yield
 
 
