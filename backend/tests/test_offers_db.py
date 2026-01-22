@@ -1,4 +1,5 @@
 from datetime import date
+from unittest.mock import patch
 
 from assertpy import assert_that
 from azure.cosmos import CosmosClient
@@ -148,15 +149,11 @@ def test_should_store_page_content_in_separate_container(
     offer = sample_offer(page_content=test_page_content)
 
     # when
-    offer_id = offers_db.store_offer(offer, spider="test")
+    with patch("aerooffers.offers_db.store_page_content") as mock_store:
+        offer_id = offers_db.store_offer(offer, spider="test")
 
-    # then - page_content SHOULD be in offer_page_content container
-    page_content_doc = db.page_content_container().read_item(
-        item=offer_id, partition_key=offer_id
-    )
-    assert_that(page_content_doc).contains_key("page_content")
-    assert_that(page_content_doc["page_content"]).is_equal_to(test_page_content)
-    assert_that(page_content_doc["id"]).is_equal_to(offer_id)
+    # then
+    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)
 
 
 def test_should_store_offer_with_page_content_in_both_containers(
@@ -171,7 +168,8 @@ def test_should_store_offer_with_page_content_in_both_containers(
     )
 
     # when
-    offer_id = offers_db.store_offer(offer, spider="test")
+    with patch("aerooffers.offers_db.store_page_content") as mock_store:
+        offer_id = offers_db.store_offer(offer, spider="test")
 
     # then - offer should be in offers container without page_content
     offer_doc = db.offers_container().read_item(item=offer_id, partition_key=offer_id)
@@ -180,9 +178,5 @@ def test_should_store_offer_with_page_content_in_both_containers(
     assert_that(offer_doc["url"]).is_equal_to("https://test.com/offer")
     assert_that(offer_doc).does_not_contain_key("page_content")
 
-    # and - page_content should be in separate container
-    page_content_doc = db.page_content_container().read_item(
-        item=offer_id, partition_key=offer_id
-    )
-    assert_that(page_content_doc["id"]).is_equal_to(offer_id)
-    assert_that(page_content_doc["page_content"]).is_equal_to(test_page_content)
+    # and - page_content should be stored via blob storage
+    mock_store.assert_called_once_with(offer_id, test_page_content, offer.url)
