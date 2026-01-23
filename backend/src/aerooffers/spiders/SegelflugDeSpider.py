@@ -21,7 +21,7 @@ def _parse_int_or_none(param: str) -> int:
 
 
 class SegelflugDeSpider(scrapy.Spider):
-    name = "segelflug_de_kleinanzeigen"
+    name = "segelflug_de_2026"
     _logger = logging.getLogger(name)
 
     start_urls_with_category: dict[str, AircraftCategory] = {
