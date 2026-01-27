@@ -30,7 +30,7 @@ dev = [
     "testcontainers[cosmosdb]==4.14.0",
 ]
 lint = [
-    "ruff==0.14.13",
+    "ruff==0.14.14",
     "mypy==1.19.1",
     "types-requests==2.32.4.20260107",
     "types-defusedxml==0.7.0.20250822",
