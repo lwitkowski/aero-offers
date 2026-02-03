@@ -74,8 +74,8 @@ dev = [
     { name = "pytest", specifier = "==9.0.2" },
     { name = "pytest-cov", specifier = "==7.0.0" },
     { name = "ruff", specifier = "==0.14.14" },
-    { name = "testcontainers", extras = ["cosmosdb"], specifier = "==4.14.0" },
-    { name = "types-assertpy", specifier = "==1.1.0.20251219" },
+    { name = "testcontainers", extras = ["cosmosdb"], specifier = "==4.14.1" },
+    { name = "types-assertpy", specifier = "==1.1.0.20260128" },
     { name = "types-defusedxml", specifier = "==0.7.0.20250822" },
     { name = "types-flask-cors", specifier = "==6.0.0.20250809" },
     { name = "types-requests", specifier = "==2.32.4.20260107" },
@@ -83,7 +83,7 @@ dev = [
 lint = [
     { name = "mypy", specifier = "==1.19.1" },
     { name = "ruff", specifier = "==0.14.14" },
-    { name = "types-assertpy", specifier = "==1.1.0.20251219" },
+    { name = "types-assertpy", specifier = "==1.1.0.20260128" },
     { name = "types-defusedxml", specifier = "==0.7.0.20250822" },
     { name = "types-flask-cors", specifier = "==6.0.0.20250809" },
     { name = "types-requests", specifier = "==2.32.4.20260107" },
@@ -1533,7 +1533,7 @@ wheels = [
 
 [[package]]
 name = "testcontainers"
-version = "4.14.0"
+version = "4.14.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docker" },
@@ -1542,9 +1542,9 @@ dependencies = [
     { name = "urllib3" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ad/5a/d24f5c7ef787fc152b1e4e4cfb84ef9364dbf165b3c7f7817e2f2583f749/testcontainers-4.14.0.tar.gz", hash = "sha256:3b2d4fa487af23024f00fcaa2d1cf4a5c6ad0c22e638a49799813cb49b3176c7", size = 79885, upload-time = "2026-01-07T23:35:22.825Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8b/02/ef62dec9e4f804189c44df23f0b86897c738d38e9c48282fcd410308632f/testcontainers-4.14.1.tar.gz", hash = "sha256:316f1bb178d829c003acd650233e3ff3c59a833a08d8661c074f58a4fbd42a64", size = 80148, upload-time = "2026-01-31T23:13:46.915Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/c4/53efc88d890d7dd38337424a83bbff32007d9d3390a79a4b53bfddaa64e8/testcontainers-4.14.0-py3-none-any.whl", hash = "sha256:64e79b6b1e6d2b9b9e125539d35056caab4be739f7b7158c816d717f3596fa59", size = 125385, upload-time = "2026-01-07T23:35:21.343Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/31/5e7b23f9e43ff7fd46d243808d70c5e8daf3bc08ecf5a7fb84d5e38f7603/testcontainers-4.14.1-py3-none-any.whl", hash = "sha256:03dfef4797b31c82e7b762a454b6afec61a2a512ad54af47ab41e4fa5415f891", size = 125640, upload-time = "2026-01-31T23:13:45.464Z" },
 ]
 
 [package.optional-dependencies]
@@ -1599,11 +1599,11 @@ wheels = [
 
 [[package]]
 name = "types-assertpy"
-version = "1.1.0.20251219"
+version = "1.1.0.20260128"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fa/87/40b63996b882d6b5c3d84aef8a260c049633f64411c33e2ec3a00358e2b2/types_assertpy-1.1.0.20251219.tar.gz", hash = "sha256:a06afd12928c6e9cf900d1347e2cda8848cee120f6779cf619815f9323bfa962", size = 10579, upload-time = "2025-12-19T03:15:53.778Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/a8/278f15e0031b8345406cc6e0e58289eeff2cfbcc9d6b24719d76b362bcb3/types_assertpy-1.1.0.20260128.tar.gz", hash = "sha256:9164fce0719f841e2e680b046fcb45f299ecedcb99f949fc408bed13454b2df5", size = 10659, upload-time = "2026-01-28T03:26:32.063Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/98/6e/847f81db055eac84f9d908d893962e9de78a7f4fa833269dac63f31a7345/types_assertpy-1.1.0.20251219-py3-none-any.whl", hash = "sha256:f238fd4be6b2c4f5785c4c158b98d4707929892eb186ec77d204d1dac7763d21", size = 13125, upload-time = "2025-12-19T03:15:52.76Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/7e/cf15aace36ec1a95ae2c26ec582558a7d4c3f5493d13ab4ee690ff68ac63/types_assertpy-1.1.0.20260128-py3-none-any.whl", hash = "sha256:a2e2ab7e0d02fdf5a46ab30f6d2018382518eea3b36a2f5abdd5f57e533ed897", size = 13124, upload-time = "2026-01-28T03:26:30.65Z" },
 ]
 
 [[package]]
