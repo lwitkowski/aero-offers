@@ -49,15 +49,15 @@ lint = [
 
 [package.metadata]
 requires-dist = [
-    { name = "azure-cosmos", specifier = "==4.14.5" },
+    { name = "azure-cosmos", specifier = "==4.14.6" },
     { name = "azure-identity", specifier = "==1.25.1" },
     { name = "azure-storage-blob", specifier = "==12.28.0" },
     { name = "defusedxml", specifier = "==0.7.1" },
     { name = "flask", specifier = "==3.1.2" },
     { name = "flask-cors", specifier = "==6.0.2" },
     { name = "flask-headers", specifier = "==1.0" },
-    { name = "google-genai", specifier = "==1.61.0" },
-    { name = "gunicorn", specifier = "==25.0.1" },
+    { name = "google-genai", specifier = "==1.62.0" },
+    { name = "gunicorn", specifier = "==25.0.3" },
     { name = "jinja2", specifier = "==3.1.6" },
     { name = "nltk", specifier = "==3.9.2" },
     { name = "price-parser", specifier = "==0.5.0" },
@@ -151,15 +151,15 @@ wheels = [
 
 [[package]]
 name = "azure-cosmos"
-version = "4.14.5"
+version = "4.14.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "azure-core" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ff/72/18cd698e5a748176bbc4e775a3f7b45e4252c0e694bed73818d5a75ec276/azure_cosmos-4.14.5.tar.gz", hash = "sha256:3239a605fe29c94b77391826773aa3d0d9bbe4b93903fce5b6434b0f32742ba7", size = 2055402, upload-time = "2026-01-16T01:51:50.025Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/7d/b503a14639caace96f6a5c801c817a4c9f7ac626d75d5bddb6757da0376b/azure_cosmos-4.14.6.tar.gz", hash = "sha256:5e7075d051c84de405a63de05752b78e3b31190e9ee04f8cf85b37a954cd7784", size = 2056812, upload-time = "2026-02-03T22:16:58.429Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/1c/c46e4a2881ef86d09fabaf2246a39788d716d1fb88640784eac6ebe291c4/azure_cosmos-4.14.5-py3-none-any.whl", hash = "sha256:1a50d2019f81380b4cf35aff881290607ff1bf1287611abf067a965b9ea46f5d", size = 394833, upload-time = "2026-01-16T01:51:51.977Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/7c/bd50e62ac330d1c194b3473947ffbe2f99bb0269dbe41824d2534cf3251c/azure_cosmos-4.14.6-py3-none-any.whl", hash = "sha256:ea314e85eff9d31db980b7f2e88291579dedc77734bca7e9011d55d371fd0d5f", size = 395078, upload-time = "2026-02-03T22:17:01.44Z" },
 ]
 
 [[package]]
@@ -579,7 +579,7 @@ requests = [
 
 [[package]]
 name = "google-genai"
-version = "1.61.0"
+version = "1.62.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -593,21 +593,21 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/69/38/421cd7e70952a536be87a0249409f87297d84f523754a25b08fe94b97e7f/google_genai-1.61.0.tar.gz", hash = "sha256:5773a4e8ad5b2ebcd54a633a67d8e9c4f413032fef07977ee47ffa34a6d3bbdf", size = 489672, upload-time = "2026-01-30T20:50:27.177Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/4c/71b32b5c8db420cf2fd0d5ef8a672adbde97d85e5d44a0b4fca712264ef1/google_genai-1.62.0.tar.gz", hash = "sha256:709468a14c739a080bc240a4f3191df597bf64485b1ca3728e0fb67517774c18", size = 490888, upload-time = "2026-02-04T22:48:41.989Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/87/78dd70cb59f7acf3350f53c5144a7aa7bc39c6f425cd7dc1224b59fcdac3/google_genai-1.61.0-py3-none-any.whl", hash = "sha256:cb073ef8287581476c1c3f4d8e735426ee34478e500a56deef218fa93071e3ca", size = 721948, upload-time = "2026-01-30T20:50:25.551Z" },
+    { url = "https://files.pythonhosted.org/packages/09/5f/4645d8a28c6e431d0dd6011003a852563f3da7037d36af53154925b099fd/google_genai-1.62.0-py3-none-any.whl", hash = "sha256:4c3daeff3d05fafee4b9a1a31f9c07f01bc22051081aa58b4d61f58d16d1bcc0", size = 724166, upload-time = "2026-02-04T22:48:39.956Z" },
 ]
 
 [[package]]
 name = "gunicorn"
-version = "25.0.1"
+version = "25.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/83/e8327358129ca4dffd4fa6b6004aa5085dc80e913dec9b253401d6bd23ad/gunicorn-25.0.1.tar.gz", hash = "sha256:573e053aa950246e307ea908bd7ddce1870d41a40aec0c935938c586f0b9b946", size = 9693127, upload-time = "2026-02-02T13:34:05.767Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/e5/e1d2225d2b75fe4988821715d2c526fdf7b39f4a7260aa7e2bb4b25ec65c/gunicorn-25.0.3.tar.gz", hash = "sha256:b53a7fff1a07b825b962af320554de44ae77a26abfa373711ff3f83d57d3506d", size = 9702357, upload-time = "2026-02-07T16:53:52.72Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/dc/f1da097b7e0de5cd7552c10667305879093125cd62ff7372ad07d184ed8f/gunicorn-25.0.1-py3-none-any.whl", hash = "sha256:23cbe968c6ae3c8efc3d118c8353fa0763efc2102d89d0d3cea696cede7ff6b1", size = 169961, upload-time = "2026-02-02T13:34:02.744Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/84/117f39896ded517149be72d16c02252885690e9b0d1b84281944928f61aa/gunicorn-25.0.3-py3-none-any.whl", hash = "sha256:aca364c096c81ca11acd4cede0aaeea91ba76ca74e2c0d7f879154db9d890f35", size = 171728, upload-time = "2026-02-07T16:53:49.546Z" },
 ]
 
 [[package]]
