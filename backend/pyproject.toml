@@ -6,7 +6,7 @@ dependencies = [
     "flask==3.1.2",
     "flask-cors==6.0.2",
     "flask-headers==1.0",
-    "gunicorn==25.0.3",
+    "gunicorn==25.1.0",
     "jinja2==3.1.6",
     "nltk==3.9.2",
     "price-parser==0.5.0",
@@ -14,10 +14,10 @@ dependencies = [
     "scrapy==2.14.1",
     "twisted==25.5.0",
     "azure-cosmos==4.14.6",
-    "azure-identity==1.25.1",
+    "azure-identity==1.25.2",
     "azure-storage-blob==12.28.0",
     "defusedxml==0.7.1",
-    "google-genai==1.62.0",
+    "google-genai==1.63.0",
     "python-dotenv==1.2.1",
 ]
 
