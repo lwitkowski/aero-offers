@@ -18,8 +18,6 @@ locals {
   container_registry_server   = "ghcr.io"
   container_registry_username = "lwitkowski"
 
-  github_repo = "lwitkowski/aero-offers"
-
   # API configuration
   container_app_cpu          = 0.25
   container_app_memory       = 0.5
@@ -34,4 +32,6 @@ locals {
   job_replica_timeout = 1800
 
   docker_image_tag = "5b348c0"
+
+  alert_email = "aero-offers@lukaszwitkowski.com"
 }

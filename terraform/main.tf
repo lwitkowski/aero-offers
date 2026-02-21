@@ -12,9 +12,10 @@ resource "azurerm_resource_group" "main" {
 
 # Container App Environment
 resource "azurerm_container_app_environment" "production" {
-  name                = local.container_app_environment_name
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  name                       = local.container_app_environment_name
+  resource_group_name        = azurerm_resource_group.main.name
+  location                   = azurerm_resource_group.main.location
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
 }
 
 # Container App (API)
@@ -23,7 +24,6 @@ resource "azurerm_container_app" "api" {
   container_app_environment_id = azurerm_container_app_environment.production.id
   resource_group_name          = azurerm_resource_group.main.name
   revision_mode                = "Single"
-  workload_profile_name        = "Consumption"
 
   ingress {
     external_enabled = true
@@ -85,7 +85,6 @@ resource "azurerm_container_app_job" "update_offers" {
   container_app_environment_id = azurerm_container_app_environment.production.id
   resource_group_name          = azurerm_resource_group.main.name
   location                     = azurerm_resource_group.main.location
-  workload_profile_name        = "Consumption"
 
   replica_timeout_in_seconds = local.job_replica_timeout
 
@@ -253,47 +252,44 @@ resource "azurerm_storage_management_policy" "main" {
   }
 }
 
+# Alerting
+resource "azurerm_monitor_action_group" "main" {
+  name                = "ag-aerooffers"
+  resource_group_name = azurerm_resource_group.main.name
+  short_name          = "aerooffers"
 
-# github integration
-resource "azurerm_user_assigned_identity" "github" {
-  name                = "id-aerooffers-github"
+  email_receiver {
+    name          = "admin"
+    email_address = local.alert_email
+  }
+}
+
+resource "azurerm_monitor_scheduled_query_rules_alert_v2" "job_failure" {
+  name                = "alert-update-offers-job-failure"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-}
+  description         = "Fires when the update-offers scheduled job fails"
 
-resource "azurerm_role_assignment" "github_contributor" {
-  principal_id         = azurerm_user_assigned_identity.github.principal_id
-  scope                = azurerm_resource_group.main.id
-  role_definition_name = "Contributor"
-}
+  evaluation_frequency  = "PT1H"
+  window_duration       = "PT1H"
+  scopes                = [azurerm_log_analytics_workspace.main.id]
+  severity              = 1
+  enabled               = true
+  skip_query_validation = true
 
-# used for terraform plan in the pipelines in pull request builds
-resource "azurerm_federated_identity_credential" "github-pull-request" {
-  name                = "github-pull-request"
-  resource_group_name = azurerm_resource_group.main.name
-  audience            = ["api://AzureADTokenExchange"]
-  issuer              = "https://token.actions.githubusercontent.com"
-  parent_id           = azurerm_user_assigned_identity.github.id
-  subject             = "repo:${local.github_repo}:pull_request"
-}
+  criteria {
+    query = <<-QUERY
+      ContainerAppSystemLogs_CL
+      | where ContainerAppName_s startswith "${local.container_app_job_name}"
+      | where Reason_s has_any ("Failed", "Error", "BackOff", "CrashLoopBackOff")
+    QUERY
 
-# used for terraform plan in the pipelines for main branch
-resource "azurerm_federated_identity_credential" "github-main-branch" {
-  name                = "github-main-branch"
-  resource_group_name = azurerm_resource_group.main.name
-  audience            = ["api://AzureADTokenExchange"]
-  issuer              = "https://token.actions.githubusercontent.com"
-  parent_id           = azurerm_user_assigned_identity.github.id
-  subject             = "repo:${local.github_repo}:ref:refs/heads/main"
-}
+    time_aggregation_method = "Count"
+    threshold               = 0
+    operator                = "GreaterThan"
+  }
 
-
-# used for terraform apply in the pipelines
-resource "azurerm_federated_identity_credential" "github-deployment-production" {
-  name                = "github-deployment-production"
-  resource_group_name = azurerm_resource_group.main.name
-  audience            = ["api://AzureADTokenExchange"]
-  issuer              = "https://token.actions.githubusercontent.com"
-  parent_id           = azurerm_user_assigned_identity.github.id
-  subject             = "repo:${local.github_repo}:environment:production"
+  action {
+    action_groups = [azurerm_monitor_action_group.main.id]
+  }
 }

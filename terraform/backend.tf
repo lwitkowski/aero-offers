@@ -1,5 +1,5 @@
-# Note: The storage account must be created before using this backend.
-# You can create it manually or use a separate bootstrap script.
+# Prerequisites: run terraform/setup-azure-bootstrap.sh to create the platform
+# resource group, state storage account, and GitHub Actions identity.
 
 terraform {
   required_version = ">= 1.0"
@@ -9,14 +9,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.0"
     }
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = "~> 2.0"
-    }
   }
 
   backend "azurerm" {
-    resource_group_name  = "rg-aerooffers"
+    resource_group_name  = "rg-aerooffers-platform"
     storage_account_name = "staeroofferstfstate"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"

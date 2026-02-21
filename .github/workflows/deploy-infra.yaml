@@ -4,7 +4,7 @@
 # Apply requires manual approval via GitHub Environment (`production`).
 #
 # Required GitHub Secrets:
-# - AZURE_CLIENT_ID (managed identity client ID from terraform outputs)
+# - AZURE_CLIENT_ID (managed identity client ID from setup-azure-bootstrap.sh)
 # - AZURE_TENANT_ID
 # - AZURE_SUBSCRIPTION_ID
 # - CONTAINER_REGISTRY_PASSWORD (GitHub Container Registry token)

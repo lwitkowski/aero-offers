@@ -21,7 +21,15 @@ This project aims at reviving [aero-offers.com](aero-offers.com) - invaluable so
     
 - `db` - Azure CosmosDb NoSQL fully managed database (for free; check https://github.com/lwitkowski/aero-offers/pull/135 for decision record).
 - `terraform` - deployment infrastructure to Azure
-- 
+
+#### Infrastructure
+
+Azure resources are split into two resource groups:
+- `rg-aerooffers-platform` - long-lived platform resources **not managed by Terraform**: TF state storage, GitHub Actions managed identity. Created once via `terraform/setup-azure-bootstrap.sh`.
+- `rg-aerooffers` - application resources managed by Terraform: Container Apps, CosmosDB, Storage, Log Analytics, alerting.
+
+First-time setup: run `terraform/setup-azure-bootstrap.sh`, then configure the GitHub secrets it outputs.
+
 #### Deployment
 
 Trunk Based Development and Continuous Deployment is utilized here - all changes pushed/merged to main are automatically deployed to production env. Currently, the project is running in Azure, managed via Terraform.

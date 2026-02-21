@@ -7,3 +7,6 @@
 # Get from GitHub: Settings -> Developer settings -> Personal access tokens -> Fine-grained tokens
 # Or use GitHub Packages read token
 container_registry_password = "your-ghcr-token"
+
+# Get from https://aistudio.google.com/apikey
+gemini_api_key = "your-gemini-api-key"
