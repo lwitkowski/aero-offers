@@ -270,17 +270,15 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "job_failure" {
   location            = azurerm_resource_group.main.location
   description         = "Fires when the update-offers scheduled job fails"
 
-  evaluation_frequency  = "PT1H"
-  window_duration       = "PT1H"
-  scopes                = [azurerm_log_analytics_workspace.main.id]
-  severity              = 1
-  enabled               = true
-  skip_query_validation = true
-
+  evaluation_frequency = "P1D"
+  window_duration      = "P1D"
+  scopes               = [azurerm_log_analytics_workspace.main.id]
+  severity             = 1
+  enabled              = true
   criteria {
     query = <<-QUERY
       ContainerAppSystemLogs_CL
-      | where ContainerAppName_s startswith "${local.container_app_job_name}"
+      | where JobName_s == "${local.container_app_job_name}"
       | where Reason_s has_any ("Failed", "Error", "BackOff", "CrashLoopBackOff")
     QUERY
 
