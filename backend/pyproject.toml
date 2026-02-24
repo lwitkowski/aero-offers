@@ -30,12 +30,12 @@ dev = [
     "testcontainers[cosmosdb]==4.14.1",
 ]
 lint = [
-    "ruff==0.15.1",
+    "ruff==0.15.2",
     "mypy==1.19.1",
     "types-requests==2.32.4.20260107",
     "types-defusedxml==0.7.0.20250822",
     "types-flask-cors==6.0.0.20250809",
-    "types-assertpy==1.1.0.20260128",
+    "types-assertpy==1.1.0.20260221",
 ]
 
 [tool.pytest.ini_options]
