@@ -17,8 +17,8 @@ dependencies = [
     "azure-identity==1.25.2",
     "azure-storage-blob==12.28.0",
     "defusedxml==0.7.1",
-    "google-genai==1.64.0",
-    "python-dotenv==1.2.1",
+    "google-genai==1.65.0",
+    "python-dotenv==1.2.2",
 ]
 
 [dependency-groups]
