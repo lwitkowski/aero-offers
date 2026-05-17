@@ -60,14 +60,14 @@ requires-dist = [
     { name = "flask", specifier = "==3.1.3" },
     { name = "flask-cors", specifier = "==6.0.2" },
     { name = "flask-headers", specifier = "==1.0" },
-    { name = "google-genai", specifier = "==1.73.0" },
-    { name = "gunicorn", specifier = "==25.3.0" },
+    { name = "google-genai", specifier = "==2.0.1" },
+    { name = "gunicorn", specifier = "==26.0.0" },
     { name = "jinja2", specifier = "==3.1.6" },
     { name = "nltk", specifier = "==3.9.4" },
     { name = "price-parser", specifier = "==0.5.1" },
     { name = "python-dotenv", specifier = "==1.2.2" },
-    { name = "requests", specifier = "==2.33.1" },
-    { name = "scrapy", specifier = "==2.15.0" },
+    { name = "requests", specifier = "==2.34.0" },
+    { name = "scrapy", specifier = "==2.15.2" },
     { name = "twisted", specifier = "==25.5.0" },
 ]
 
@@ -621,7 +621,7 @@ requests = [
 
 [[package]]
 name = "google-genai"
-version = "1.73.0"
+version = "2.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -635,21 +635,21 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/99/5f/b293b1a78a547b0dd061642a3f6087f0a52c1b723eafa58f94ccdc3e0d2a/google_genai-1.73.0.tar.gz", hash = "sha256:569395b2c225e12bcd8758b8affe1af480e0a1b1c71d652d38c705677057e05f", size = 530812, upload-time = "2026-04-13T20:40:02.642Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/ae/8504f6fa44aae887909c3fda1d49c6ffe129225b68f6f63b8904c49e7e90/google_genai-2.0.1.tar.gz", hash = "sha256:32cec7c07157c0e65e4dfc740e3288ff8e8bfc2d506cde49f884d79ed8377867", size = 537456, upload-time = "2026-05-09T01:37:12.693Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/73/fb36ced456688c9b95a8ab49a1f408f5b3e69a589788f3eb25016002dd7a/google_genai-1.73.0-py3-none-any.whl", hash = "sha256:dfb0214b834bf977e3841de512cfb651d2fe76309f85064b80c2bc11da99d76b", size = 786072, upload-time = "2026-04-13T20:40:00.365Z" },
+    { url = "https://files.pythonhosted.org/packages/a1/20/7f427041c3660fabd4c396e80b27dd40b7d89b121ba384d69005a764910d/google_genai-2.0.1-py3-none-any.whl", hash = "sha256:5cb61ff5b8d33129bb7f5df0b5384ed2e71e5dd06ccc012cdbad28b070f6ce99", size = 791449, upload-time = "2026-05-09T01:37:10.841Z" },
 ]
 
 [[package]]
 name = "gunicorn"
-version = "25.3.0"
+version = "26.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c4/f4/e78fa054248fab913e2eab0332c6c2cb07421fca1ce56d8fe43b6aef57a4/gunicorn-25.3.0.tar.gz", hash = "sha256:f74e1b2f9f76f6cd1ca01198968bd2dd65830edc24b6e8e4d78de8320e2fe889", size = 634883, upload-time = "2026-03-27T00:00:26.092Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/b7/a4a3f632f823e432ce6bc65f62961b7980c898c77f075a2f7118cb3846fe/gunicorn-26.0.0.tar.gz", hash = "sha256:ca9346f85e3a4aeeb64d491045c16b9a35647abd37ea15efe53080eb8b090baf", size = 727286, upload-time = "2026-05-05T06:38:25.529Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/43/c8/8aaf447698c4d59aa853fd318eed300b5c9e44459f242ab8ead6c9c09792/gunicorn-25.3.0-py3-none-any.whl", hash = "sha256:cacea387dab08cd6776501621c295a904fe8e3b7aae9a1a3cbb26f4e7ed54660", size = 208403, upload-time = "2026-03-27T00:00:27.386Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/40/9c2384fc2be4ad25dd4a49decd5ad9ea5a3639814c11bd40ab77cb9f0a14/gunicorn-26.0.0-py3-none-any.whl", hash = "sha256:40233d26a5f0d1872916188c276e21641155111c2853f0c2cd55260aec0d24fc", size = 212009, upload-time = "2026-05-05T06:38:23.007Z" },
 ]
 
 [[package]]
@@ -1449,7 +1449,7 @@ wheels = [
 
 [[package]]
 name = "requests"
-version = "2.33.1"
+version = "2.34.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -1457,9 +1457,9 @@ dependencies = [
     { name = "idna" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5f/a4/98b9c7c6428a668bf7e42ebb7c79d576a1c3c1e3ae2d47e674b468388871/requests-2.33.1.tar.gz", hash = "sha256:18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517", size = 134120, upload-time = "2026-03-30T16:09:15.531Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/b8/7a707d60fea4c49094e40262cc0e2ca6c768cca21587e34d3f705afec47e/requests-2.34.0.tar.gz", hash = "sha256:7d62fe92f50eb82c529b0916bb445afa1531a566fc8f35ffdc64446e771b856a", size = 142436, upload-time = "2026-05-11T19:29:51.717Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/8e/7540e8a2036f79a125c1d2ebadf69ed7901608859186c856fa0388ef4197/requests-2.33.1-py3-none-any.whl", hash = "sha256:4e6d1ef462f3626a1f0a0a9c42dd93c63bad33f9f1c1937509b8c5c8718ab56a", size = 64947, upload-time = "2026-03-30T16:09:13.83Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/e6/e300fce5fe83c30520607a015dabd985df3251e188d234bfe9492e17a389/requests-2.34.0-py3-none-any.whl", hash = "sha256:917520a21b767485ce7c588f4ebb917c436b24a31231b44228715eaeb5a52c60", size = 73021, upload-time = "2026-05-11T19:29:49.923Z" },
 ]
 
 [[package]]
@@ -1501,7 +1501,7 @@ wheels = [
 
 [[package]]
 name = "scrapy"
-version = "2.15.0"
+version = "2.15.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
@@ -1523,9 +1523,9 @@ dependencies = [
     { name = "w3lib" },
     { name = "zope-interface" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/7b/48608f18bd0fe3a51124fe14cb48690dc0768aea52e66faf632467940509/scrapy-2.15.0.tar.gz", hash = "sha256:8072b42da2b54ccafaf188298c8da851197e83f6d4a19db324777ee2e204b70c", size = 1290115, upload-time = "2026-04-09T12:02:11.92Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/ee/601014b8696e2e869c806d4377da6c468b278fd891b03fc5d1c830f2b641/scrapy-2.15.2.tar.gz", hash = "sha256:c7b8fc8d2c51a39d52f6025bdd7e9c714e43f97afd300e8c44157cf7a05c0c9e", size = 1291748, upload-time = "2026-04-28T13:29:54.141Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d4/f1/88c440a6b5a331e0f11d1d45442ae538bc52a26828bbe9755abff00afa48/scrapy-2.15.0-py3-none-any.whl", hash = "sha256:7d7a421fb75711c096cf8ad8b3d5090a4fc403e04abe4d38f86d612666fe07ac", size = 352486, upload-time = "2026-04-09T12:02:09.99Z" },
+    { url = "https://files.pythonhosted.org/packages/32/2c/b9d926e117765d84654efb5a8280379e76a681338155c5c79578b4b207ac/scrapy-2.15.2-py3-none-any.whl", hash = "sha256:ff47379299699f1fcc7bc1d404754306f04371d0822e077c2857777d60743e07", size = 352868, upload-time = "2026-04-28T13:29:52.623Z" },
 ]
 
 [[package]]
