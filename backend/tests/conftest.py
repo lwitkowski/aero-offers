@@ -36,7 +36,7 @@ class VnextCosmosDBNoSQLEndpointContainer(CosmosDBNoSQLEndpointContainer):
 
 
 @pytest.fixture(scope="session")
-def session_cosmos_db() -> Generator[CosmosClient, None, None]:
+def session_cosmos_db() -> Generator[CosmosClient]:
     from aerooffers.db import COSMOSDB_DB_NAME
 
     print("Starting CosmosDb TestContainers, db name=" + COSMOSDB_DB_NAME)
@@ -62,7 +62,7 @@ def session_cosmos_db() -> Generator[CosmosClient, None, None]:
 
 
 @pytest.fixture(autouse=True)
-def mock_store_page_content() -> Generator[None, None, None]:
+def mock_store_page_content() -> Generator[None]:
     with patch("aerooffers.pipelines.store_page_content"):
         yield
 

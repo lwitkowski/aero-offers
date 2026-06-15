@@ -47,7 +47,7 @@ Trunk Based Development and Continuous Deployment is utilized here - all changes
 `docker compose up --build` - starts CosmosDb and Python Flask backend
 
 ### Prerequisites for local development with hot reloads
-- python 3.13+
+- python 3.13
 - uv (`pip install uv`)
 - docker (compose)
 - nodejs

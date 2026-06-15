@@ -90,7 +90,7 @@ class SegelflugDeSpider(scrapy.Spider):
     @override
     def parse(
         self, response: Response, **kwargs: Any
-    ) -> Generator[scrapy.Request, None]:
+    ) -> Generator[scrapy.Request]:
         assert response.request is not None
 
         self._logger.debug("Scraping %s", response.url)
@@ -208,7 +208,7 @@ class SegelflugDeSpider(scrapy.Spider):
                 return location_text
         return None
 
-    def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem, None]:
+    def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem]:
         self._logger.debug("Parsing offer page %s", response.url)
         try:
             offer = OfferPageItem(

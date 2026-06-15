@@ -41,7 +41,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
     @override
     def parse(
         self, response: Response, **kwargs: Any
-    ) -> Generator[scrapy.Request, None]:
+    ) -> Generator[scrapy.Request]:
         self._logger.debug("Scraping %s", response.url)
         category = self.start_urls_with_category.get(
             response.url, AircraftCategory.unknown
@@ -95,7 +95,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
             return int(number)
         return 0
 
-    def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem, None]:
+    def _parse_detail_page(self, response: Response) -> Generator[OfferPageItem]:
         self._logger.debug("Parsing offer page %s", response.url)
         try:
             category = response.meta.get("aircraft_category", AircraftCategory.unknown)
