@@ -39,9 +39,7 @@ class FlugzeugMarktDeSpider(scrapy.Spider):
         return list(self.start_urls_with_category.keys())
 
     @override
-    def parse(
-        self, response: Response, **kwargs: Any
-    ) -> Generator[scrapy.Request]:
+    def parse(self, response: Response, **kwargs: Any) -> Generator[scrapy.Request]:
         self._logger.debug("Scraping %s", response.url)
         category = self.start_urls_with_category.get(
             response.url, AircraftCategory.unknown

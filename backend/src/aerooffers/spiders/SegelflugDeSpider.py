@@ -88,9 +88,7 @@ class SegelflugDeSpider(scrapy.Spider):
         raise ValueError(f"Could not parse date: {date_text}")
 
     @override
-    def parse(
-        self, response: Response, **kwargs: Any
-    ) -> Generator[scrapy.Request]:
+    def parse(self, response: Response, **kwargs: Any) -> Generator[scrapy.Request]:
         assert response.request is not None
 
         self._logger.debug("Scraping %s", response.url)
