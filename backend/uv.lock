@@ -77,7 +77,7 @@ dev = [
     { name = "testcontainers", extras = ["cosmosdb"], specifier = "==4.14.2" },
     { name = "types-assertpy", specifier = "==1.1.0.20260518" },
     { name = "types-defusedxml", specifier = "==0.7.0.20260504" },
-    { name = "types-flask-cors", specifier = "==6.0.3.20260609" },
+    { name = "types-flask-cors", specifier = "==6.0.3.20260616" },
     { name = "types-requests", specifier = "==2.33.0.20260518" },
 ]
 lint = [
@@ -85,7 +85,7 @@ lint = [
     { name = "ruff", specifier = ">=0.15.17" },
     { name = "types-assertpy", specifier = "==1.1.0.20260518" },
     { name = "types-defusedxml", specifier = "==0.7.0.20260504" },
-    { name = "types-flask-cors", specifier = "==6.0.3.20260609" },
+    { name = "types-flask-cors", specifier = "==6.0.3.20260616" },
     { name = "types-requests", specifier = "==2.33.0.20260518" },
 ]
 
@@ -1306,14 +1306,14 @@ wheels = [
 
 [[package]]
 name = "types-flask-cors"
-version = "6.0.3.20260609"
+version = "6.0.3.20260616"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ed/95/2dfdb1f6a6377e8c96603c85954ca2423dc14a2cdd56214508ebb308831c/types_flask_cors-6.0.3.20260609.tar.gz", hash = "sha256:b36afac6a3bb95789d6494d20fcf08d24941d26b28e7cefa67a60648671587b3", size = 10176, upload-time = "2026-06-09T05:58:31.396Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/cc/2edf29ad1e4e2fb886923f64c917cdeffdffe9a8c4aacdbb0254d18bd3d3/types_flask_cors-6.0.3.20260616.tar.gz", hash = "sha256:01be3febe686e1088ed2502e24655edc17fc9f0aa33aceccd70b8a88a954b9ee", size = 10202, upload-time = "2026-06-16T07:12:00.124Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ac/c9/f74a99fd44ae8e0f6c8b5f5994814b8c9571a50d0df09daca09b12ead6ad/types_flask_cors-6.0.3.20260609-py3-none-any.whl", hash = "sha256:3f7ac9a26008496fbf623b26b2f6bd5d8d1c2c57553a7c64adfaa15504cd5a7e", size = 9907, upload-time = "2026-06-09T05:58:30.543Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/b8/012cae29631499068650fb792597fddba5925360c79d9b8d0b78b83bed1a/types_flask_cors-6.0.3.20260616-py3-none-any.whl", hash = "sha256:3bfe91fcc3925f057275efae8371c256f0f71ea79b16d6160011adf987ec8f1f", size = 9927, upload-time = "2026-06-16T07:11:59.302Z" },
 ]
 
 [[package]]
