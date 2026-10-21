@@ -31,7 +31,7 @@ locals {
   job_cron_expression = "17 3/11 * * *"
   job_replica_timeout = 1800
 
-  docker_image_tag = "aa17cd8"
+  docker_image_tag = "94466e5"
 
   alert_email = "aero-offers@lukaszwitkowski.com"
 }
