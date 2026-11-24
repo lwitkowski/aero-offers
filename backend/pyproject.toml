@@ -26,11 +26,11 @@ dev = [
     {include-group = "lint"},
     "pytest==9.2.0",
     "pytest-cov==7.1.0",
-    "assertpy==2.36.0",
+    "assertpy==2.36.1",
     "testcontainers[cosmosdb]==4.15.0",
 ]
 lint = [
-    "ruff>=0.17.4",
+    "ruff>=0.17.6",
     "mypy>=2.4.1",
     "types-requests==2.33.0.20261030",
     "types-defusedxml==0.7.0.20260504",
